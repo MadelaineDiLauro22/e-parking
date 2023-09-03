@@ -151,7 +151,7 @@
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webApp>
-                        <contextPath>/spring</contextPath>
+                        <contextPath>/eparking</contextPath>
                     </webApp>
                 </configuration>
             </plugin>
