@@ -20,13 +20,13 @@ class ParkingControllerTest {
     private ParkingController parkingController;
 
     @Mock
-    private ParkingService parkingService;
+    private ParkingService mockParkingService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        parkingController = new ParkingController(parkingService);
+        parkingController = new ParkingController(mockParkingService);
     }
 
     @Test
@@ -34,7 +34,7 @@ class ParkingControllerTest {
         Long userId = 1L;
         List<Vehiculo> cars = new ArrayList<>();
 
-        Mockito.when(parkingService.getUserCarsList(userId))
+        Mockito.when(mockParkingService.getUserCarsList(userId))
                 .thenReturn(cars);
 
         ModelAndView response = parkingController.getParkingRegister(userId);

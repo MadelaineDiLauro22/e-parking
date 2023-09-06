@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
 import com.tallerwebi.infraestructura.RepositorioUsuario;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.MobileUser;
@@ -21,8 +22,9 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public List<Vehiculo> getUserCarsList(Long idUsuario) {
-        //TODO agregar excepción
         MobileUser user = (MobileUser) repositorioUsuario.buscarUsuarioPorId(idUsuario);
+        if(user == null) throw new UsuarioInexistente();
+
         return vehicleRepository.obtenerVehiculosPorUsuario(user);
     }
 }
