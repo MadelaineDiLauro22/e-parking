@@ -1,20 +1,29 @@
 package com.tallerwebi.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Usuario {
+@Table(name = "USER_TABLE")
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String email;
     private String password;
     private String rol;
     private Boolean activo = false;
+
+    public Usuario(String email, String password, String rol) {
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+    }
+
+    public Usuario() {
+    }
 
     public Long getId() {
         return id;
