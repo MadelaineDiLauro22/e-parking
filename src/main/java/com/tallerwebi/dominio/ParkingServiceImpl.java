@@ -21,6 +21,7 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public List<Vehiculo> getUserCarsList(Long idUsuario) {
+        //TODO agregar excepción
         MobileUser user = (MobileUser) repositorioUsuario.buscarUsuarioPorId(idUsuario);
         return vehicleRepository.obtenerVehiculosPorUsuario(user);
     }

@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
-import com.tallerwebi.model.Usuario;
 import com.tallerwebi.model.Vehiculo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
