@@ -5,28 +5,53 @@
     <title>Taller Web I</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#">UNLAM</a>
-    </nav>
-    <main >
-        <h1>Nothing to show</h1>
-        <table>
-            <thead>
-            <tr>
-                <th> Patente </th>
-                <th> Marca </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${vehicleList == null}">
-                <td colspan="2"> No Books Available </td>
-            </tr>
-            <tr th:each="vehicle : ${vehicleList}">
-                <td><span th:text="${vehicle.patente}"> Patente </span></td>
-                <td><span th:text="${vehicle.marca}"> Marca </span></td>
-            </tr>
-            </tbody>
-        </table>
-    </main>
+<main>
+    <h1>Registrar Parking</h1>
+    <form action="/eparking/mobile/parking/register" method="post">
+        <div>
+            <label for="parkingType">Seleccionar Tipo:</label>
+            <select id="parkingType" name="parkingType" onchange="renderTicketImageForm()">
+                <option value="STREET" selected>Vía Publica</option>
+                <option value="GARAGE">Estacionamiento</option>
+            </select>
+        </div>
+        <div>
+            <label for="vehicle">Seleccionar Vehículo:</label>
+            <select id="vehicle" name="vehicle" th:each="vehicle : ${vehicleList}">
+                <option th:value="${vehicle.patente}" th:text="${vehicle.marca + ' - ' + vehicle.patente}">Marca -
+                    Patente
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="vehiclePic">Foto del vehiculo:</label>
+            <input id="vehiclePic" name="vehiclePic" type="file" accept="image/jpeg">
+        </div>
+        <div id="typeGarage" style="display: none">
+            <label for="ticketPic">Foto de Ticket:</label>
+            <input id="ticketPic" name="ticketPic" type="file" accept="image/jpeg">
+        </div>
+        <div id="geolocation">
+            <input id="lat" name="lat" value="" style="display: none">
+            <input id="ln" name="ln" value="" style="display: none">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.36433397229!2d-58.565380123487344!3d-34.670753161042825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc62cc3ef7083%3A0x8867107f425fade5!2sUniversidad%20Nacional%20de%20La%20Matanza!5e0!3m2!1ses-419!2sar!4v1694126930425!5m2!1ses-419!2sar" width="350" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div>
+            <input type="submit" value="Registrar">
+        </div>
+    </form>
+    <script>
+        function renderTicketImageForm() {
+            let parking = document.getElementById("parkingType").value;
+            let div = document.getElementById("typeGarage");
+
+            if (parking === "GARAGE") {
+                div.style.display = "block"
+            } else {
+                div.style.display = "none"
+            }
+        }
+    </script>
+</main>
 </body>
 </html>
