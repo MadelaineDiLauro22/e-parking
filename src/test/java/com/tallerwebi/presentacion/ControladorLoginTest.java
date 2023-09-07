@@ -4,8 +4,8 @@ import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.presentacion.dto.DatosLogin;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 

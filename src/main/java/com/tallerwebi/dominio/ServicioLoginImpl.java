@@ -4,7 +4,7 @@ import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.infraestructura.RepositorioUsuario;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Usuario;
-import com.tallerwebi.presentacion.DatosLogin;
+import com.tallerwebi.presentacion.dto.DatosLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

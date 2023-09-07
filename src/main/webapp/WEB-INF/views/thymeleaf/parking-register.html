@@ -7,7 +7,7 @@
 <body>
 <main>
     <h1>Registrar Parking</h1>
-    <form action="/eparking/mobile/parking/register" method="post">
+    <form action="/eparking/mobile/parking/register" method="post" enctype="multipart/form-data">
         <div>
             <label for="parkingType">Seleccionar Tipo:</label>
             <select id="parkingType" name="parkingType" onchange="renderTicketImageForm()">
