@@ -48,10 +48,10 @@ public class ControladorLogin {
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") MobileUser usuario) {
+    public ModelAndView registrarme(@ModelAttribute("usuario") DatosLogin requestLogin) {
         ModelMap model = new ModelMap();
         try{
-            servicioLogin.registrar(usuario);
+            servicioLogin.registrar(requestLogin);
         } catch (UsuarioExistente e){
             model.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", model);

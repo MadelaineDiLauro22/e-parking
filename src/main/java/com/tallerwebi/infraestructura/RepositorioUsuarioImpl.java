@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -31,7 +32,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void guardar(Usuario usuario) {
+    public void guardar(MobileUser usuario) {
         sessionFactory.getCurrentSession().save(usuario);
     }
 

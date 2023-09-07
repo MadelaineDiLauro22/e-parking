@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.infraestructura.RepositorioUsuario;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Usuario;
+import com.tallerwebi.presentacion.DatosLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,20 @@ public class ServicioLoginImpl implements ServicioLogin {
     }
 
     @Override
-    public void registrar(MobileUser usuario) throws UsuarioExistente {
-        Usuario usuarioEncontrado = servicioLoginDao.buscarUsuario(usuario.getEmail(), usuario.getPassword());
+    public void registrar(DatosLogin request) throws UsuarioExistente {
+        Usuario usuarioEncontrado = servicioLoginDao.buscarUsuario(request.getEmail(), request.getPassword());
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();
         }
-        servicioLoginDao.guardar(usuario);
+        //TODO: agregar nombre y nickname al request
+        MobileUser user = new MobileUser(
+                request.getEmail(),
+                request.getPassword(),
+                "ADMIN",
+                "Admin",
+                "admin"
+        );
+        servicioLoginDao.guardar(user);
     }
 
 }
