@@ -38,7 +38,8 @@ public class ControladorLogin {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+            request.getSession().setAttribute("rol", usuarioBuscado.getRol());
+            request.getSession().setAttribute("email", usuarioBuscado.getEmail());
             return new ModelAndView("redirect:/home");
         } else {
             model.put("error", "Usuario o clave incorrecta");
@@ -47,7 +48,7 @@ public class ControladorLogin {
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
+    public ModelAndView registrarme(@ModelAttribute("usuario") MobileUser usuario) {
         ModelMap model = new ModelMap();
         try{
             servicioLogin.registrar(usuario);
@@ -68,10 +69,10 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
+    /*@RequestMapping(path = "/home", method = RequestMethod.GET)
     public ModelAndView irAHome() {
         return new ModelAndView("home");
-    }
+    }*/
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
