@@ -55,7 +55,9 @@ public class ControladorLoginTest {
 	@Test
 	public void loginConUsuarioYPasswordCorrectosDeberiaLLevarAHome(){
 		// preparacion
+
 		MobileUser usuarioEncontradoMock = mock(MobileUser.class);
+
 		when(usuarioEncontradoMock.getRol()).thenReturn(UserRole.ADMIN);
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
