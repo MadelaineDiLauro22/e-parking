@@ -40,7 +40,7 @@ public class ControladorLogin {
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("rol", usuarioBuscado.getRol());
             request.getSession().setAttribute("id", usuarioBuscado.getId());
-            request.getSession().setAttribute("nickname", usuarioBuscado.getNickName());
+            request.getSession().setAttribute("nickName", usuarioBuscado.getNickName());
             return new ModelAndView("redirect:/home");
         } else {
             model.put("error", "Usuario o clave incorrecta");

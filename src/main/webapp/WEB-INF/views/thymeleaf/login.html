@@ -1,18 +1,4 @@
-<!DOCTYPE HTML>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta th:charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        <title>Taller Web I</title>
-
-        <!-- Boostrap core css -->
-        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-
-        <!-- custom style -->
-        <link rel="stylesheet" th:href="@{/css/main.css}"/>
-
-    </head>
+<div th:replace="fragments/header.html"></div>
 
     <body class="bg-login min-vh-100 position-relative">
 
@@ -60,20 +46,5 @@
             </section>
 
         </main>
-        <footer class="position-absolute bottom-0 start-0 container-fluid">
-            <div class="d-flex justify-content-between text-white">
-                <p>eParking © Argentina</p>
-                <div>
-                    <i class="fa-brands fa-instagram"></i>
-                    <i class="fa-brands fa-twitter"></i>
-                    <i class="fa-brands fa-facebook"></i>
-                </div>
-            </div>
-        </footer>
-    <!-- /.container -->
 
-    <!-- Boostrap core js -->
-    <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-    <script src="https://kit.fontawesome.com/c0cf04e4bc.js" crossorigin="anonymous"></script>
-    </body>
-</html>
+<div th:replace="fragments/footer.html"></div>

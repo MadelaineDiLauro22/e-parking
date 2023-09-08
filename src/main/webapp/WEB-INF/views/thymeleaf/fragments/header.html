@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta th:charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-</body>
-</html>
+        <link rel="icon" th:href="@{/img/logo/Logo2.png}" type="image/x-icon">
+        <title>eParking</title>
+
+        <!-- Boostrap core css -->
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+        <!-- custom style -->
+        <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    </head>
+
+    <body>
+        <header th:if="${id != null}">
+
+        </header>

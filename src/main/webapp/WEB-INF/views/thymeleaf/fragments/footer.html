@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+        <footer th:if="${id == null}" class="position-absolute bottom-0 start-0 container-fluid">
+            <div class="d-flex justify-content-between text-white">
+                <p>eParking © Argentina</p>
+                <div>
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-twitter"></i>
+                    <i class="fa-brands fa-facebook"></i>
+                </div>
+            </div>
+        </footer>
 
-</body>
+        <footer th:if="${id != null}" class="position-absolute bottom-0 start-0 container-fluid">
+            <nav>
+
+            </nav>
+        </footer>
+
+        <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+        <script src="https://kit.fontawesome.com/c0cf04e4bc.js" crossorigin="anonymous"></script>
+    </body>
 </html>
