@@ -18,9 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorLogin {
 
-    private ServicioLogin servicioLogin;
+    private final ServicioLogin servicioLogin;
 
-    @Autowired
     public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
     }
@@ -37,10 +36,11 @@ public class ControladorLogin {
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
-        Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
+        MobileUser usuarioBuscado = (MobileUser) servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("rol", usuarioBuscado.getRol());
-            request.getSession().setAttribute("email", usuarioBuscado.getEmail());
+            request.getSession().setAttribute("id", usuarioBuscado.getId());
+            request.getSession().setAttribute("nickname", usuarioBuscado.getNickName());
             return new ModelAndView("redirect:/home");
         } else {
             model.put("error", "Usuario o clave incorrecta");
@@ -69,11 +69,6 @@ public class ControladorLogin {
         model.put("usuario", new MobileUser());
         return new ModelAndView("nuevo-usuario", model);
     }
-
-    /*@RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome() {
-        return new ModelAndView("home");
-    }*/
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {

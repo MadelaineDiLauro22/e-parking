@@ -14,32 +14,82 @@
 
 </head>
 
-<body>
+<body class="bg-login min-vh-100 position-relative">
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="#">UNLAM</a>
-</nav>
+  <main role="main" class="container p-5">
 
-<main role="main" class="container">
+    <section>
 
-  <div class = "container">
-    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
-        <h3 class="form-signin-heading">Nuevo Usuario</h3>
-        <hr class="colorgraph"><br>
+      <div class="mx-auto text-center">
 
-        <input th:field="*{email}" id="email" class="form-control" required/>
-        <input th:field="*{password}" type="password" id="password" class="form-control" required/>
+        <img th:src="@{/img/logo/Logo2.png}" width="200rem">
+        <h2 class="text-white fs-4 mt-3 text-bold">eParking: Encontrá, Estacioná,
+          Pagá, ¡Listo!</h2>
+      </div>
 
-        <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" Type="Submit">Registrarme</button>
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-        </p>
-      </form>
+      <article class = "container mx-auto col-sm-6 mt-3 text-white p-0">
+
+        <div id="registerbox" class="py-3 px-4 bg-primary rounded-5 box-shadow">
+
+        <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
+
+          <h3 class="form-signin-heading text-center bg-terciary rounded-4 py-2 fs-5 text-bold">¡Comenzemos!</h3>
+
+          <label for="nombre" class="text-white mt-1 fs-6 text-bold">Nombre</label>
+
+          <input th:field="*{nombre}" id="nombre" class="form-control rounded-4 box-shadow" required/>
+
+          <label for="nickName" class="text-white mt-1 fs-6 text-bold">Nombre de Usuario</label>
+
+          <input th:field="*{nickName}" id="nickname" class="form-control rounded-4 box-shadow" required/>
+
+          <label for="email" class="text-white mt-1 fs-6 text-bold">Correo Electronico</label>
+
+          <input th:field="*{email}" id="email" class="form-control rounded-4 box-shadow" required/>
+
+          <label for="password" class="text-white mt-1 fs-6 text-bold">Contraseña</label>
+
+          <input th:field="*{password}" type="password" id="password" class="form-control rounded-4 box-shadow" required/>
+
+          <div class="text-center mt-4">
+
+            <button id="btn-login" class="btn btn-lg btn-primary btn-block text-center rounded-4
+                                   mx-auto fs-6 box-shadow px-5 text-bold" Type="Submit">Registrarme</button>
+
+          </div>
+
+          <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}"></p>
+
+        </form>
+
+        </div>
+
+        <p class="text-white text-center mt-2 fs-6">¿Ya estas registrado? Inicia sesión <a th:href="@{login.html}" class="text-primary">aquí.</a></p>
+
+      </article>
+
+    </section>
+
+  </main>
+
+  <footer class="position-absolute bottom-0 start-0 container-fluid">
+
+    <div class="d-flex justify-content-between text-white">
+
+      <p>eParking © Argentina</p>
+
+      <div>
+        <i class="fa-brands fa-instagram"></i>
+
+        <i class="fa-brands fa-twitter"></i>
+
+        <i class="fa-brands fa-facebook"></i>
+
+      </div>
 
     </div>
-  </div>
 
-</main>
+  </footer>
 <!-- /.container -->
 
 <!-- Boostrap core js -->

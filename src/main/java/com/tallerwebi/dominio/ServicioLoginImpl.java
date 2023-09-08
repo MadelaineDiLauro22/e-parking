@@ -28,18 +28,16 @@ public class ServicioLoginImpl implements ServicioLogin {
 
     @Override
     public void registrar(DatosLogin request) throws UsuarioExistente {
-        Usuario usuarioEncontrado = servicioLoginDao.buscarUsuario(request.getEmail(), request.getPassword());
+        Usuario usuarioEncontrado =  servicioLoginDao.buscarUsuario(request.getEmail(), request.getPassword());
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();
         }
-        //TODO: agregar nombre y nickname al request
         MobileUser user = new MobileUser(
                 request.getEmail(),
                 request.getPassword(),
-                "ADMIN",
-                "Admin",
-                "admin"
-        );
+                request.getRol(),
+                request.getNombre(),
+                request.getNickName());
         servicioLoginDao.guardar(user);
     }
 
