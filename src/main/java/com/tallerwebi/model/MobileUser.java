@@ -15,7 +15,7 @@ public class MobileUser extends Usuario {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Vehiculo> vehiculos;
 
-    public MobileUser(String email, String password, String rol, String nombre, String nickName) {
+    public MobileUser(String email, String password, UserRole rol, String nombre, String nickName) {
         super(email, password, rol);
         this.nombre = nombre;
         this.nickName = nickName;

@@ -13,10 +13,11 @@ public abstract class Usuario {
     private Long id;
     private String email;
     private String password;
-    private String rol;
+    @Enumerated(EnumType.STRING)
+    private UserRole rol;
     private Boolean activo = false;
 
-    public Usuario(String email, String password, String rol) {
+    public Usuario(String email, String password, UserRole rol) {
         this.email = email;
         this.password = password;
         this.rol = rol;
@@ -43,10 +44,10 @@ public abstract class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getRol() {
+    public UserRole getRol() {
         return rol;
     }
-    public void setRol(String rol) {
+    public void setRol(UserRole rol) {
         this.rol = rol;
     }
     public Boolean getActivo() {

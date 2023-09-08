@@ -21,10 +21,14 @@
     background-color: #A47823;
 }
 
-.bg-home{
+.bg-login{
     background: rgb(12,13,13);
     background: linear-gradient(0deg, rgba(12,13,13,1) 0%, rgba(63,66,70,1) 100%);
     background-repeat: no-repeat;
+}
+
+.bg-home{
+    background-color: #FEBC3D;
 }
 
 .text-primary{
