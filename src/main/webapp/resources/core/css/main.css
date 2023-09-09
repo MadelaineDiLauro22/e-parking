@@ -1,13 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Condensed:wght@400;700&display=swap');
 
-.btn-primary{
-    background-color: #46433F;
-    border: #46433F;
-}
 
-.btn-primary:hover{
-    background-color: #46433F;
-}
+/* Backgrounds */
 
 .bg-primary{
     background-color: #FEBC3D !important;
@@ -31,14 +25,21 @@
     background-color: #FEBC3D;
 }
 
-.text-primary{
-    color:#FEBC3D !important;
+/* Buttons */
+
+.btn-primary{
+    background-color: #46433F;
+    border: #46433F;
 }
 
-.box-shadow{
-    -webkit-box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
-    -moz-box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
-    box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
+.btn-primary:hover{
+    background-color: #46433F;
+}
+
+/* Texts */
+
+.text-primary{
+    color:#FEBC3D !important;
 }
 
 .text-white{
@@ -48,4 +49,12 @@
 
 .text-bold{
     font-weight: bold;
+}
+
+/* Decorations */
+
+.box-shadow{
+    -webkit-box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
+    -moz-box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
+    box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
 }
