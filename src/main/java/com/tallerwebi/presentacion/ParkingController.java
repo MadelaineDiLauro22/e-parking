@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
-import com.tallerwebi.model.Vehiculo;
+import com.tallerwebi.model.Vehicle;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ public class ParkingController {
 
     @GetMapping
     public ModelAndView getParkingRegister(@RequestParam("id") Long userId) {
-        List<Vehiculo> list = parkingService.getUserCarsList(userId);
+        List<Vehicle> list = parkingService.getUserCarsList(userId);
         ModelMap model = new ModelMap();
         model.put("vehicleList", list);
 

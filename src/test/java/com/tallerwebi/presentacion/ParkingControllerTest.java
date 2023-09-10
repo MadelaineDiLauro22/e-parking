@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
-import com.tallerwebi.model.Vehiculo;
+import com.tallerwebi.model.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -32,13 +32,13 @@ class ParkingControllerTest {
     @Test
     void shouldGetViewWithCarList() {
         Long userId = 1L;
-        List<Vehiculo> cars = new ArrayList<>();
+        List<Vehicle> cars = new ArrayList<>();
 
         Mockito.when(mockParkingService.getUserCarsList(userId))
                 .thenReturn(cars);
 
         ModelAndView response = parkingController.getParkingRegister(userId);
-        List<Vehiculo> responseList = (List<Vehiculo>) response.getModel().get("vehicleList");
+        List<Vehicle> responseList = (List<Vehicle>) response.getModel().get("vehicleList");
 
         assertEquals(PARKING_VIEW_NAME, response.getViewName());
         assertEquals(cars, responseList);

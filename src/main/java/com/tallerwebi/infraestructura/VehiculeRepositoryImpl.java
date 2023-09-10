@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Vehiculo;
+import com.tallerwebi.model.Vehicle;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -21,10 +21,10 @@ public class VehiculeRepositoryImpl implements VehicleRepository{
     }
 
     @Override
-    public List<Vehiculo> obtenerVehiculosPorUsuario(MobileUser user) {
+    public List<Vehicle> findVehiclesByUser(MobileUser user) {
         Session session = sessionFactory.getCurrentSession();
 
-        return (List<Vehiculo>) session.createCriteria(Vehiculo.class)
+        return (List<Vehicle>) session.createCriteria(Vehicle.class)
                 .add(Restrictions.eq("usuario", user)).list();
     }
 }

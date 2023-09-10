@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "USER_TABLE")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Usuario {
+public abstract class User {
 
     @Id
     @Column(name = "user_id")
@@ -15,18 +15,18 @@ public abstract class Usuario {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole rol;
-    private Boolean activo = false;
+    private Boolean isActive = false;
 
-    public Usuario(String email, String password, UserRole rol) {
+    public User(String email, String password, UserRole rol) {
         this.email = email;
         this.password = password;
         this.rol = rol;
     }
 
-    public Usuario() {
+    public User() {
     }
 
-    public abstract void registerVehicle(Vehiculo vehiculo);
+    public abstract void registerVehicle(Vehicle vehicle);
 
     public Long getId() {
         return id;
@@ -52,18 +52,11 @@ public abstract class Usuario {
     public void setRol(UserRole rol) {
         this.rol = rol;
     }
-    public Boolean getActivo() {
-        return activo;
+    public Boolean getIsActive() {
+        return isActive;
     }
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public boolean activo() {
-        return activo;
+    public void setIsActive(Boolean activo) {
+        this.isActive = activo;
     }
 
-    public void activar() {
-        activo = true;
-    }
 }

@@ -1,11 +1,10 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.excepcion.UsuarioInexistente;
-import com.tallerwebi.infraestructura.RepositorioUsuario;
+import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Usuario;
-import com.tallerwebi.model.Vehiculo;
+import com.tallerwebi.model.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -23,28 +22,28 @@ class ParkingServiceImplTest {
     @Mock
     private VehicleRepository mockVehicleRepository;
     @Mock
-    private RepositorioUsuario mockRepositorioUsuario;
+    private UserRepository mockUserRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockRepositorioUsuario);
+        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockUserRepository);
     }
 
     @Test
     void shouldGetVehicleList(){
         Long userId = 1L;
-        List<Vehiculo> cars = new ArrayList<>();
+        List<Vehicle> cars = new ArrayList<>();
         MobileUser user = new MobileUser();
 
-        Mockito.when(mockRepositorioUsuario.buscarUsuarioPorId(userId))
+        Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(user);
 
-        Mockito.when(mockVehicleRepository.obtenerVehiculosPorUsuario(user))
+        Mockito.when(mockVehicleRepository.findVehiclesByUser(user))
                 .thenReturn(cars);
 
-        List<Vehiculo> vehicles = parkingService.getUserCarsList(userId);
+        List<Vehicle> vehicles = parkingService.getUserCarsList(userId);
 
         assertEquals(cars,vehicles);
     }
@@ -53,9 +52,9 @@ class ParkingServiceImplTest {
     void whenTryToGetUserCarList_IfUserNotExist_ShouldThrowException(){
         Long userId = 1L;
 
-        Mockito.when(mockRepositorioUsuario.buscarUsuarioPorId(userId))
+        Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(null);
 
-        assertThrows(UsuarioInexistente.class,() -> parkingService.getUserCarsList(userId));
+        assertThrows(UserNotFoundException.class,() -> parkingService.getUserCarsList(userId));
     }
 }

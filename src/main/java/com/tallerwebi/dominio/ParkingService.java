@@ -1,11 +1,11 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.model.Vehiculo;
+import com.tallerwebi.model.Vehicle;
 
 import java.util.List;
 
 public interface ParkingService {
 
-    List<Vehiculo> getUserCarsList(Long idUsuario);
+    List<Vehicle> getUserCarsList(Long idUsuario);
 
 }

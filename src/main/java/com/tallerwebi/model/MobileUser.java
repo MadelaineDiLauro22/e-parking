@@ -7,20 +7,20 @@ import java.util.List;
 @Entity
 @Table(name = "MOBILE_USER")
 @PrimaryKeyJoinColumn(name = "user_id")
-public class MobileUser extends Usuario {
+public class MobileUser extends User {
 
-    private String nombre;
+    private String name;
     @Column(name = "nick_name")
     private String nickName;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Vehiculo> vehiculos;
+    private List<Vehicle> vehicles;
 
-    public MobileUser(String email, String password, UserRole rol, String nombre, String nickName) {
+    public MobileUser(String email, String password, UserRole rol, String name, String nickName) {
         super(email, password, rol);
-        this.nombre = nombre;
+        this.name = name;
         this.nickName = nickName;
-        this.vehiculos = new ArrayList<>();
+        this.vehicles = new ArrayList<>();
     }
 
     public MobileUser() {
@@ -28,16 +28,16 @@ public class MobileUser extends Usuario {
     }
 
     @Override
-    public void registerVehicle(Vehiculo vehiculo) {
-        vehiculos.add(vehiculo);
+    public void registerVehicle(Vehicle vehicle) {
+        vehicles.add(vehicle);
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getNickName() {

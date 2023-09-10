@@ -2,7 +2,7 @@ package com.tallerwebi.integracion;
 
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
-import com.tallerwebi.model.Usuario;
+import com.tallerwebi.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
-public class ControladorLoginTest {
+public class LoginControllerTest {
 
-	private Usuario usuarioMock;
+	private User userMock;
 	@Autowired
 	private WebApplicationContext wac;
 	private MockMvc mockMvc;
@@ -39,8 +39,8 @@ public class ControladorLoginTest {
 
 	@BeforeEach
 	public void init(){
-		usuarioMock = mock(Usuario.class);
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+		userMock = mock(User.class);
+		when(userMock.getEmail()).thenReturn("dami@unlam.com");
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	}
 
@@ -68,7 +68,7 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = result.getModelAndView();
         assert modelAndView != null;
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("login"));
-		assertThat(modelAndView.getModel().get("datosLogin").toString(),  containsString("com.tallerwebi.presentacion.dto.DatosLogin"));
+		assertThat(modelAndView.getModel().get("datosLogin").toString(),  containsString("com.tallerwebi.presentacion.dto.LoginDataDTO"));
 
 	}
 }

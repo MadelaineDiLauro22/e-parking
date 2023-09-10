@@ -2,20 +2,20 @@ package com.tallerwebi.presentacion.dto;
 
 import com.tallerwebi.model.UserRole;
 
-public class DatosLogin {
+public class LoginDataDTO {
 
     private UserRole rol = UserRole.USER;
 
-    private String nombre;
+    private String name;
 
     private String nickName;
     private String email;
     private String password;
 
-    public DatosLogin() {
+    public LoginDataDTO() {
     }
 
-    public DatosLogin(String email, String password) {
+    public LoginDataDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }
@@ -28,12 +28,12 @@ public class DatosLogin {
         this.rol = rol;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getNickName() {
