@@ -26,6 +26,8 @@ public abstract class Usuario {
     public Usuario() {
     }
 
+    public abstract void registerVehicle(Vehiculo vehiculo);
+
     public Long getId() {
         return id;
     }

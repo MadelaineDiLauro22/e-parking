@@ -1,29 +1,37 @@
 package com.tallerwebi.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tallerwebi.infraestructura.RepositorioUsuario;
+import com.tallerwebi.model.MobileUser;
+import com.tallerwebi.model.UserRole;
+import com.tallerwebi.model.Vehiculo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-
-import javax.sql.DataSource;
 
 @Configuration
 public class DatabaseInitializationConfig {
 
-    @Autowired
-    private DataSource dataSource;
+    public static final String MAIL = "test@unlam.edu.ar";
+    public static final String PASSWORD = "test";
+    public static final String NOMBRE = "Admin";
+    public static final String NICK_NAME = "admin";
+    public static final String PATENTE = "ABC123";
+    public static final String MARCA = "VOLKSWAGEN";
+    public static final String MODELO = "FOX";
+    public static final String COLOR = "Rojo";
+    private final RepositorioUsuario repositorioUsuario;
+
+
+    public DatabaseInitializationConfig(RepositorioUsuario repositorioUsuario) {
+        this.repositorioUsuario = repositorioUsuario;
+    }
 
     @Bean
-    public DataSourceInitializer dataSourceInitializer() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("data.sql"));
+    public void dataSourceInitializer() {
+        MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.ADMIN, NOMBRE, NICK_NAME);
+        Vehiculo vehiculo = new Vehiculo(PATENTE, MARCA, MODELO, COLOR);
+        user.registerVehicle(vehiculo);
 
-        DataSourceInitializer initializer = new DataSourceInitializer();
-        initializer.setDataSource(dataSource);
-        initializer.setDatabasePopulator(populator);
-
-        return initializer;
+        repositorioUsuario.guardar(user);
     }
+
 }

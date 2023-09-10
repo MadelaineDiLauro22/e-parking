@@ -1,6 +1,7 @@
 package com.tallerwebi.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,10 +20,16 @@ public class MobileUser extends Usuario {
         super(email, password, rol);
         this.nombre = nombre;
         this.nickName = nickName;
+        this.vehiculos = new ArrayList<>();
     }
 
     public MobileUser() {
         super();
+    }
+
+    @Override
+    public void registerVehicle(Vehiculo vehiculo) {
+        vehiculos.add(vehiculo);
     }
 
     public String getNombre() {
