@@ -90,7 +90,7 @@ public class LoginControllerTest {
 		ModelAndView modelAndView = loginController.registrarme(loginDataDTOMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("new-user"));
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("El usuario ya existe"));
 	}
 
@@ -103,7 +103,7 @@ public class LoginControllerTest {
 		ModelAndView modelAndView = loginController.registrarme(loginDataDTOMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("new-user"));
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
 	}
 }

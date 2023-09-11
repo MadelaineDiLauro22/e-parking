@@ -18,7 +18,7 @@
         <div>
             <label for="vehicle">Seleccionar Vehículo:</label>
             <select id="vehicle" name="vehicle" th:each="vehicle : ${vehicleList}">
-                <option th:value="${vehicle.patente}" th:text="${vehicle.marca + ' - ' + vehicle.patente}">Marca -
+                <option th:value="${vehicle.patent}" th:text="${vehicle.brand + ' - ' + vehicle.patent}">Marca -
                     Patente
                 </option>
             </select>

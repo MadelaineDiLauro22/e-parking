@@ -30,7 +30,7 @@ public class LoginController {
         return new ModelAndView("login", modelo);
     }
 
-    @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+    @RequestMapping(path = "/validate-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") LoginDataDTO loginDataDTO, HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
@@ -46,26 +46,26 @@ public class LoginController {
         return new ModelAndView("login", model);
     }
 
-    @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") LoginDataDTO requestLogin) {
+    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
+    public ModelAndView registrarme(@ModelAttribute("user") LoginDataDTO requestLogin) {
         ModelMap model = new ModelMap();
         try{
             loginService.registerUser(requestLogin);
         } catch (UserNotFoundException e){
             model.put("error", "El usuario ya existe");
-            return new ModelAndView("nuevo-usuario", model);
+            return new ModelAndView("new-user", model);
         } catch (Exception e){
             model.put("error", "Error al registrar el nuevo usuario");
-            return new ModelAndView("nuevo-usuario", model);
+            return new ModelAndView("new-user", model);
         }
         return new ModelAndView("redirect:/login");
     }
 
-    @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
+    @RequestMapping(path = "/new-user", method = RequestMethod.GET)
     public ModelAndView nuevoUsuario() {
         ModelMap model = new ModelMap();
-        model.put("usuario", new LoginDataDTO());
-        return new ModelAndView("nuevo-usuario", model);
+        model.put("user", new LoginDataDTO());
+        return new ModelAndView("new-user", model);
     }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)

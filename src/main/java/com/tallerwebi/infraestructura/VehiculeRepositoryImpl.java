@@ -25,6 +25,6 @@ public class VehiculeRepositoryImpl implements VehicleRepository{
         Session session = sessionFactory.getCurrentSession();
 
         return (List<Vehicle>) session.createCriteria(Vehicle.class)
-                .add(Restrictions.eq("usuario", user)).list();
+                .add(Restrictions.eq("user", user)).list();
     }
 }

@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,22 +23,27 @@ class ParkingControllerTest {
     @Mock
     private ParkingService mockParkingService;
 
+    @Mock
+    private HttpSession mockHttpSession;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        parkingController = new ParkingController(mockParkingService);
+        parkingController = new ParkingController(mockParkingService, mockHttpSession);
     }
 
     @Test
     void shouldGetViewWithCarList() {
         Long userId = 1L;
+        Double lat = 1.0;
+        Double lng = 1.0;
         List<Vehicle> cars = new ArrayList<>();
 
         Mockito.when(mockParkingService.getUserCarsList(userId))
                 .thenReturn(cars);
 
-        ModelAndView response = parkingController.getParkingRegister(userId);
+        ModelAndView response = parkingController.getParkingRegister();
         List<Vehicle> responseList = (List<Vehicle>) response.getModel().get("vehicleList");
 
         assertEquals(PARKING_VIEW_NAME, response.getViewName());
