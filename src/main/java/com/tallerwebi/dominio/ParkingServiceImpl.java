@@ -5,6 +5,7 @@ import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public class ParkingServiceImpl implements ParkingService {
         if(user == null) throw new UserNotFoundException();
 
         return vehicleRepository.findVehiclesByUser(user);
+    }
+
+    @Override
+    public boolean registerParking(ParkingRegisterDTO parkingRegisterDTO) {
+        return true;
     }
 }

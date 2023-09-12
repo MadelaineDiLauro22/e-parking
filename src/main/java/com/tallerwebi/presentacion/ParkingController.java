@@ -2,12 +2,10 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
 import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -30,8 +28,26 @@ public class ParkingController {
         List<Vehicle> list = parkingService.getUserCarsList((Long)session.getAttribute("id"));
         ModelMap model = new ModelMap();
         model.put("vehicleList", list);
+        model.put("parkingRegister", new ParkingRegisterDTO());
 
         return new ModelAndView("parking-register", model);
+    }
+
+    @PostMapping
+    @RequestMapping("/register")
+    public ModelAndView registerParking(@ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO){
+        boolean response = parkingService.registerParking(parkingRegisterDTO);
+
+        ModelMap model = new ModelMap();
+        model.put("success", response);
+
+        if (response){
+            return new ModelAndView("redirect:/home", model);
+        } else{
+            return new ModelAndView("parking-register", model);
+        }
+
+
     }
 
 }
