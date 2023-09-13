@@ -39,6 +39,9 @@
         <div>
             <input type="submit" value="Registrar">
         </div>
+        <div>
+            <p th:if="${error != null}"  th:text="'Error ' + ${error}"></p>
+        </div>
     </form>
     <script>
         function renderTicketImageForm() {

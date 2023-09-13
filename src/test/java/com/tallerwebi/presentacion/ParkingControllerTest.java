@@ -1,9 +1,11 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
+import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -76,5 +78,18 @@ class ParkingControllerTest {
         assertEquals("parking-register", response.getViewName());
         assertFalse((boolean)response.getModel().get("success"));
     }
+    @Test
+    @Disabled
+    void whenGetUserById_IfUserNotExists_ShouldShowMessage(){
+        Long idUser = 3L;
 
+        Mockito.when(mockHttpSession.getAttribute("id")).thenReturn(idUser);
+        Mockito.when(mockParkingService.getUserCarsList(idUser))
+                .thenThrow(UserNotFoundException.class);
+
+        ModelAndView response = parkingController.getParkingRegister();
+
+        assertEquals("parking-register", response.getViewName());
+        assertEquals("Usuario inexistente",response.getModel().get("error"));
+    }
 }
