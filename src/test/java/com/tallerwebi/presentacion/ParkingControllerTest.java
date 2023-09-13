@@ -32,7 +32,6 @@ class ParkingControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-
         parkingController = new ParkingController(mockParkingService, mockHttpSession);
     }
 
@@ -54,7 +53,7 @@ class ParkingControllerTest {
     }
 
     @Test
-    void shouldRegisterParkingAndReturnToHomeWithSuccess(){
+    void shouldRegisterParkingAndReturnToHomeWithSuccess() {
 
         ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
 
@@ -63,11 +62,11 @@ class ParkingControllerTest {
         ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
 
         assertEquals("redirect:/home", response.getViewName());
-        assertTrue((boolean)response.getModel().get("success"));
+        assertTrue((boolean) response.getModel().get("success"));
     }
 
     @Test
-    void whenRegisterFail_ShouldReturnParkingViewAndError(){
+    void whenRegisterFail_ShouldReturnParkingViewAndError() {
 
         ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
 
@@ -76,20 +75,21 @@ class ParkingControllerTest {
         ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
 
         assertEquals("parking-register", response.getViewName());
-        assertFalse((boolean)response.getModel().get("success"));
+        assertFalse((boolean) response.getModel().get("success"));
     }
-    @Test
-    @Disabled
-    void whenGetUserById_IfUserNotExists_ShouldShowMessage(){
-        Long idUser = 3L;
 
-        Mockito.when(mockHttpSession.getAttribute("id")).thenReturn(idUser);
-        Mockito.when(mockParkingService.getUserCarsList(idUser))
-                .thenThrow(UserNotFoundException.class);
+    @Test
+    void whenGetUserById_IfUserNotExists_ShouldShowMessage() {
+        Long userId = 3L;
+
+        Mockito.when(mockHttpSession.getAttribute("id"))
+                .thenReturn(userId);
+        Mockito.when(mockParkingService.getUserCarsList(userId))
+                .thenThrow(new UserNotFoundException());
 
         ModelAndView response = parkingController.getParkingRegister();
 
         assertEquals("parking-register", response.getViewName());
-        assertEquals("Usuario inexistente",response.getModel().get("error"));
+        assertEquals("Usuario inexistente", response.getModel().get("error"));
     }
 }

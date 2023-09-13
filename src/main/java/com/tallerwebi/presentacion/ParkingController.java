@@ -27,31 +27,31 @@ public class ParkingController {
     @GetMapping
     public ModelAndView getParkingRegister() {
         try {
-            List<Vehicle> list = parkingService.getUserCarsList((Long)session.getAttribute("id"));
+            List<Vehicle> list = parkingService.getUserCarsList((Long) session.getAttribute("id"));
             ModelMap model = new ModelMap();
             model.put("vehicleList", list);
             model.put("parkingRegister", new ParkingRegisterDTO());
 
             return new ModelAndView("parking-register", model);
-
         } catch (UserNotFoundException e) {
             ModelMap model = new ModelMap();
-            model.put("error",e.getMessage());
+            model.put("error", e.getMessage());
+
             return new ModelAndView("parking-register", model);
         }
     }
 
     @PostMapping
     @RequestMapping("/register")
-    public ModelAndView registerParking(@ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO){
+    public ModelAndView registerParking(@ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO) {
         boolean response = parkingService.registerParking(parkingRegisterDTO);
 
         ModelMap model = new ModelMap();
         model.put("success", response);
 
-        if (response){
+        if (response) {
             return new ModelAndView("redirect:/home", model);
-        } else{
+        } else {
             return new ModelAndView("parking-register", model);
         }
 
