@@ -16,11 +16,15 @@ public class MobileUser extends User {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Vehicle> vehicles;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Parking> parkings;
+
     public MobileUser(String email, String password, UserRole rol, String name, String nickName) {
         super(email, password, rol);
         this.name = name;
         this.nickName = nickName;
         this.vehicles = new ArrayList<>();
+        this.parkings = new ArrayList<>();
     }
 
     public MobileUser() {
@@ -31,6 +35,9 @@ public class MobileUser extends User {
     public void registerVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
     }
+
+    @Override
+    public void registerParking(Parking parking) {parkings.add(parking);}
 
     public String getName() {
         return name;

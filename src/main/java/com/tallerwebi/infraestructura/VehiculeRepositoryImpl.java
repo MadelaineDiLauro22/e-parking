@@ -27,4 +27,12 @@ public class VehiculeRepositoryImpl implements VehicleRepository{
         return (List<Vehicle>) session.createCriteria(Vehicle.class)
                 .add(Restrictions.eq("user", user)).list();
     }
+
+    @Override
+    public Vehicle findVehicleByPatent(String patent) {
+        Session session = sessionFactory.getCurrentSession();
+
+        return (Vehicle) session.createCriteria(Vehicle.class)
+                .add(Restrictions.eq("patent", patent)).uniqueResult();
+    }
 }

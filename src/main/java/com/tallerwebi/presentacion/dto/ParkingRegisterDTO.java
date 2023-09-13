@@ -6,15 +6,15 @@ public class ParkingRegisterDTO {
 
     private ParkingType parkingType;
     private String vehicle;
-    private String vehiclePic;
-    private String ticketPic;
+    private byte[] vehiclePic;
+    private byte[] ticketPic;
     private Double lat;
     private Double ln;
 
     public ParkingRegisterDTO() {
     }
 
-    public ParkingType parkingType() {
+    public ParkingType getParkingType() {
         return parkingType;
     }
 
@@ -22,7 +22,7 @@ public class ParkingRegisterDTO {
         this.parkingType = parkingType;
     }
 
-    public String vehicle() {
+    public String getVehicle() {
         return vehicle;
     }
 
@@ -30,23 +30,23 @@ public class ParkingRegisterDTO {
         this.vehicle = vehicle;
     }
 
-    public String vehiclePic() {
+    public byte[] getVehiclePic() {
         return vehiclePic;
     }
 
-    public void setVehiclePic(String vehiclePic) {
+    public void setVehiclePic(byte[] vehiclePic) {
         this.vehiclePic = vehiclePic;
     }
 
-    public String ticketPic() {
+    public byte[] getTicketPic() {
         return ticketPic;
     }
 
-    public void setTicketPic(String ticketPic) {
+    public void setTicketPic(byte[] ticketPic) {
         this.ticketPic = ticketPic;
     }
 
-    public Double lat() {
+    public Double getLat() {
         return lat;
     }
 
@@ -54,7 +54,7 @@ public class ParkingRegisterDTO {
         this.lat = lat;
     }
 
-    public Double ln() {
+    public Double getLn() {
         return ln;
     }
 

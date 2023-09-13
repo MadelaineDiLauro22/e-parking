@@ -44,18 +44,18 @@ public class ParkingController {
     @PostMapping
     @RequestMapping("/register")
     public ModelAndView registerParking(@ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO) {
-        boolean response = parkingService.registerParking(parkingRegisterDTO);
+        parkingService.registerParking(parkingRegisterDTO, (Long)session.getAttribute("id"));
 
         ModelMap model = new ModelMap();
-        model.put("success", response);
+        //model.put("success", response);
 
-        if (response) {
+        /*if (response) {
             return new ModelAndView("redirect:/home", model);
         } else {
             return new ModelAndView("parking-register", model);
-        }
+        }*/
 
-
+        return null;
     }
 
 }

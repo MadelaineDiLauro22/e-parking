@@ -10,5 +10,5 @@ public interface ParkingService {
 
     List<Vehicle> getUserCarsList(Long idUsuario) throws UserNotFoundException;
 
-    boolean registerParking(ParkingRegisterDTO parkingRegisterDTO);
+    void registerParking(ParkingRegisterDTO parkingRegisterDTO, Long idUser);
 }

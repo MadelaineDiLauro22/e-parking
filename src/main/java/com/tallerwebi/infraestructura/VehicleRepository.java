@@ -9,4 +9,5 @@ public interface VehicleRepository {
 
     List<Vehicle> findVehiclesByUser(MobileUser user);
 
+    Vehicle findVehicleByPatent(String vehicle);
 }

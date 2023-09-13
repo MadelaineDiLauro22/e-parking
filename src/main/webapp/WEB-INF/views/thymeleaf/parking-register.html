@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Taller Web I</title>
-</head>
-<body>
-<main>
+<div th:replace="fragments/header.html"></div>
+
+<body class="bg-home min-vh-100 position-relative">
+<main role="main" class="container p-5">
     <h1>Registrar Parking</h1>
     <form action="/eparking/mobile/parking/register" method="post" enctype="multipart/form-data">
         <div>
@@ -57,4 +53,4 @@
     </script>
 </main>
 </body>
-</html>
+<div th:replace="fragments/footer.html"></div>
