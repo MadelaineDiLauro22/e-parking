@@ -88,3 +88,40 @@
     }
 
 }
+
+/*Views*/
+.titleView{
+    text-align: center;
+    border-bottom: solid 2px #FEBC3D;
+    padding: 5px;
+    color: white;
+}
+
+.divContainer{
+    margin: auto;
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.divContainerBorderBottom{
+    border-bottom: solid 2px #FEBC3D;
+    padding: 5px;
+}
+.labelForm{
+    text-align: left;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.buttons{
+    border-radius:5px;
+    color: white;
+    background-color:#3F4246;
+}
+
+#vehiclePic{
+    color: transparent;
+    overflow: hidden;
+}
