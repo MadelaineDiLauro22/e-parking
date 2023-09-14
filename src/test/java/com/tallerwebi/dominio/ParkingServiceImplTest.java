@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.MobileUser;
@@ -24,12 +25,14 @@ class ParkingServiceImplTest {
     private VehicleRepository mockVehicleRepository;
     @Mock
     private UserRepository mockUserRepository;
+    @Mock
+    private ParkingRepository mockParkingRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockUserRepository);
+        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockUserRepository, mockParkingRepository);
     }
 
     @Test

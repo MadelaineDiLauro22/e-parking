@@ -7,7 +7,10 @@ import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -42,8 +45,7 @@ public class ParkingController {
         }
     }
 
-    @PostMapping
-    @RequestMapping("/register")
+    @PostMapping(value = "/register")
     public ModelAndView registerParking(@ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO) {
         try {
             parkingService.registerParking(parkingRegisterDTO, (Long)session.getAttribute("id"));

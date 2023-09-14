@@ -1,36 +1,37 @@
 <div th:replace="fragments/header.html"></div>
 
+
 <body class="bg-primary min-vh-100 position-relative" style="color:white;">
 <main role="main" class="container p-5 bg-login w-75" style="height: 90vh;border-radius: 5px">
     <h1 class="titleView">Registrar Parking</h1>
-    <form action="/eparking/mobile/parking/register" method="post" enctype="multipart/form-data">
+    <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}">
         <div class="divContainer divContainerBorderBottom">
-            <label for="parkingType" class="labelForm">Seleccionar Tipo:</label>
-            <select id="parkingType" name="parkingType" onchange="renderTicketImageForm()">
+            <label for="parkingType">Seleccionar Tipo:</label>
+            <select th:field="*{parkingType}" id="parkingType" onchange="renderTicketImageForm()">
                 <option value="STREET" selected>Vía Publica</option>
                 <option value="GARAGE">Estacionamiento</option>
             </select>
         </div>
         <div class="divContainer divContainerBorderBottom">
-            <label for="vehicle" class="labelForm">Seleccionar Vehículo:</label>
-            <select id="vehicle" name="vehicle" th:each="vehicle : ${vehicleList}">
-                <option th:value="${vehicle.patent}" th:text="${vehicle.brand + ' - ' + vehicle.patent}">Marca -
-                    Patente
+            <label for="vehicle">Seleccionar Vehículo:</label>
+            <select th:field="*{vehicle}" id="vehicle" th:each="vehicle : ${vehicleList}">
+                <option th:value="${vehicle.patent}" th:text="${vehicle.brand + ' - ' + vehicle.patent}">
+                    Marca - Patente
                 </option>
             </select>
         </div>
         <div class="divContainer divContainerBorderBottom">
-            <label for="vehiclePic" class="labelForm">Foto del vehículo:</label>
-            <input id="vehiclePic" name="vehiclePic" type="file" accept="image/jpeg">
+            <label for="vehiclePic">Foto del vehicle:</label>
+            <input th:field="*{vehiclePic}" id="vehiclePic"  type="file" accept="image/jpeg">
         </div>
         <div id="typeGarage" style="display: none" class="divContainer divContainerBorderBottom">
-            <label for="ticketPic" class="labelForm">Foto de Ticket:</label>
-            <input id="ticketPic" name="ticketPic" type="file" accept="image/jpeg">
+            <label for="ticketPic">Foto de Ticket:</label>
+            <input th:field="*{ticketPic}" id="ticketPic"  type="file" accept="image/jpeg">
         </div>
         <div id="geolocation" class="divContainer" style="margin-top: 10px; margin-bottom: 10px">
-            <input id="lat" name="lat" value="" style="display: none">
-            <input id="ln" name="ln" value="" style="display: none">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.36433397229!2d-58.565380123487344!3d-34.670753161042825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc62cc3ef7083%3A0x8867107f425fade5!2sUniversidad%20Nacional%20de%20La%20Matanza!5e0!3m2!1ses-419!2sar!4v1694126930425!5m2!1ses-419!2sar" style="border:solid 2px #FEBC3D;border-radius:5px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <input th:field="*{lat}" id="lat" type="text" style="display: none">
+            <input th:field="*{ln}" id="ln"  type="text" style="display: none">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.36433397229!2d-58.565380123487344!3d-34.670753161042825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc62cc3ef7083%3A0x8867107f425fade5!2sUniversidad%20Nacional%20de%20La%20Matanza!5e0!3m2!1ses-419!2sar!4v1694126930425!5m2!1ses-419!2sar" width="350" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div class="divContainer" style="marign-top:5px;margin-bottom:5px;width:50%">
             <input type="submit" value="Registrar" class="buttons">

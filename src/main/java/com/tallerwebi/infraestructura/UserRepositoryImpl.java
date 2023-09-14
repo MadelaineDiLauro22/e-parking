@@ -33,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void save(MobileUser usuario) {
-        sessionFactory.getCurrentSession().save(usuario);
+        sessionFactory.getCurrentSession().saveOrUpdate(usuario);
     }
 
     @Override

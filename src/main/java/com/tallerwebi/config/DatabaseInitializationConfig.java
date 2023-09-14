@@ -20,7 +20,6 @@ public class DatabaseInitializationConfig {
     public static final String COLOR = "Rojo";
     private final UserRepository userRepository;
 
-
     public DatabaseInitializationConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -29,6 +28,7 @@ public class DatabaseInitializationConfig {
     public void dataSourceInitializer() {
         MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.ADMIN, NOMBRE, NICK_NAME);
         Vehicle vehicle = new Vehicle(PATENTE, MARCA, MODELO, COLOR);
+        vehicle.setUser(user);
         user.registerVehicle(vehicle);
 
         userRepository.save(user);

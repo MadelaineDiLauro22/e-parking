@@ -66,6 +66,14 @@ public class Vehicle {
         this.isActive = active;
     }
 
+    public MobileUser getUser() {
+        return user;
+    }
+
+    public void setUser(MobileUser user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -14,6 +14,15 @@ public class ParkingRegisterDTO {
     public ParkingRegisterDTO() {
     }
 
+    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln) {
+        this.parkingType = parkingType;
+        this.vehicle = vehicle;
+        this.vehiclePic = vehiclePic;
+        this.ticketPic = ticketPic;
+        this.lat = lat;
+        this.ln = ln;
+    }
+
     public ParkingType getParkingType() {
         return parkingType;
     }
