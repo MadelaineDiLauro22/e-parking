@@ -16,14 +16,19 @@
         <div th:class="${id} ? 'bg-home cover-container w-100 d-flex mx-auto flex-column' : 'bg-login cover-container w-100 d-flex mx-auto flex-column'">
             <header class="mb-auto">
                 <nav th:if="${id != null}" class="menu-desktop">
-                    <div>
+                    <!--TODO: Menú-Desktop-->
+                    <div class="">
                         <ul>
+                            <li>
+                                <img th:src="@{/img/logo/Logo2.png}" width="30rem">
+                                <p th:text="${nickname}"></p>
+                            </li>
                             <li>
                                 <a href="#">
                                     Inicio
                                 </a>
                             </li>
-                            <li>
+                            <li class="">
                                 <a href="#">
                                     Registros
                                 </a>
