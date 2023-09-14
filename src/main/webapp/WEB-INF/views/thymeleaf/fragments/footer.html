@@ -1,19 +1,40 @@
-        <footer th:if="${id == null}" class="position-absolute bottom-0 start-0 container-fluid">
-            <div class="d-flex justify-content-between text-white">
-                <p>eParking © Argentina</p>
-                <div>
-                    <i class="fa-brands fa-instagram"></i>
-                    <i class="fa-brands fa-twitter"></i>
-                    <i class="fa-brands fa-facebook"></i>
-                </div>
-            </div>
-        </footer>
-
-        <footer th:if="${id != null}" class="position-absolute bottom-0 start-0 container-fluid">
-            <nav>
-
-            </nav>
-        </footer>
+        <footer class="mt-auto">
+                <nav>
+                    <div th:if="${id != null}" class="menu-mobile">
+                        <ul>
+                            <li>
+                                <a href="#">
+                                    Inicio
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Registros
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Denuncias
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Mi Cuenta
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div th:class="${id} ? 'footer-desktop d-flex justify-content-between text-white px-3' : 'd-flex justify-content-between text-white px-3'">
+                        <p>eParking © Argentina</p>
+                        <div>
+                            <i class="fa-brands fa-instagram"></i>
+                            <i class="fa-brands fa-twitter"></i>
+                            <i class="fa-brands fa-facebook"></i>
+                        </div>
+                    </div>
+                </nav>
+            </footer>
+        </div>
 
         <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
         <script src="https://kit.fontawesome.com/c0cf04e4bc.js" crossorigin="anonymous"></script>
