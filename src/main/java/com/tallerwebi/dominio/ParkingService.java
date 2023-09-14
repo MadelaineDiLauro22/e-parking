@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
@@ -10,5 +11,5 @@ public interface ParkingService {
 
     List<Vehicle> getUserCarsList(Long idUsuario) throws UserNotFoundException;
 
-    void registerParking(ParkingRegisterDTO parkingRegisterDTO, Long idUser);
+    void registerParking(ParkingRegisterDTO parkingRegisterDTO, Long idUser) throws UserNotFoundException, VehicleNotFoundException;
 }

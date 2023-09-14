@@ -6,6 +6,7 @@ import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -57,4 +58,23 @@ class ParkingServiceImplTest {
 
         assertThrows(UserNotFoundException.class,() -> parkingService.getUserCarsList(userId));
     }
+
+    @Test
+    @Disabled
+    void shouldRegisterParking() {
+        //TODO: implement test
+    }
+
+    @Test
+    @Disabled
+    void whenRegisterParking_ifUserNotFound_shouldThrowException() {
+        //TODO: implement test
+    }
+
+    @Test
+    @Disabled
+    void whenRegisterParking_ifVehicleNotFound_shouldThrowException() {
+        //TODO: implement test
+    }
+
 }

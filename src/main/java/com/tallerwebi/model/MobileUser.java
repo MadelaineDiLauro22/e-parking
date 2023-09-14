@@ -2,7 +2,9 @@ package com.tallerwebi.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "MOBILE_USER")
@@ -13,17 +15,17 @@ public class MobileUser extends User {
     @Column(name = "nick_name")
     private String nickName;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Vehicle> vehicles;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Vehicle> vehicles;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mobileUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Parking> parkings;
 
     public MobileUser(String email, String password, UserRole rol, String name, String nickName) {
         super(email, password, rol);
         this.name = name;
         this.nickName = nickName;
-        this.vehicles = new ArrayList<>();
+        this.vehicles = new HashSet<>();
         this.parkings = new ArrayList<>();
     }
 

@@ -1,6 +1,7 @@
 package com.tallerwebi.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "VEHICLE")
@@ -44,33 +45,18 @@ public class Vehicle {
         return patent;
     }
 
-    public void setPatent(String patent) {
-        this.patent = patent;
-    }
-
     public String getBrand() {
         return brand;
-    }
-
-    public void setBrand(String marca) {
-        this.brand = marca;
     }
 
     public String getModel() {
         return model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public String getColor() {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public boolean isIsActive() {
         return isActive;
@@ -78,5 +64,18 @@ public class Vehicle {
 
     public void setIsActive(boolean active) {
         this.isActive = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return Objects.equals(patent, vehicle.patent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(patent);
     }
 }

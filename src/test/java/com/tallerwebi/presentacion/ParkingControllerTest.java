@@ -53,31 +53,34 @@ class ParkingControllerTest {
     }
 
     @Test
-    @Disabled
     void shouldRegisterParkingAndReturnToHomeWithSuccess() {
-
+        Long userId = 3L;
         ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
 
-        //Mockito.when(mockParkingService.registerParking(parkingRegisterDTO)).thenReturn(true);
+        Mockito.when(mockHttpSession.getAttribute("id"))
+                .thenReturn(userId);
 
         ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
+        Mockito.verify(mockParkingService).registerParking(parkingRegisterDTO, userId);
 
         assertEquals("redirect:/home", response.getViewName());
         assertTrue((boolean) response.getModel().get("success"));
     }
 
     @Test
-    @Disabled
     void whenRegisterFail_ShouldReturnParkingViewAndError() {
-
+        Long userId = 3L;
         ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
 
-        //Mockito.when(mockParkingService.registerParking(parkingRegisterDTO)).thenReturn(false);
+        Mockito.when(mockHttpSession.getAttribute("id"))
+                .thenReturn(userId);
+        Mockito.doThrow(new UserNotFoundException())
+                .when(mockParkingService).registerParking(parkingRegisterDTO, userId);
 
         ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
 
         assertEquals("parking-register", response.getViewName());
-        assertFalse((boolean) response.getModel().get("success"));
+        assertEquals("Usuario inexistente", response.getModel().get("error"));
     }
 
     @Test

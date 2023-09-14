@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Controller;
@@ -44,18 +45,18 @@ public class ParkingController {
     @PostMapping
     @RequestMapping("/register")
     public ModelAndView registerParking(@ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO) {
-        parkingService.registerParking(parkingRegisterDTO, (Long)session.getAttribute("id"));
+        try {
+            parkingService.registerParking(parkingRegisterDTO, (Long)session.getAttribute("id"));
+            ModelMap model = new ModelMap();
+            model.put("success", true);
 
-        ModelMap model = new ModelMap();
-        //model.put("success", response);
-
-        /*if (response) {
             return new ModelAndView("redirect:/home", model);
-        } else {
-            return new ModelAndView("parking-register", model);
-        }*/
+        } catch (UserNotFoundException | VehicleNotFoundException e) {
+            ModelMap model = new ModelMap();
+            model.put("error", e.getMessage());
 
-        return null;
+            return new ModelAndView("parking-register", model);
+        }
     }
 
 }

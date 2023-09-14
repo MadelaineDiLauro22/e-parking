@@ -2,6 +2,7 @@ package com.tallerwebi.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "PARKING")
@@ -25,6 +26,7 @@ public class Parking {
     private Date dateArrival;
 
     private Date dateExit;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
@@ -51,56 +53,28 @@ public class Parking {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public ParkingType getParkingType() {
         return parkingType;
-    }
-
-    public void setParkingType(ParkingType parkingType) {
-        this.parkingType = parkingType;
     }
 
     public byte[] getVehiclePicture() {
         return vehiclePicture;
     }
 
-    public void setVehiclePicture(byte[] vehiclePicture) {
-        this.vehiclePicture = vehiclePicture;
-    }
-
     public byte[] getTicketPicture() {
         return ticketPicture;
-    }
-
-    public void setTicketPicture(byte[] ticketPicture) {
-        this.ticketPicture = ticketPicture;
     }
 
     public Geolocation getGeolocation() {
         return geolocation;
     }
 
-    public void setGeolocation(Geolocation geolocation) {
-        this.geolocation = geolocation;
-    }
-
     public Date getDateArrival() {
         return dateArrival;
     }
 
-    public void setDateArrival(Date dateArrival) {
-        this.dateArrival = dateArrival;
-    }
-
     public Date getDateExit() {
         return dateExit;
-    }
-
-    public void setDateExit(Date dateExit) {
-        this.dateExit = dateExit;
     }
 
     public Vehicle getVehicle() {
