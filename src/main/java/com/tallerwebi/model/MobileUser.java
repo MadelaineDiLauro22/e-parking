@@ -31,6 +31,8 @@ public class MobileUser extends User {
 
     public MobileUser() {
         super();
+        this.vehicles = new HashSet<>();
+        this.parkings = new ArrayList<>();
     }
 
     @Override
