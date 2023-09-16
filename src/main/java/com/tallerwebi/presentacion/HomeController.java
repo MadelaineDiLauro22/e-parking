@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/mobile/home")
 public class HomeController {
 
     private final HttpSession session;

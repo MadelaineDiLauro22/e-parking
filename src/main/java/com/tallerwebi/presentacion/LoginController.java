@@ -39,7 +39,7 @@ public class LoginController {
             request.getSession().setAttribute("rol", usuarioBuscado.getRol());
             request.getSession().setAttribute("id", usuarioBuscado.getId());
             request.getSession().setAttribute("nickName", usuarioBuscado.getNickName());
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/mobile/home");
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }

@@ -66,7 +66,7 @@ public class LoginControllerTest {
 		ModelAndView modelAndView = loginController.validarLogin(loginDataDTOMock, requestMock);
 
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/mobile/home"));
 		verify(sessionMock, times(1)).setAttribute("rol", usuarioEncontradoMock.getRol());
 	}
 
