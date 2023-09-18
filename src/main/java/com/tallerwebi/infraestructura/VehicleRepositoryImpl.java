@@ -12,11 +12,11 @@ import java.util.List;
 
 @Transactional
 @Repository("repositorioVehiculo")
-public class VehiculeRepositoryImpl implements VehicleRepository{
+public class VehicleRepositoryImpl implements VehicleRepository{
 
     private final SessionFactory sessionFactory;
 
-    public VehiculeRepositoryImpl(SessionFactory sessionFactory) {
+    public VehicleRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

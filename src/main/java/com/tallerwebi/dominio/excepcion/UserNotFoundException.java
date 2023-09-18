@@ -1,8 +1,12 @@
 package com.tallerwebi.dominio.excepcion;
 
-public class UserNotFoundException extends RuntimeException{
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    public UserNotFoundException(){
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class UserNotFoundException extends RuntimeException {
+
+    public UserNotFoundException() {
         super("Usuario inexistente");
     }
 }
