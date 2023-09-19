@@ -1,7 +1,9 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.model.Parking;
+import com.tallerwebi.model.User;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -20,5 +22,12 @@ public class ParkingRepositoryImpl implements ParkingRepository {
     @Override
     public void save(Parking parking) {
         sessionFactory.getCurrentSession().saveOrUpdate(parking);
+    }
+
+    @Override
+    public Parking findById(Long id) {
+        return (Parking) sessionFactory.getCurrentSession().createCriteria(Parking.class)
+                .add(Restrictions.eq("id", id))
+                .uniqueResult();
     }
 }
