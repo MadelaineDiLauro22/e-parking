@@ -1,7 +1,5 @@
 <div th:replace="fragments/header.html"></div>
 
-
-<body class="bg-primary min-vh-100 position-relative" style="color:white;">
 <main role="main" class="container p-5 bg-login w-75" style="height: 90vh;border-radius: 5px;margin-top:20px;">
     <h1 class="titleView">Registrar Parking</h1>
     <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}">

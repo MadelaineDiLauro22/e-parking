@@ -2,6 +2,7 @@ package com.tallerwebi.helpers;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,19 @@ public class SessionInterceptor implements HandlerInterceptor {
         }
 
         return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+        if(request.getSession().getAttribute("id") != null) {
+
+            Long userId = (Long) request.getSession().getAttribute("id");
+            String userNickname = (String) request.getSession().getAttribute("nickName");
+
+            modelAndView.addObject("id", userId);
+            modelAndView.addObject("nickName", userNickname);
+        }
     }
 
 }

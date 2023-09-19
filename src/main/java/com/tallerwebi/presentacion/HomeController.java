@@ -21,10 +21,6 @@ public class HomeController {
     @GetMapping
     public ModelAndView getHomeRegister() {
         ModelMap model = new ModelMap();
-        Long id = (Long) session.getAttribute("id");
-        String nickName = (String) session.getAttribute("nickName");
-        model.put("id", id);
-        model.put("nickname", nickName);
 
         return new ModelAndView("home", model);
     }
