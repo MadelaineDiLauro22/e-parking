@@ -34,4 +34,10 @@ public class HomeControllerTest {
         homeController = new HomeController(sessionMock);
     }
 
+    @Test
+    public void shouldGetHomePage(){
+        ModelAndView page = homeController.getHomeRegister();
+        assertEquals ("home", page.getViewName());
+    }
+
 }
