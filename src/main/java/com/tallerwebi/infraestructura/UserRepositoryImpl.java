@@ -22,10 +22,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findUserByMailAndPassword(String email, String password) {
+    public MobileUser findUserByMailAndPassword(String email, String password) {
 
         final Session session = sessionFactory.getCurrentSession();
-        return (User) session.createCriteria(User.class)
+        return (MobileUser) session.createCriteria(User.class)
                 .add(Restrictions.eq("email", email))
                 .add(Restrictions.eq("password", password))
                 .uniqueResult();
@@ -37,21 +37,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findUserByMail(String email) {
-        return (User) sessionFactory.getCurrentSession().createCriteria(User.class)
+    public MobileUser findUserByMail(String email) {
+        return (MobileUser) sessionFactory.getCurrentSession().createCriteria(User.class)
                 .add(Restrictions.eq("email", email))
                 .uniqueResult();
     }
 
     @Override
-    public void modifyUser(User user) {
-        sessionFactory.getCurrentSession().update(user);
-    }
-
-    @Override
-    public User findUserById(Long id) {
+    public MobileUser findUserById(Long id) {
         final Session session = sessionFactory.getCurrentSession();
-        return (User) session.createCriteria(User.class)
+        return (MobileUser) session.createCriteria(User.class)
                 .add(Restrictions.eq("id", id))
                 .uniqueResult();
     }

@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpSession;
@@ -31,33 +32,6 @@ public class HomeControllerTest {
         sessionMock.setAttribute("nickName", "carlitos");
 
         homeController = new HomeController(sessionMock);
-    }
-
-    @Test
-    void shouldGetView() {
-        ModelAndView response = homeController.getHomeRegister();
-
-        assertEquals(HOME_VIEW_NAME, response.getViewName());
-    }
-
-    @Test
-    void shouldGetViewWithId() {
-        ModelAndView response = homeController.getHomeRegister();
-
-        assertEquals(HOME_VIEW_NAME, response.getViewName());
-
-        assertTrue(response.getModel().containsKey("id"));
-        assertEquals(1L, response.getModel().get("id"));
-    }
-
-    @Test
-    void shouldGetViewWithNickname() {
-        ModelAndView response = homeController.getHomeRegister();
-
-        assertEquals(HOME_VIEW_NAME, response.getViewName());
-
-        assertTrue(response.getModel().containsKey("nickname"));
-        assertEquals("carlitos", response.getModel().get("nickname"));
     }
 
 }

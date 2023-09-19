@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class LoginServiceImpl implements LoginService {
 
-    private UserRepository servicioLoginDao;
+    private final UserRepository servicioLoginDao;
 
     @Autowired
     public LoginServiceImpl(UserRepository servicioLoginDao){
@@ -22,13 +22,13 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public User searchUser(String email, String password) {
+    public MobileUser searchUser(String email, String password) {
         return servicioLoginDao.findUserByMailAndPassword(email, password);
     }
 
     @Override
     public void registerUser(LoginDataDTO request) throws UserNotFoundException {
-        User userEncontrado =  servicioLoginDao.findUserByMailAndPassword(request.getEmail(), request.getPassword());
+        MobileUser userEncontrado =  servicioLoginDao.findUserByMailAndPassword(request.getEmail(), request.getPassword());
         if(userEncontrado != null){
             throw new UserNotFoundException();
         }
