@@ -38,7 +38,9 @@
 .bg-home{
     background-color: #FEBC3D;
 }
-
+.bg-menu-mobile{
+    background-color: #1B1F25;
+}
 /* Buttons */
 
 .btn-primary{
