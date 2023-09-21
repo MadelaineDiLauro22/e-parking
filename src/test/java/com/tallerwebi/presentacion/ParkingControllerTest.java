@@ -63,7 +63,7 @@ class ParkingControllerTest {
         ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
         Mockito.verify(mockParkingService).registerParking(parkingRegisterDTO, userId);
 
-        assertEquals("redirect:/home", response.getViewName());
+        assertEquals("redirect:/mobile/home", response.getViewName());
         assertTrue((boolean) response.getModel().get("success"));
     }
 

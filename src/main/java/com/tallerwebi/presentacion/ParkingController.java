@@ -52,7 +52,7 @@ public class ParkingController {
             ModelMap model = new ModelMap();
             model.put("success", true);
 
-            return new ModelAndView("redirect:/home", model);
+            return new ModelAndView("redirect:/mobile/home", model);
         } catch (UserNotFoundException | VehicleNotFoundException e) {
             ModelMap model = new ModelMap();
             model.put("error", e.getMessage());
