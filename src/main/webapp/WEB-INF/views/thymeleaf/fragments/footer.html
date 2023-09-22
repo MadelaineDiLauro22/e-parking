@@ -1,0 +1,92 @@
+        <footer class="mt-auto p-0">
+            <nav>
+                <div th:if="${id != null}" class="menu-mobile bg-menu-mobile py-3 px-3 fixed-bottom">
+
+                    <ul class="d-flex align-items-center justify-content-between list-unstyled mb-0">
+
+                        <li>
+
+                            <a class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none" th:href="@{/mobile/home}">
+
+                                <i class="fa-solid fa-house fs-1"></i>
+
+                               <span>Inicio</span>
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="#" class=" text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none" >
+
+                                <i class="fa-solid fa-car fs-1"></i>
+
+                                <span>Registros</span>
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
+
+                                <i class="fa-solid fa-address-card fs-1"></i>
+
+                                <span>Denuncias</span>
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
+
+                                <i class="fa-solid fa-user fs-1"></i>
+
+                                <span>Mi Cuenta</span>
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div th:class="${id} ? 'd-flex flex-wrap justify-content-between align-items-center py-3 px-3 bg-windows footer-desktop'
+                : 'd-flex flex-wrap justify-content-between align-items-center py-3 px-3 footer-desktop'">
+
+                    <div class="col-md-6 d-flex align-items-center">
+
+                        <span class="mb-md-0 text-white">© 2023 eParking, Argentina</span>
+
+                    </div>
+
+                    <ul class="nav col-md-6 justify-content-end list-unstyled d-flex">
+
+                        <li class="ms-3"><a class="text-white" th:href="@{/#}"><i class="fa-brands fa-twitter"></i></a></li>
+
+                        <li class="ms-3"><a class="text-white" th:href="@{/#}"><i class="fa-brands fa-facebook-f"></i></a></li>
+
+                        <li class="ms-3"><a class="text-white" th:href="@{/#}"><i class="fa-brands fa-instagram"></i></a></li>
+
+                    </ul>
+
+                </div>
+
+            </nav>
+
+        </footer>
+
+    </div>
+
+        <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.js}"></script>
+
+        <script th:src="@{https://kit.fontawesome.com/c0cf04e4bc.js}" crossorigin="anonymous"></script>
+
+    </body>
+
+</html>

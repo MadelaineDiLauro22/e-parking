@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta th:charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>eParking</title>
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
+
+        <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
+    </head>
+
+    <body class="d-flex min-vh-100">
+
+        <div th:class="${id} ? 'bg-home cover-container w-100 d-flex mx-auto flex-column' : 'bg-login cover-container w-100 d-flex mx-auto flex-column'">
+
+            <header class="mb-auto">
+
+                <nav th:if="${id != null}" class="navbar navbar-expand-lg menu-desktop">
+
+                    <div class="container">
+
+                        <img th:src="@{/img/logo/Logo2.png}" width="20rem">
+
+                        <a class="navbar-brand text-white text-bold" th:href="@{/#}"> eParking </a>
+
+                        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+
+                            <ul class="navbar-nav">
+
+                                <li class="nav-item active">
+
+                                    <a class="nav-link px-2 text-white text-bold" th:href="@{/mobile/home}">Inicio</a>
+
+                                </li>
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link text-white text-bold" th:href="@{/#}">Registro</a>
+
+                                </li>
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link text-white text-bold" th:href="@{/#}">Denuncias</a>
+
+                                </li>
+
+
+
+                            <li class="navbar-nav ml-auto">
+
+                                <div class="nav-item dropdown">
+
+                                    <a class="nav-link dropdown-toggle text-white text-bold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mi cuenta</a>
+
+                                    <ul class="dropdown-menu bg-windows" aria-labelledby="navbarDropdown">
+
+                                        <li>
+
+                                            <a class="dropdown-item text-white text-bold" th:href="@{/#}">Perfil</a>
+
+                                        </li>
+
+                                        <li>
+
+                                            <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
+
+                                        </li>
+
+                                        <li>
+
+                                            <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
+
+                                        </li>
+
+                                        <div class="dropdown-divider"></div>
+
+                                        <li>
+
+                                            <a class="dropdown-item text-white text-bold" th:href="@{/#}">Cerrar sesion</a>
+
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                            </li>
+
+                        </ul>
+
+                        </div>
+
+                    </div>
+
+                </nav>
+
+            </header>

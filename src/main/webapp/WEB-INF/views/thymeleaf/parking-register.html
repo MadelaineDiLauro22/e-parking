@@ -1,0 +1,108 @@
+<div th:replace="fragments/header.html"></div>
+
+<main role="main" class="container-fluid m-f">
+
+    <section>
+
+        <article class="container text-white bg-windows mx-auto col-md-6 p-2 my-3 rounded-4">
+
+            <h1 class="titleView">Registrar Parking</h1>
+
+            <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}">
+
+                <div class="divContainer divContainerBorderBottom my-1">
+
+                    <label for="parkingType" class="text-white text-bold mb-1">Seleccionar Tipo:</label>
+
+                    <select th:field="*{parkingType}" id="parkingType" onchange="renderTicketImageForm()" class="form-select my-1">
+
+                        <option value="STREET" selected>Vía Publica</option>
+
+                        <option value="GARAGE">Estacionamiento</option>
+
+                    </select>
+
+                </div>
+
+                <div class="divContainer divContainerBorderBottom my-1">
+
+                    <label for="vehicle" class="text-white text-bold mb-1">Seleccionar Vehículo:</label>
+
+                    <select th:field="*{vehicle}" id="vehicle" th:each="vehicle : ${vehicleList}" class="form-select my-1">
+
+                        <option th:value="${vehicle.patent}" th:text="${vehicle.brand + ' - ' + vehicle.patent}">
+
+                            Marca - Patente
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="divContainer divContainerBorderBottom my-1">
+
+                    <label for="vehiclePic" class="text-white text-bold mb-1">Foto del vehículo:</label>
+
+                    <input th:field="*{vehiclePic}" id="vehiclePic"  type="file" accept="image/jpeg" class="form-control my-1">
+
+                </div>
+
+                <div id="typeGarage" class="divContainer divContainerBorderBottom my-1">
+
+                    <label for="ticketPic" class="text-white text-bold mb-1">Foto de Ticket:</label>
+
+                    <input th:field="*{ticketPic}" id="ticketPic"  type="file" accept="image/jpeg" class="form-control my-1">
+
+                </div>
+
+                <div id="geolocation" class="divContainer">
+
+                    <input th:field="*{lat}" id="lat" type="text" class="d-none">
+
+                    <input th:field="*{ln}" id="ln"  type="text" class="d-none">
+
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.36433397229!2d-58
+            .565380123487344!3d-34.670753161042825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x
+            95bcc62cc3ef7083%3A0x8867107f425fade5!2sUniversidad%20Nacional%20de%20La%20Matanza!5e0!3m2!
+            1ses-419!2sar!4v1694126930425!5m2!1ses-419!2sar" style="border:0; height: 15rem; width: 100%;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade" class="my-1"></iframe>
+
+                </div>
+
+                <div class="divContainer my-3">
+
+                    <input type="submit" value="Registrar" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+             fs-6 text-center btn-primary text-white text-bold">
+
+                </div>
+
+                <div>
+
+                    <p th:if="${error != null}"  th:text="'Error ' + ${error}"></p>
+
+                </div>
+
+            </form>
+        </article>
+
+
+    </section>
+
+
+    <script>
+        function renderTicketImageForm() {
+            let parking = document.getElementById("parkingType").value;
+            let div = document.getElementById("typeGarage");
+
+            if (parking === "GARAGE") {
+                div.style.display = "block"
+            } else {
+                div.style.display = "none"
+            }
+        }
+    </script>
+
+</main>
+
+<div th:replace="fragments/footer.html"></div>

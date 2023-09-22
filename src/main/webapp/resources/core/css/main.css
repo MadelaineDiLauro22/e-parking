@@ -1,19 +1,147 @@
-body {
-  padding-top: 5rem;
-}
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Condensed:wght@400;700&display=swap');
+
+/*Menus*/
+
+.menu-desktop{
+    display: block !important;
+    background-color: #1B1F25 !important;
 }
 
-h1{
-	color:#0000FF;
+.menu-mobile{
+    display: block;
+    display: none !important;
 }
 
-h2{
-	color:#FF0000;
+.footer-desktop{
+    display: flex !important;
 }
 
-.navbar-brand{
-    margin:0 2rem;
+/* Backgrounds */
+
+.bg-primary{
+    background-color: #FEBC3D !important;
+}
+
+.bg-secondary{
+    background-color: #46433F !important;
+}
+
+.bg-terciary{
+    background-color: #A47823;
+}
+
+.bg-windows{
+    background-color: #1B1F25;
+}
+
+.bg-login{
+    background: rgb(12,13,13);
+    background: linear-gradient(0deg, rgba(12,13,13,1) 0%, rgba(63,66,70,1) 100%);
+    background-repeat: no-repeat;
+}
+
+.bg-home{
+    background-color: #FEBC3D;
+}
+.bg-menu-mobile{
+    background-color: #1B1F25;
+}
+/* Buttons */
+
+.btn-primary{
+    background-color: #46433F;
+    border: #46433F;
+}
+
+.btn-primary:hover{
+    background-color: #46433F;
+}
+
+/* Texts */
+
+.text-primary{
+    color:#FEBC3D !important;
+}
+
+.text-white{
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 0.188rem 0.188rem 0.125rem rgba(0, 0, 0, 0.40);
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
+/* Decorations */
+
+.box-shadow{
+    -webkit-box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
+    -moz-box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
+    box-shadow: 0.375rem 0.625rem 0.25rem -0.375rem rgba(0,0,0,0.3);
+}
+
+.text-shadow-none{
+    text-shadow: 0 0 0 rgba(0,0,0,0) !important;
+}
+
+.map{
+    width: 100% !important;
+    height: 75vh !important;
+    border:0;
+}
+
+@media screen and (max-device-width: 800px) {
+
+    .menu-desktop{
+        display: none !important;
+    }
+
+    .menu-mobile{
+        display: block !important;
+    }
+
+    .footer-desktop{
+        display: none !important;
+    }
+
+    .m-f{
+        margin-bottom: 5.5rem;
+    }
+}
+
+/*Views*/
+.titleView{
+    text-align: center;
+    border-bottom: solid 2px #FEBC3D;
+    padding: 5px;
+    color: white;
+}
+
+.divContainer{
+    margin: auto;
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.divContainerBorderBottom{
+    border-bottom: solid 2px #FEBC3D;
+    padding: 5px;
+}
+.labelForm{
+    text-align: left;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.buttons{
+    border-radius:5px;
+    color: white;
+    background-color:#3F4246;
+}
+
+#vehiclePic{
+    color: transparent;
+    overflow: hidden;
 }
