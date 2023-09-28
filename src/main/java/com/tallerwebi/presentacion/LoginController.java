@@ -72,5 +72,15 @@ public class LoginController {
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request){
+        request.getSession().removeAttribute("rol");
+        request.getSession().removeAttribute("id");
+        request.getSession().removeAttribute("nickName");
+
+        return new ModelAndView("redirect:/login");
+    }
+
 }
 
