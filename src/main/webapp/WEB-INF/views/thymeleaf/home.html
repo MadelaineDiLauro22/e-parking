@@ -6,10 +6,18 @@
 
       <article>
 
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.36433397229!2d-58.565380123487344!3d-
-          34.670753161042825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc62cc3ef7083%3A0x8867107f425fade5!2
-          sUniversidad%20Nacional%20de%20La%20Matanza!5e0!3m2!1ses-419!2sar!4v1694126930425!5m2!1ses-419!2sar"
-                  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-100 px-3 py-1 map"></iframe>
+        <div class="px-2 mb-2">
+
+          <div id="myMap" class="map"></div>
+
+          <div id='infoBox'>
+            <div id='infoboxText'>
+              <b id='infoboxTitle'></b>
+              <a id='infoboxDescription'></a>
+            </div>
+          </div>
+
+        </div>
 
         <div class="mx-auto text-center">
 
@@ -22,5 +30,80 @@
     </section>
 
   </main>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'></script>
+
+<script type='text/javascript'>
+
+  $(document).ready(function () {
+
+    var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+    var bingMap = null;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+              function (position)
+              {
+                GetMap(position);
+              },
+              function (error)
+              {
+                alert(error);
+              }
+      );
+    }
+    else
+      GetMap(null);
+
+    function GetMap(position) {
+      var lat = null;
+      var long = null;
+
+      if (position != null) {
+        lat = position.coords.latitude;
+        long = position.coords.longitude;
+      }
+      else{
+        lat = -34.67059942011568;
+        long = -58.56276297028322;
+      }
+
+      bingMap = new Microsoft.Maps.Map("#myMap",
+              { credentials: credentials,
+                center: new Microsoft.Maps.Location(lat, long),
+                mapTypeId: Microsoft.Maps.MapTypeId.road,
+                zoom: 16
+              });
+
+      var center = bingMap.getCenter();
+
+      var pin = new Microsoft.Maps.Pushpin(center,{
+        color: 'red'
+      });
+      var title = "Yo";
+      var description = "¡Estoy aquí!";
+      Microsoft.Maps.Pushpin.prototype.title = null;
+      pin.title = title;
+      Microsoft.Maps.Pushpin.prototype.description = null;
+      pin.description = description;
+
+      Microsoft.Maps.Events.addHandler(pin, 'click', function(){displayEventInfo(center, title, description)});
+      bingMap.entities.push(pin);
+    }
+
+    function displayEventInfo(center, title, description) {
+      var infobox = new Microsoft.Maps.Infobox(center, {
+        title: title,
+        description: description
+      });
+
+      infobox.setMap(bingMap);
+    }
+
+  });
+
+</script>
 
 <div th:replace="fragments/footer.html"></div>

@@ -87,7 +87,6 @@
 .map{
     width: 100% !important;
     height: 75vh !important;
-    border:0;
 }
 
 @media screen and (max-device-width: 800px) {
