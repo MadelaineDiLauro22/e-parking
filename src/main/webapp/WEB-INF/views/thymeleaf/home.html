@@ -33,76 +33,74 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'></script>
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es' async defer></script>
 
 <script type='text/javascript'>
 
-  $(document).ready(function () {
+  var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+  var bingMap = null;
 
-    var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
-    var bingMap = null;
-
+  function initializeBingMap() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-              function (position)
-              {
+              function (position) {
                 GetMap(position);
               },
-              function (error)
-              {
+              function (error) {
                 alert(error);
               }
       );
-    }
-    else
+    } else {
       GetMap(null);
+    }
+  }
 
-    function GetMap(position) {
-      var lat = null;
-      var long = null;
+  function GetMap(position) {
+    var lat = null;
+    var long = null;
 
-      if (position != null) {
-        lat = position.coords.latitude;
-        long = position.coords.longitude;
-      }
-      else{
-        lat = -34.67059942011568;
-        long = -58.56276297028322;
-      }
-
-      bingMap = new Microsoft.Maps.Map("#myMap",
-              { credentials: credentials,
-                center: new Microsoft.Maps.Location(lat, long),
-                mapTypeId: Microsoft.Maps.MapTypeId.road,
-                zoom: 16
-              });
-
-      var center = bingMap.getCenter();
-
-      var pin = new Microsoft.Maps.Pushpin(center,{
-        color: 'red'
-      });
-      var title = "Yo";
-      var description = "¡Estoy aquí!";
-      Microsoft.Maps.Pushpin.prototype.title = null;
-      pin.title = title;
-      Microsoft.Maps.Pushpin.prototype.description = null;
-      pin.description = description;
-
-      Microsoft.Maps.Events.addHandler(pin, 'click', function(){displayEventInfo(center, title, description)});
-      bingMap.entities.push(pin);
+    if (position != null) {
+      lat = position.coords.latitude;
+      long = position.coords.longitude;
+    } else {
+      lat = -34.67059942011568;
+      long = -58.56276297028322;
     }
 
-    function displayEventInfo(center, title, description) {
-      var infobox = new Microsoft.Maps.Infobox(center, {
-        title: title,
-        description: description
-      });
+    bingMap = new Microsoft.Maps.Map("#myMap",
+            {
+              credentials: credentials,
+              center: new Microsoft.Maps.Location(lat, long),
+              mapTypeId: Microsoft.Maps.MapTypeId.road,
+              zoom: 16
+            });
 
-      infobox.setMap(bingMap);
-    }
+    var center = bingMap.getCenter();
 
-  });
+    var pin = new Microsoft.Maps.Pushpin(center, {
+      color: 'red'
+    });
+    var title = "Yo";
+    var description = "¡Estoy aquí!";
+    Microsoft.Maps.Pushpin.prototype.title = null;
+    pin.title = title;
+    Microsoft.Maps.Pushpin.prototype.description = null;
+    pin.description = description;
+
+    Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+      displayEventInfo(center, title, description);
+    });
+    bingMap.entities.push(pin);
+  }
+
+  function displayEventInfo(center, title, description) {
+    var infobox = new Microsoft.Maps.Infobox(center, {
+      title: title,
+      description: description
+    });
+
+    infobox.setMap(bingMap);
+  }
 
 </script>
 
