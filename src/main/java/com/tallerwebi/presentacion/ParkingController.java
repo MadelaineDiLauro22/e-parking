@@ -37,11 +37,11 @@ public class ParkingController {
             model.put("parkingRegister", new ParkingRegisterDTO());
 
             return new ModelAndView("parking-register", model);
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | VehicleNotFoundException e) {
             ModelMap model = new ModelMap();
             model.put("error", e.getMessage());
 
-            return new ModelAndView("parking-register", model);
+            return new ModelAndView("redirect:/mobile/home", model);
         }
     }
 

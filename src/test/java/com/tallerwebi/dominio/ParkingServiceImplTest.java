@@ -44,10 +44,11 @@ class ParkingServiceImplTest {
         Long userId = 1L;
         List<Vehicle> cars = new ArrayList<>();
         MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        cars.add(vehicle);
 
         Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(user);
-
         Mockito.when(mockVehicleRepository.findVehiclesByUser(user))
                 .thenReturn(cars);
 
@@ -122,6 +123,20 @@ class ParkingServiceImplTest {
 
         assertThrows(VehicleNotFoundException.class,
                 () -> parkingService.registerParking(dto, userId));
+    }
+
+    @Test
+    void whenGetParkingInformation_ifUserNotHaveVehicles_shouldThrowException() {
+        Long userId = 1L;
+        MobileUser user = new MobileUser();
+
+        Mockito.when(mockUserRepository.findUserById(userId))
+                .thenReturn(user);
+        Mockito.when(mockVehicleRepository.findVehiclesByUser(user))
+                .thenReturn(List.of());
+
+        assertThrows(VehicleNotFoundException.class,
+                () -> parkingService.getUserCarsList(userId));
     }
 
 }
