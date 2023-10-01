@@ -6,9 +6,12 @@ import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.MobileUser;
+import com.tallerwebi.model.Parking;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
+
+import java.util.List;
 
 public class ProfileServiceImpl implements ProfileService{
 

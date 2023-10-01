@@ -1,11 +1,13 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Parking;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 @Repository("parkingRepository")
@@ -28,5 +30,11 @@ public class ParkingRepositoryImpl implements ParkingRepository {
         return (Parking) sessionFactory.getCurrentSession().createCriteria(Parking.class)
                 .add(Restrictions.eq("id", id))
                 .uniqueResult();
+    }
+
+    @Override
+    public List<Parking> findParkingsByUser(MobileUser user){
+        //TODO: Debe devolver una lista de los parkings vinculados al usuario.
+        return null;
     }
 }
