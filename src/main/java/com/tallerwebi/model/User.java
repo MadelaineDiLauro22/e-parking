@@ -26,8 +26,6 @@ public abstract class User {
     public User() {
     }
 
-    public abstract void registerVehicle(Vehicle vehicle);
-    public abstract void registerParking(Parking parking);
 
     public Long getId() {
         return id;
