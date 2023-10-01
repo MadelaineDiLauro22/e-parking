@@ -7,7 +7,7 @@ import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 
 public interface ProfileService {
 
-    ProfileResponseDTO getMobileUser(Long userId) throws UserNotFoundException;
+    ProfileResponseDTO getVehiclesAndParkingsByMobileUser(Long userId) throws UserNotFoundException;
 
     void registerVehicle(VehicleRegisterDTO request, Long userId) throws UserNotFoundException;
 

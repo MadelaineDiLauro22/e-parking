@@ -26,21 +26,28 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public ProfileResponseDTO getMobileUser(Long userId) {
+    public ProfileResponseDTO getVehiclesAndParkingsByMobileUser(Long userId) {
+        MobileUser user = (MobileUser) userRepository.findUserById(userId);
+        if(user != null) {
+            List<Vehicle> vehicles = vehicleRepository.findVehiclesByUser(user);
+            List<Parking> parkings = parkingRepository.findParkingsByUser(user);
+            return new ProfileResponseDTO(vehicles, parkings);
+        }
         return null;
     }
 
     @Override
     public void registerVehicle(VehicleRegisterDTO request, Long userId) {
         MobileUser user = (MobileUser) userRepository.findUserById(userId);
-        //TODO: no verifica que llegue el usuario
-        Vehicle vehicle = new Vehicle(
-                request.getPatent(),
-                request.getBrand(),
-                request.getModel(),
-                request.getColor());
-        vehicle.setUser(user);
-        vehicleRepository.save(vehicle);
 
+        if(user != null) {
+            Vehicle vehicle = new Vehicle(
+                    request.getPatent(),
+                    request.getBrand(),
+                    request.getModel(),
+                    request.getColor());
+            vehicle.setUser(user);
+            vehicleRepository.save(vehicle);
+        }
     }
 }
