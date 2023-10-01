@@ -53,6 +53,7 @@
               },
               function (error) {
                 alert(error);
+                GetMap(null);
               },
               options
       );
@@ -69,8 +70,8 @@
       lat = position.coords.latitude;
       long = position.coords.longitude;
     } else {
-      lat = -34.67059942011568;
-      long = -58.56276297028322;
+      lat = -34.670560;
+      long = -58.562780;
     }
 
     bingMap = new Microsoft.Maps.Map("#myMap",
