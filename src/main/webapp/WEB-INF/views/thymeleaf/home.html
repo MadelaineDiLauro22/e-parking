@@ -42,13 +42,19 @@
 
   function initializeBingMap() {
     if (navigator.geolocation) {
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
       navigator.geolocation.getCurrentPosition(
               function (position) {
                 GetMap(position);
               },
               function (error) {
                 alert(error);
-              }
+              },
+              options
       );
     } else {
       GetMap(null);
