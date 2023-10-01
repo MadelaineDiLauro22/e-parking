@@ -30,6 +30,7 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public void registerVehicle(VehicleRegisterDTO request, Long userId) {
         MobileUser user = (MobileUser) userRepository.findUserById(userId);
+        //TODO: no verifica que llegue el usuario
         Vehicle vehicle = new Vehicle(
                 request.getPatent(),
                 request.getBrand(),

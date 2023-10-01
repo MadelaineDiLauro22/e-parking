@@ -9,6 +9,6 @@ public interface ProfileService {
 
     ProfileResponseDTO getMobileUser(Long userId) throws UserNotFoundException;
 
-    void registerVehicle(VehicleRegisterDTO request, Long userId) throws CantRegisterVehicleException;
+    void registerVehicle(VehicleRegisterDTO request, Long userId) throws UserNotFoundException;
 
 }
