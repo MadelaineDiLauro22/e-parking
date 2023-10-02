@@ -70,18 +70,4 @@ class ProfileServiceImplTest {
 
         assertThrows(UserNotFoundException.class, () -> profileService.getVehiclesAndParkingsByMobileUser(userId));
     }
-
-    @Test
-    void whenTryToGetVehiclesAndParkingsByMobileUser_IfVehiclesListIsEmpty_ShouldThrowVehicleNotFoundException(){
-        Long userId = 1L;
-        MobileUser user = new MobileUser();
-        List<Vehicle> emptyList = new ArrayList<>();
-
-        Mockito.when(mockUserRepository.findUserById(userId)).
-                thenReturn(user);
-        Mockito.when(mockVehicleRepository.findVehiclesByUser(user))
-                .thenReturn(emptyList);
-
-        assertThrows(VehicleNotFoundException.class, () -> profileService.getVehiclesAndParkingsByMobileUser(userId));
-    }
 }

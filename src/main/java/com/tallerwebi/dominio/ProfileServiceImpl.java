@@ -35,8 +35,6 @@ public class ProfileServiceImpl implements ProfileService{
         List<Vehicle> vehicles = vehicleRepository.findVehiclesByUser(user);
         List<Parking> parkings = parkingRepository.findParkingsByUser(user);
 
-        if(vehicles.isEmpty()) throw new VehicleNotFoundException();
-
         return new ProfileResponseDTO(vehicles, parkings);
     }
 
