@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.CantRegisterVehicleException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
@@ -28,26 +29,29 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public ProfileResponseDTO getVehiclesAndParkingsByMobileUser(Long userId) {
         MobileUser user = (MobileUser) userRepository.findUserById(userId);
-        if(user != null) {
-            List<Vehicle> vehicles = vehicleRepository.findVehiclesByUser(user);
-            List<Parking> parkings = parkingRepository.findParkingsByUser(user);
-            return new ProfileResponseDTO(vehicles, parkings);
-        }
-        return null;
+
+        if (user == null) throw new UserNotFoundException();
+
+        List<Vehicle> vehicles = vehicleRepository.findVehiclesByUser(user);
+        List<Parking> parkings = parkingRepository.findParkingsByUser(user);
+
+        if(vehicles.isEmpty()) throw new VehicleNotFoundException();
+
+        return new ProfileResponseDTO(vehicles, parkings);
     }
 
     @Override
     public void registerVehicle(VehicleRegisterDTO request, Long userId) {
         MobileUser user = (MobileUser) userRepository.findUserById(userId);
 
-        if(user != null) {
-            Vehicle vehicle = new Vehicle(
-                    request.getPatent(),
-                    request.getBrand(),
-                    request.getModel(),
-                    request.getColor());
-            vehicle.setUser(user);
-            vehicleRepository.save(vehicle);
-        }
+        if (user == null) throw new UserNotFoundException();
+
+        Vehicle vehicle = new Vehicle(
+                request.getPatent(),
+                request.getBrand(),
+                request.getModel(),
+                request.getColor());
+        vehicle.setUser(user);
+        vehicleRepository.save(vehicle);
     }
 }

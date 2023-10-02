@@ -2,6 +2,8 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Parking;
+import com.tallerwebi.model.Vehicle;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -34,7 +36,9 @@ public class ParkingRepositoryImpl implements ParkingRepository {
 
     @Override
     public List<Parking> findParkingsByUser(MobileUser user){
-        //TODO: Debe devolver una lista de los parkings vinculados al usuario.
-        return null;
+        Session session = sessionFactory.getCurrentSession();
+
+        return (List<Parking>) session.createCriteria(Vehicle.class)
+                .add(Restrictions.eq("user", user)).list();
     }
 }

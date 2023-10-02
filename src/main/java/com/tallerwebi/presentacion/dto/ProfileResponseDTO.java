@@ -15,4 +15,13 @@ public class ProfileResponseDTO {
         this.vehicles = vehicles;
         this.parkings = parkings;
     }
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public List<Parking> getParkings() {
+        return parkings;
+    }
+
 }
