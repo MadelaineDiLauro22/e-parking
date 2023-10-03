@@ -1,27 +1,87 @@
 <div th:replace="fragments/header.html"></div>
-    <main>
+
+    <main role="main" class="container-fluid m-f">
+
         <section>
-            <article>
-                <h2 class="titleView" th:text="@{nickName}"></h2>
-            </article>
-            <article>
-                <h2 class="titleView">Mis Vehículos</h2>
-                <div th:each="vechicle : ${vehicles}">
-                    <p th:text="${vechicle.model + ' - ' + vechicle.patent}"></p>
-                    <i class="fa-solid fa-gear"></i>
-                </div>
-                <i class="fa-solid fa-plus"></i>
+
+            <article class="container text-white bg-windows mx-auto col-md-6 p-2 my-3 rounded-4">
+
+                <h2 class="titleView" th:text="${nickName}"></h2>
+
             </article>
 
-            <article>
-                <h2 class="titleView">Historial de Parkings</h2>
-                <div th:each="parking : ${parkings}">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <p th:text="${parking.geolocation}">ver de tomar el nombre en base a la geolocalizacion</p>
-                    <i class="fa-solid fa-xmark"></i>
+            <article class="container text-white bg-windows mx-auto col-md-6 p-2 my-3 rounded-4">
+
+                <h2 class="titleView">Mis Vehículos</h2>
+
+                <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
+
+                    <p class="m-0">Lamborigini Murcielago</p>
+
+                    <a href="#"><i class="fa-solid fa-gear text-blue"></i></a>
+
                 </div>
+
+                <div th:each="vechicle : ${vehicles}">
+
+                    <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
+
+                        <p class="m-0" th:text="${vechicle.model + ' - ' + vechicle.patent}"></p>
+
+                        <a href="#"><i class="fa-solid fa-gear text-blue"></i></a>
+
+                    </div>
+
+                </div>
+
+                <div class="text-end">
+
+                    <a class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-3 fs-6 text-center btn-primary" th:href="@{/vehicle-register.html}"><i class="fa-solid fa-plus fs-6"></i></a>
+
+                </div>
+
             </article>
+
+            <article class="container text-white bg-windows mx-auto col-md-6 p-2 my-3 rounded-4">
+
+                <h2 class="titleView">Historial de Parkings</h2>
+
+                <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
+
+                    <div class="d-flex align-items-center justify-content-between">
+
+                        <i class="fa-solid fa-location-dot text-danger fs-3"></i>
+
+                        <p class="m-0 px-2">Perito Moreno 1793</p>
+
+                    </div>
+
+                    <i class="fa-solid fa-circle-xmark text-blue"></i>
+
+                </div>
+
+                <div th:each="parking : ${parkings}">
+
+                    <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
+
+                        <div class="d-flex align-items-center justify-content-between">
+
+                            <i class="fa-solid fa-location-dot text-danger"></i>
+
+                            <p class="m-0" th:text="${parking.geolocation}">ver de tomar el nombre en base a la geolocalizacion</p>
+
+                        </div>
+
+                        <a href="#"><i class="fa-solid fa-circle-xmark text-blue"></i></a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
         </section>
 
     </main>
+
 <div th:replace="fragments/footer.html"></div>
