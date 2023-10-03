@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProfileService;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +19,16 @@ public class ProfileController {
     private ProfileService profileService;
     private HttpSession httpSession;
 
-    //TODO: add constructor when Profile Service is done
+    public ProfileController(ProfileService profileService, HttpSession httpSession){
+        this.profileService = profileService;
+        this.httpSession = httpSession;
+    }
 
     @GetMapping
     public ModelAndView getProfileView() {
-        //TODO: implement method
-        return null;
+        ModelMap model = new ModelMap();
+
+        return new ModelAndView("profile", model);
     }
 
     @GetMapping("vehicle")

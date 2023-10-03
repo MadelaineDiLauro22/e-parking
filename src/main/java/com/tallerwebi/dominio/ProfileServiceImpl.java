@@ -11,9 +11,11 @@ import com.tallerwebi.model.Parking;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProfileServiceImpl implements ProfileService{
 
     private final VehicleRepository vehicleRepository;

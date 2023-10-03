@@ -1,21 +1,27 @@
 <div th:replace="fragments/header.html"></div>
     <main>
         <section>
-            <h2 class="titleView">Vehículos</h2>
-            <div th:each="vechicle : ${vehicles}">
-                <p th:text="${vechicle.model + ' - ' + vechicle.patent}"></p>
-                <i class="fa-solid fa-gear"></i>
-            </div>
-            <i class="fa-solid fa-plus"></i>
+            <article>
+                <h2 class="titleView" th:text="@{nickName}"></h2>
+            </article>
+            <article>
+                <h2 class="titleView">Mis Vehículos</h2>
+                <div th:each="vechicle : ${vehicles}">
+                    <p th:text="${vechicle.model + ' - ' + vechicle.patent}"></p>
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+                <i class="fa-solid fa-plus"></i>
+            </article>
+
+            <article>
+                <h2 class="titleView">Historial de Parkings</h2>
+                <div th:each="parking : ${parkings}">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <p th:text="${parking.geolocation}">ver de tomar el nombre en base a la geolocalizacion</p>
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            </article>
         </section>
 
-        <section>
-            <h2 class="titleView">Parkings</h2>
-            <div th:each="parking : ${parkings}">
-                <i class="fa-solid fa-location-dot"></i>
-                <p th:text="${parking.geolocation}">ver de tomar el nombre en base a la geolocalizacion</p>
-                <i class="fa-solid fa-xmark"></i>
-            </div>
-        </section>
     </main>
 <div th:replace="fragments/footer.html"></div>
