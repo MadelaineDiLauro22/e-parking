@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProfileService;
+import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,8 +27,10 @@ public class ProfileController {
 
     @GetMapping
     public ModelAndView getProfileView() {
+        ProfileResponseDTO vehiclesAndParkings = profileService.getVehiclesAndParkingsByMobileUser((Long) httpSession.getAttribute("id"));
         ModelMap model = new ModelMap();
-
+        model.put("vehicles", vehiclesAndParkings.getVehicles());
+        model.put("parkings", vehiclesAndParkings.getParkings());
         return new ModelAndView("profile", model);
     }
 

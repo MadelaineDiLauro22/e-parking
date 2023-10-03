@@ -8,7 +8,6 @@ import java.util.List;
 public class ProfileResponseDTO {
 
     List<Vehicle> vehicles;
-
     List<Parking> parkings;
 
     public ProfileResponseDTO(List<Vehicle> vehicles, List<Parking> parkings) {
