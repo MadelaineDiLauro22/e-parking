@@ -58,27 +58,12 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public List<Notification> findAllNotificationsByUser(Long idUser) {
+    public List<Notification> getAllNotificationsByMobileUser(Long idUser) {
         MobileUser user = (MobileUser) userRepository.findUserById(idUser);
 
         if (user == null) throw new UserNotFoundException();
 
         List<Notification> notifications = notificationRepository.findAllByUser(user);
-
-        //if(notifications.isEmpty()) throw NotificationsNotFound();
-
-        return notifications;
-    }
-
-    @Override
-    public List<Notification> findAllNotificationsByUserAndNotRead(Long idUser) {
-        MobileUser user = (MobileUser) userRepository.findUserById(idUser);
-
-        if (user == null) throw new UserNotFoundException();
-
-        List<Notification> notifications = notificationRepository.findAllByUserAndNotRead(user);
-
-        //if(notifications.isEmpty()) throw NotificationsNotFound();
 
         return notifications;
     }

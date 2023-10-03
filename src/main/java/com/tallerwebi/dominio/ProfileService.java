@@ -13,7 +13,6 @@ public interface ProfileService {
     ProfileResponseDTO getVehiclesAndParkingsByMobileUser(Long userId) throws UserNotFoundException;
 
     void registerVehicle(VehicleRegisterDTO request, Long userId) throws UserNotFoundException;
-    List<Notification> findAllNotificationsByUser(Long idUser);
-    List<Notification> findAllNotificationsByUserAndNotRead(Long idUser);
+    List<Notification> getAllNotificationsByMobileUser(Long idUser);
 
 }

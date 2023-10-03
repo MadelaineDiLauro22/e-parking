@@ -6,6 +6,7 @@ import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.MobileUser;
+import com.tallerwebi.model.Notification;
 import com.tallerwebi.model.Parking;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
@@ -70,5 +71,26 @@ class ProfileServiceImplTest {
                 .thenReturn(null);
 
         assertThrows(UserNotFoundException.class, () -> profileService.getVehiclesAndParkingsByMobileUser(userId));
+    }
+
+    @Test
+    void whenTryToGetAllNotificationsByMobileUser_ShouldGetAllNotifications() {
+        MobileUser user = getNewMobileUserWithNotificationList();
+        List<Notification> notifications = user.getNotifications();
+
+        Mockito.when(mockUserRepository.findUserById(user.getId()))
+                .thenReturn(user);
+        Mockito.when(notificationRepository.findAllByUser(user))
+                .thenReturn(user.getNotifications());
+
+        assertEquals(notifications, notificationRepository.findAllByUser(user));
+    }
+
+    private MobileUser getNewMobileUserWithNotificationList(){
+        Notification notification = new Notification();
+        MobileUser user = new MobileUser();
+        user.addNotification(notification);
+
+        return user;
     }
 }
