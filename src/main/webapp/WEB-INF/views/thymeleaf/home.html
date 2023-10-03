@@ -1,134 +1,128 @@
 <div th:replace="fragments/header.html"></div>
 
-  <main role="main" class="m-f">
+<main role="main" class="m-f">
 
     <section>
 
-      <article>
+        <article>
 
-        <div class="px-2 mb-2">
+            <div class="px-2 mb-2">
 
-          <div id="myMap" class="map"></div>
+                <div id="myMap" class="map"></div>
 
-          <div id='infoBox'>
-            <div id='infoboxText'>
-              <b id='infoboxTitle'></b>
-              <a id='infoboxDescription'></a>
+                <div id='infoBox'>
+                    <div id='infoboxText'>
+                        <b id='infoboxTitle'></b>
+                        <a id='infoboxDescription'></a>
+                    </div>
+                </div>
+
             </div>
-          </div>
 
-        </div>
+            <div class="mx-auto text-center">
 
-        <div class="mx-auto text-center">
+                <a th:href="@{/mobile/parking}"
+                   class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5 fs-6 text-center btn-primary">Registrar
+                    Parking</a>
 
-          <a th:href="@{/mobile/parking}" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5 fs-6 text-center btn-primary">Registrar Parking</a>
+            </div>
 
-        </div>
-
-      </article>
+        </article>
 
     </section>
 
-  </main>
+</main>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es' async defer></script>
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script type='text/javascript'
+        src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'
+        async defer></script>
 <script type='text/javascript'>
 
-  var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
-  var bingMap = null;
+    var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+    var bingMap = null;
 
-
-  function initializeBingMap() {
-    if (navigator.geolocation) {
-      const options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      };
-      navigator.geolocation.getCurrentPosition(
-              function (position) {
-                GetMap(position);
-              },
-              function (error) {
-                alert(error);
-                GetMap(null);
-              },
-              options
-      );
-    } else {
-      GetMap(null);
-    }
-  }
-
-  function GetMap(position) {
-    var lat = null;
-    var long = null;
-
-    if (position != null) {
-      lat = position.coords.latitude;
-      long = position.coords.longitude;
-    } else {
-      lat = -34.670560;
-      long = -58.562780;
+    function initializeBingMap() {
+        if (navigator.geolocation) {
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    GetMap(position);
+                },
+                function (error) {
+                    alert(error);
+                    GetMap(null);
+                },
+                options
+            );
+        } else {
+            GetMap(null);
+        }
     }
 
-    bingMap = new Microsoft.Maps.Map("#myMap",
+    function GetMap(position) {
+        var lat = null;
+        var long = null;
+
+        if (position != null) {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+        } else {
+            lat = -34.670560;
+            long = -58.562780;
+        }
+
+        bingMap = new Microsoft.Maps.Map("#myMap",
             {
-              credentials: credentials,
-              center: new Microsoft.Maps.Location(lat, long),
-              mapTypeId: Microsoft.Maps.MapTypeId.road,
-              zoom: 16
+                credentials: credentials,
+                center: new Microsoft.Maps.Location(lat, long),
+                mapTypeId: Microsoft.Maps.MapTypeId.road,
+                zoom: 16
             });
 
-    const url = `https://dev.virtualearth.net/REST/v1/Locations/${lat},${long}?key=${credentials}`;
+        var center = bingMap.getCenter();
 
-    var address;
+        var pin = new Microsoft.Maps.Pushpin(center, {
+            color: 'red'
+        });
+        var title = "Yo";
+        var description = "¡Estoy aquí!";
+        Microsoft.Maps.Pushpin.prototype.title = null;
+        pin.title = title;
+        Microsoft.Maps.Pushpin.prototype.description = null;
+        pin.description = description;
 
-    fetch(url)
-            .then(response => response.json())
-            .then(data => {
-              if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
-                address = data.resourceSets[0].resources[0].address.formattedAddress;
-              } else {
-                console.error('No se encontró ninguna dirección.');
-              }
-            })
-            .catch(error => {
-              console.error('Error en la solicitud: ', error);
-            });
+        Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+            displayEventInfo(center, title, description);
+        });
+        bingMap.entities.push(pin);
+    }
 
-    var center = bingMap.getCenter();
+    function displayEventInfo(center, title, description) {
+        var infobox = new Microsoft.Maps.Infobox(center, {
+            title: title,
+            description: description
+        });
 
-    var pin = new Microsoft.Maps.Pushpin(center, {
-      color: 'red'
-    });
+        infobox.setMap(bingMap);
+    }
 
-    var title = "¡Estoy aquí!";
-    Microsoft.Maps.Pushpin.prototype.title = null;
-    pin.title = title;
-    Microsoft.Maps.Pushpin.prototype.description = null;
-    pin.description = address;
+</script>
+<script>
+    const client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
 
+    client.onopen = () => {
+        console.log("Connected!");
+    }
 
-    Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-      displayEventInfo(center, title, address);
-    });
-
-    bingMap.entities.push(pin);
-  }
-
-  function displayEventInfo(center, title, description) {
-    var infobox = new Microsoft.Maps.Infobox(center, {
-      title: title,
-      description: description
-    });
-
-    infobox.setMap(bingMap);
-  }
-
+    client.onerror = (err) => {
+        console.log("Error", err);
+    }
 </script>
 
 <div th:replace="fragments/footer.html"></div>
