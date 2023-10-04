@@ -28,39 +28,29 @@ class ProfileServiceImplTest {
     @Mock
     private UserRepository mockUserRepository;
     @Mock
-    private ParkingRepository mockParkingRepository;
-    @Mock
     private NotificationRepository notificationRepository;
-    @Captor
-    private ArgumentCaptor<Parking> parkingCaptor;
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, mockParkingRepository, notificationRepository);
+        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, notificationRepository);
     }
 
     @Test
-    void shouldGetVehiclesAndParkingList(){
+    void shouldGetVehiclesAndParkingList() {
         Long userId = 1L;
-        List<Vehicle> vehiclesList = new ArrayList<>();
-        List<Parking> parkingsList = new ArrayList<>();
         MobileUser user = new MobileUser();
         Vehicle vehicle = new Vehicle();
         Parking parking = new Parking();
-        vehiclesList.add(vehicle);
-        parkingsList.add(parking);
+        user.registerParking(parking);
+        user.registerVehicle(vehicle);
 
         Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(user);
-        Mockito.when(mockVehicleRepository.findVehiclesByUser(user))
-                .thenReturn(vehiclesList);
-        Mockito.when(mockParkingRepository.findParkingsByUser(user)).
-                thenReturn(parkingsList);
 
         ProfileResponseDTO response = profileService.getVehiclesAndParkingsByMobileUser(userId);
 
-        assertEquals(vehiclesList, response.getVehicles());
-        assertEquals(parkingsList, response.getParkings());
+        assertEquals(1, response.getVehicles().size());
+        assertEquals(1, response.getParkings().size());
     }
 
     @Test
