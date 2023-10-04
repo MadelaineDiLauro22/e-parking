@@ -2,7 +2,6 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Parking;
-import com.tallerwebi.model.Vehicle;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -38,7 +37,7 @@ public class ParkingRepositoryImpl implements ParkingRepository {
     public List<Parking> findParkingsByUser(MobileUser user){
         Session session = sessionFactory.getCurrentSession();
 
-        return (List<Parking>) session.createCriteria(Vehicle.class)
+        return (List<Parking>) session.createCriteria(Parking.class)
                 .add(Restrictions.eq("user", user)).list();
     }
 }

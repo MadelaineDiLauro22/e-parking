@@ -2,7 +2,6 @@ package com.tallerwebi.model;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "PARKING")
@@ -33,7 +32,7 @@ public class Parking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private MobileUser mobileUser;
+    private MobileUser user;
 
     public Parking() {
     }
@@ -82,7 +81,7 @@ public class Parking {
     }
 
     public MobileUser getMobileUser() {
-        return mobileUser;
+        return user;
     }
 
     public void setVehicle(Vehicle vehicle) {
@@ -90,6 +89,6 @@ public class Parking {
     }
 
     public void setMobileUser(MobileUser mobileUser) {
-        this.mobileUser = mobileUser;
+        this.user = mobileUser;
     }
 }
