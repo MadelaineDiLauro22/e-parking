@@ -1,6 +1,6 @@
 package com.tallerwebi.config;
 
-import com.tallerwebi.helpers.NotificationWebsocketHandler;
+import com.tallerwebi.helpers.SocketHandler;
 import com.tallerwebi.helpers.SessionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -11,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -29,6 +28,9 @@ public class SpringWebConfig implements WebMvcConfigurer, WebSocketConfigurer {
     // Spring + Thymeleaf need this
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private SocketHandler websocketHandler;
 
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
@@ -89,12 +91,7 @@ public class SpringWebConfig implements WebMvcConfigurer, WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(myHandler(), "/ws/notifications");
-    }
-
-    @Bean
-    public WebSocketHandler myHandler() {
-        return new NotificationWebsocketHandler();
+        registry.addHandler(websocketHandler, "/ws/notifications");
     }
 
 }

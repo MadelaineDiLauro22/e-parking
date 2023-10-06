@@ -117,12 +117,18 @@
     const client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
 
     client.onopen = () => {
+        client.send(1);
         console.log("Connected!");
     }
 
     client.onerror = (err) => {
         console.log("Error", err);
     }
+
+    client.onclose = () => {
+        console.log("Sesión cerrada");
+    }
+
 </script>
 
 <div th:replace="fragments/footer.html"></div>

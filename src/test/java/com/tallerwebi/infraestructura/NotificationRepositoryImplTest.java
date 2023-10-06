@@ -5,6 +5,7 @@ import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Notification;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

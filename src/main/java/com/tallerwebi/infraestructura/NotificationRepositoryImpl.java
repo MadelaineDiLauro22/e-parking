@@ -4,6 +4,7 @@ import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Notification;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -34,7 +35,8 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
         return (List<Notification>) session.createCriteria(Notification.class)
                 .add(Restrictions.eq("user", user))
-                .add(Restrictions.eq("isRead", false)).list();
+                .add(Restrictions.eq("isRead", false))
+                .addOrder(Order.desc("creationDate")).list();
     }
 
     @Override

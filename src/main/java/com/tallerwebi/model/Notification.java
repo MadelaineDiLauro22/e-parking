@@ -17,7 +17,7 @@ public class Notification {
     boolean isRead;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MobileUser user;
 
     public Notification(String title, String message, Date creationDate, MobileUser user) {
