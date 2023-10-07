@@ -17,9 +17,6 @@ public class HomeControllerTest {
     public void setUp(){
         sessionMock = new MockHttpSession();
 
-        sessionMock.setAttribute("id", 1L);
-        sessionMock.setAttribute("nickName", "carlitos");
-
         homeController = new HomeController(sessionMock);
     }
 

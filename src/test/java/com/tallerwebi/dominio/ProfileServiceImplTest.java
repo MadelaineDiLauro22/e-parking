@@ -38,11 +38,7 @@ class ProfileServiceImplTest {
     @Test
     void shouldGetVehiclesAndParkingList() {
         Long userId = 1L;
-        MobileUser user = new MobileUser();
-        Vehicle vehicle = new Vehicle();
-        Parking parking = new Parking();
-        user.registerParking(parking);
-        user.registerVehicle(vehicle);
+        MobileUser user = sinceItSavesAMobileUserWithVehiclesAndParkings();
 
         Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(user);
@@ -74,6 +70,15 @@ class ProfileServiceImplTest {
                 .thenReturn(user.getNotifications());
 
         assertEquals(notifications, notificationRepository.findAllByUser(user));
+    }
+
+    private MobileUser sinceItSavesAMobileUserWithVehiclesAndParkings() {
+        MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        Parking parking = new Parking();
+        user.registerParking(parking);
+        user.registerVehicle(vehicle);
+        return user;
     }
 
     private MobileUser getNewMobileUserWithNotificationList(){
