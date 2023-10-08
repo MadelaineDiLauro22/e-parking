@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProfileService;
+import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Controller;
@@ -27,11 +28,19 @@ public class ProfileController {
 
     @GetMapping
     public ModelAndView getProfileView() {
-        ProfileResponseDTO vehiclesAndParkings = profileService.getVehiclesAndParkingsByMobileUser((Long) httpSession.getAttribute("id"));
-        ModelMap model = new ModelMap();
-        model.put("vehicles", vehiclesAndParkings.getVehicles());
-        model.put("parkings", vehiclesAndParkings.getParkings());
-        return new ModelAndView("profile", model);
+
+        try{
+            ProfileResponseDTO vehiclesAndParkings = profileService.getVehiclesAndParkingsByMobileUser((Long) httpSession.getAttribute("id"));
+            ModelMap model = new ModelMap();
+            model.put("vehicles", vehiclesAndParkings.getVehicles());
+            model.put("parkings", vehiclesAndParkings.getParkings());
+            return new ModelAndView("profile", model);
+        }
+        catch (UserNotFoundException e){
+            ModelMap model = new ModelMap();
+            //TO DO: trabajar mas el error
+            return new ModelAndView("error");
+        }
     }
 
     @GetMapping("vehicle")
