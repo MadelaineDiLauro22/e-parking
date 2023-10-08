@@ -22,8 +22,7 @@ public class SocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession webSocketSession) throws JsonProcessingException {
-        System.out.println("connected: " + webSocketSession);
+    public void afterConnectionEstablished(WebSocketSession webSocketSession) {
         notificationService.setWebSocketSession(webSocketSession);
     }
 

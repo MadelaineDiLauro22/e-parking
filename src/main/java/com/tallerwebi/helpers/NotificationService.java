@@ -1,16 +1,21 @@
 package com.tallerwebi.helpers;
 
 import com.tallerwebi.dominio.excepcion.CantSendMessageException;
+import com.tallerwebi.dominio.excepcion.NotificationServiceException;
 import com.tallerwebi.helpers.websocket.NotificationSocketHandler;
 import com.tallerwebi.infraestructura.NotificationRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Notification;
 import com.tallerwebi.presentacion.dto.NotificationDTO;
+import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,9 +41,23 @@ public class NotificationService extends NotificationSocketHandler {
         }
     }
 
+    @Transactional
+    public void registerNotification(NotificationRequestDTO request) {
+        try {
+            MobileUser user = userRepository.findUserById(super.getUserId());
+
+            Notification notification = new Notification(request.getTitle(), request.getMessage(), Date.from(Instant.now()), user);
+            user.addNotification(notification);
+
+            userRepository.save(user);
+            notificationRepository.save(notification);
+        } catch (Exception e) {
+            throw new NotificationServiceException("Can't register notification. Exception: " + e.getMessage());
+        }
+    }
+
     private NotificationDTO getNotifications() {
         try {
-            //Long userId = (Long) webSocketSession.getAttributes().get("userId");
             MobileUser user = userRepository.findUserById(super.getUserId());
             List<Notification> notifications = notificationRepository.findAllByUserAndNotRead(user);
 
@@ -46,7 +65,7 @@ public class NotificationService extends NotificationSocketHandler {
 
             return new NotificationDTO(size, size > 0 ? notifications.get(0).getMessage() : "");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new NotificationServiceException("Can't get notifications. Exception: " + e.getMessage());
         }
     }
 }
