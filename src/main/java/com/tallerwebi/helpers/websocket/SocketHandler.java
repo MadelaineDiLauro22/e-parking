@@ -37,13 +37,14 @@ public class SocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
+    public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) {
         throw new WebsocketError(throwable.getMessage());
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-        //webSocketSession.close();
+    public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) {
+        notificationService.setWebSocketSession(null);
+        notificationService.setUserId(null);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.tallerwebi.helpers;
 
 import com.tallerwebi.dominio.excepcion.CantSendMessageException;
 import com.tallerwebi.dominio.excepcion.NotificationServiceException;
+import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.helpers.websocket.NotificationSocketHandler;
 import com.tallerwebi.infraestructura.NotificationRepository;
 import com.tallerwebi.infraestructura.UserRepository;
@@ -45,6 +46,8 @@ public class NotificationService extends NotificationSocketHandler {
     public void registerNotification(NotificationRequestDTO request) {
         try {
             MobileUser user = userRepository.findUserById(super.getUserId());
+
+            if(user == null) throw new UserNotFoundException();
 
             Notification notification = new Notification(request.getTitle(), request.getMessage(), Date.from(Instant.now()), user);
             user.addNotification(notification);
