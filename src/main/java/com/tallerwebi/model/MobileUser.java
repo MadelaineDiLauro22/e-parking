@@ -1,10 +1,7 @@
 package com.tallerwebi.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "MOBILE_USER")
@@ -73,6 +70,7 @@ public class MobileUser extends User {
     }
 
     public List<Parking> getParkings() {
+        Collections.sort(parkings);
         return parkings;
     }
 

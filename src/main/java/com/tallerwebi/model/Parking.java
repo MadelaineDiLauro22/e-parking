@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "PARKING")
-public class Parking {
+public class Parking implements Comparable<Parking>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -90,5 +90,10 @@ public class Parking {
 
     public void setMobileUser(MobileUser mobileUser) {
         this.user = mobileUser;
+    }
+
+    @Override
+    public int compareTo(Parking parking) {
+        return parking.dateArrival.compareTo(this.dateArrival);
     }
 }
