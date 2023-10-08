@@ -1,6 +1,6 @@
 package com.tallerwebi.config;
 
-import com.tallerwebi.helpers.SocketHandler;
+import com.tallerwebi.helpers.websocket.SocketHandler;
 import com.tallerwebi.helpers.SessionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
