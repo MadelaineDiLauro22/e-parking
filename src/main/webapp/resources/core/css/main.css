@@ -16,6 +16,18 @@
     display: flex !important;
 }
 
+.badge-desktop{
+    display: flex !important;
+}
+
+.badge-mobile{
+    display: none !important;
+}
+
+.nav-width{
+    width: 14.438rem;
+}
+
 /* Backgrounds */
 
 .bg-primary{
@@ -76,6 +88,14 @@
     color: #1B1F25;
 }
 
+.text-gray{
+    color: #3F4246;
+}
+
+.text-brown{
+    color: #A47823;
+}
+
 /* Decorations */
 
 .box-shadow{
@@ -109,6 +129,14 @@
 
     .m-f{
         margin-bottom: 5.5rem;
+    }
+
+    .badge-desktop{
+        display: none !important;
+    }
+
+    .badge-mobile{
+        display: flex !important;
     }
 }
 

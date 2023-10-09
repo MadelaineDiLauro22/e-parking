@@ -114,6 +114,44 @@
 
         <script th:src="@{https://kit.fontawesome.com/c0cf04e4bc.js}" crossorigin="anonymous"></script>
 
+        <script th:inline="javascript">
+            const userId = [[${id}]];
+
+            if(userId != null){
+                const client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
+
+                client.onopen = () => {
+                    client.send(userId);
+                    console.log("Connected!");
+                }
+
+                client.onmessage = (event) => {
+                    const message = event.data;
+                    const notifications = JSON.parse(message);
+                    var countNotif = document.getElementById("count-notif");
+                    var lastNotif = document.getElementById("last-notification");
+                    var countNotifMobile = document.getElementById("count-notif-mobile");
+                    var lastNotifMobile = document.getElementById("last-notification-mobile");
+
+                    countNotif.textContent = notifications.count;
+                    countNotifMobile.textContent = notifications.count;
+
+                    if(notifications.lastMessage !== ""){
+                        lastNotif.textContent = notifications.lastMessage;
+                        lastNotifMobile.textContent = notifications.lastMessage;
+                    }
+                };
+
+                client.onerror = (err) => {
+                    console.log("Error", err);
+                }
+
+                client.onclose = () => {
+                    console.log("Sesión cerrada");
+                }
+            }
+        </script>
+
     </body>
 
 </html>

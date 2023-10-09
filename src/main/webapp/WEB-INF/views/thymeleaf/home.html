@@ -22,7 +22,7 @@
             <div class="mx-auto text-center">
 
                 <a th:href="@{/mobile/parking}"
-                   class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5 fs-6 text-center btn-primary">Registrar
+                   class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5 fs-6 text-center btn-primary mb-2">Registrar
                     Parking</a>
 
             </div>
@@ -35,9 +35,11 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 <script type='text/javascript'
         src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'
         async defer></script>
+
 <script type='text/javascript'>
 
     var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
@@ -110,23 +112,6 @@
         });
 
         infobox.setMap(bingMap);
-    }
-
-</script>
-<script>
-    const client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
-
-    client.onopen = () => {
-        client.send(1);
-        console.log("Connected!");
-    }
-
-    client.onerror = (err) => {
-        console.log("Error", err);
-    }
-
-    client.onclose = () => {
-        console.log("Sesión cerrada");
     }
 
 </script>
