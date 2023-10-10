@@ -28,6 +28,14 @@
     width: 14.438rem;
 }
 
+.li-f{
+    width: 5rem;
+}
+
+.icon-f{
+    font-size: 2.3rem;
+}
+
 /* Backgrounds */
 
 .bg-primary{
@@ -113,7 +121,7 @@
     height: 75vh !important;
 }
 
-@media screen and (max-device-width: 800px) {
+@media screen and (max-device-width: 1000px) {
 
     .menu-desktop{
         display: none !important;
@@ -137,6 +145,10 @@
 
     .badge-mobile{
         display: flex !important;
+    }
+
+    .map{
+        height: 65vh !important;
     }
 }
 
@@ -174,4 +186,12 @@
 
 #vehiclePic{
     overflow: hidden;
+}
+
+.geolocation{}
+
+.direction{}
+
+.dropdown-menu[data-bs-popper] {
+    left: auto !important;
 }
