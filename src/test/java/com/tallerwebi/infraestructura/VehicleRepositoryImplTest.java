@@ -31,10 +31,9 @@ class VehicleRepositoryImplTest {
     @Rollback
     @Test
     void shouldSaveVehicle() {
-        Vehicle vehicle = new Vehicle("ABC123", "BMW", "2023", "BLACK");
+        Vehicle vehicle = getBMWVehicle();
 
         vehicleRepository.save(vehicle);
-
         Vehicle saved = vehicleRepository.findVehicleByPatent(vehicle.getPatent());
 
         assertEquals(vehicle, saved);
@@ -45,11 +44,9 @@ class VehicleRepositoryImplTest {
     @Test
     void shouldFindAVehicleByPatent(){
         String patent = "ABC123";
-
-        Vehicle vehicle = new Vehicle("ABC123", "BMW", "2023", "BLACK");
+        Vehicle vehicle = getBMWVehicle();
 
         vehicleRepository.save(vehicle);
-
         Vehicle saved = vehicleRepository.findVehicleByPatent(patent);
 
         assertEquals(vehicle, saved);
@@ -59,7 +56,26 @@ class VehicleRepositoryImplTest {
     @Rollback
     @Test
     void shouldFindVehiclesByUserId(){
+        MobileUser user = getUserWithVehicles();
 
+        userRepository.save(user);
+        vehicleRepository.save(getBMWVehicle());
+        vehicleRepository.save(getMERCEDEZVehicle());
+
+        List<Vehicle> vehicleList = vehicleRepository.findVehiclesByUser(user);
+
+        assertEquals(vehicleList.size(), 2);
+    }
+
+    private Vehicle getBMWVehicle(){
+        return new Vehicle("ABC123", "BMW", "2023", "BLACK");
+    }
+
+    private Vehicle getMERCEDEZVehicle(){
+        return new Vehicle("DEF123", "MERCEDEZ", "2022", "RED");
+    }
+
+    private MobileUser getUserWithVehicles(){
         MobileUser user = new MobileUser();
         Vehicle vehicle = new Vehicle("ABC123", "BMW", "2023", "BLACK");
         Vehicle vehicle2 = new Vehicle("DEF123", "MERCEDEZ", "2022", "RED");
@@ -69,13 +85,7 @@ class VehicleRepositoryImplTest {
         user.registerVehicle(vehicle);
         user.registerVehicle(vehicle2);
 
-        userRepository.save(user);
-        vehicleRepository.save(vehicle);
-        vehicleRepository.save(vehicle2);
-
-        List<Vehicle> vehicleList = vehicleRepository.findVehiclesByUser(user);
-
-        assertEquals(vehicleList.size(), 2);
+        return user;
     }
 
 }
