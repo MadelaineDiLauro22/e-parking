@@ -12,6 +12,14 @@
 
                 <div class="divContainer divContainerBorderBottom my-1">
 
+                    <label for="parkingDate" class="text-white text-bold mb-1">Fecha y hora de estacionamiento:</label>
+
+                    <input th:field="*{parkingDate}" id="parkingDate" type="datetime-local" class="form-control my-1">
+                </div>
+
+
+                <div class="divContainer divContainerBorderBottom my-1">
+
                     <label for="parkingType" class="text-white text-bold mb-1">Seleccionar Tipo:</label>
 
                     <select th:field="*{parkingType}" id="parkingType" onchange="renderTicketImageForm()" class="form-select my-1">

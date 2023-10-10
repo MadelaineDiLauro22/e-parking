@@ -56,7 +56,8 @@ public class ParkingServiceImpl implements ParkingService {
                 parkingRegisterDTO.getVehiclePic(),
                 parkingRegisterDTO.getTicketPic(),
                 new Geolocation(parkingRegisterDTO.getLat(), parkingRegisterDTO.getLn()),
-                Date.from(Instant.now()));
+                parkingRegisterDTO.getParkingDate()
+                );
 
         parking.setMobileUser(user);
         parking.setVehicle(vehicle);

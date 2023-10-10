@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,6 +71,7 @@ class ParkingServiceImplTest {
 
     @Test
     void shouldRegisterParking() {
+        java.util.Date date = Date.from(Instant.now());
         ParkingRegisterDTO dto = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
@@ -95,6 +98,7 @@ class ParkingServiceImplTest {
         assertEquals(ParkingType.STREET, registered.getParkingType());
         assertEquals(vehicle, registered.getVehicle());
         assertEquals(user, registered.getMobileUser());
+        assertEquals(dto.getParkingDate(),registered.getDateArrival());
     }
 
     @Test
