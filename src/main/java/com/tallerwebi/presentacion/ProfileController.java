@@ -46,7 +46,7 @@ public class ProfileController {
         }
     }
 
-    @GetMapping("/profile/notifications")
+    @GetMapping("/list-notifications")
     public ModelAndView getNotifications() {
         try {
             List<Notification> notifications = profileService.getAllNotificationsByMobileUser((Long) httpSession.getAttribute("id"));
