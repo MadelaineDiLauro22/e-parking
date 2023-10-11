@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,7 +95,23 @@ class ParkingControllerTest {
 
         ModelAndView response = parkingController.getParkingRegister();
 
-        assertEquals("parking-register", response.getViewName());
+        assertEquals("redirect:/mobile/home", response.getViewName());
         assertEquals("Usuario inexistente", response.getModel().get("error"));
     }
+
+    @Test
+    void whenGetVehiclesListByUserId_ifNotHaveVehicles_shouldShowMessage() {
+        Long userId = 3L;
+
+        Mockito.when(mockHttpSession.getAttribute("id"))
+                .thenReturn(userId);
+        Mockito.when(mockParkingService.getUserCarsList(userId))
+                .thenThrow(new VehicleNotFoundException());
+
+        ModelAndView response = parkingController.getParkingRegister();
+
+        assertEquals("redirect:/mobile/home", response.getViewName());
+        assertEquals("Vehículo inexistente", response.getModel().get("error"));
+    }
+
 }

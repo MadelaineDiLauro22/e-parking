@@ -12,4 +12,16 @@ public class Geolocation {
     public Geolocation(){
 
     }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public Double getLn() {
+        return ln;
+    }
+
+    public String toString(){
+        return lat + "," + ln;
+    }
 }

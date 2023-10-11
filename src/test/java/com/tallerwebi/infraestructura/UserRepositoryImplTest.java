@@ -40,17 +40,10 @@ class UserRepositoryImplTest {
     @Rollback
     @Test
     void shouldFindUserByMailAndPassword(){
-        String email = "carlitos@hotmail.com";
-        String password = "123";
-
-        MobileUser user = new MobileUser();
-
-        user.setEmail(email);
-        user.setPassword(password);
+        MobileUser user = getUser();
 
         userRepository.save(user);
-
-        MobileUser saved = userRepository.findUserByMailAndPassword(email, password);
+        MobileUser saved = userRepository.findUserByMailAndPassword(getEmail(), getPassword());
 
         assertEquals(user, saved);
     }
@@ -59,17 +52,31 @@ class UserRepositoryImplTest {
     @Rollback
     @Test
     void shouldFindUserByMail() {
-        String email = "carlitos@hotmail.com";
-
-        MobileUser user = new MobileUser();
-
-        user.setEmail(email);
+        MobileUser user = getUser();
 
         userRepository.save(user);
-
-        MobileUser saved = userRepository.findUserByMail(email);
+        MobileUser saved = userRepository.findUserByMail(getEmail());
 
         assertEquals(user, saved);
     }
 
+    private MobileUser getUser(){
+        String email = "carlitos@hotmail.com";
+        String password = "123";
+
+        MobileUser user = new MobileUser();
+
+        user.setEmail(email);
+        user.setPassword(password);
+
+        return user;
+    }
+
+    private String getEmail(){
+        return "carlitos@hotmail.com";
+    }
+
+    private String getPassword(){
+        return "123";
+    }
 }

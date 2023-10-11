@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,10 +46,11 @@ class ParkingServiceImplTest {
         Long userId = 1L;
         List<Vehicle> cars = new ArrayList<>();
         MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        cars.add(vehicle);
 
         Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(user);
-
         Mockito.when(mockVehicleRepository.findVehiclesByUser(user))
                 .thenReturn(cars);
 
@@ -68,6 +71,7 @@ class ParkingServiceImplTest {
 
     @Test
     void shouldRegisterParking() {
+        java.util.Date date = Date.from(Instant.now());
         ParkingRegisterDTO dto = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
@@ -94,6 +98,7 @@ class ParkingServiceImplTest {
         assertEquals(ParkingType.STREET, registered.getParkingType());
         assertEquals(vehicle, registered.getVehicle());
         assertEquals(user, registered.getMobileUser());
+        assertEquals(dto.getParkingDate(),registered.getDateArrival());
     }
 
     @Test
@@ -122,6 +127,20 @@ class ParkingServiceImplTest {
 
         assertThrows(VehicleNotFoundException.class,
                 () -> parkingService.registerParking(dto, userId));
+    }
+
+    @Test
+    void whenGetParkingInformation_ifUserNotHaveVehicles_shouldThrowException() {
+        Long userId = 1L;
+        MobileUser user = new MobileUser();
+
+        Mockito.when(mockUserRepository.findUserById(userId))
+                .thenReturn(user);
+        Mockito.when(mockVehicleRepository.findVehiclesByUser(user))
+                .thenReturn(List.of());
+
+        assertThrows(VehicleNotFoundException.class,
+                () -> parkingService.getUserCarsList(userId));
     }
 
 }

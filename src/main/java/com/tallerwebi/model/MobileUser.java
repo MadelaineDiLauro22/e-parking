@@ -1,10 +1,7 @@
 package com.tallerwebi.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "MOBILE_USER")
@@ -18,8 +15,11 @@ public class MobileUser extends User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Vehicle> vehicles;
 
-    @OneToMany(mappedBy = "mobileUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Parking> parkings;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Notification> notifications;
 
     public MobileUser(String email, String password, UserRole rol, String name, String nickName) {
         super(email, password, rol);
@@ -27,21 +27,27 @@ public class MobileUser extends User {
         this.nickName = nickName;
         this.vehicles = new HashSet<>();
         this.parkings = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
     public MobileUser() {
         super();
         this.vehicles = new HashSet<>();
         this.parkings = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
-    @Override
     public void registerVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
     }
 
-    @Override
-    public void registerParking(Parking parking) {parkings.add(parking);}
+    public void registerParking(Parking parking) {
+        parkings.add(parking);
+    }
+
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
+    }
 
     public String getName() {
         return name;
@@ -58,4 +64,19 @@ public class MobileUser extends User {
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
+
+    public Set<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public List<Parking> getParkings() {
+        Collections.sort(parkings);
+        return parkings;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+
 }

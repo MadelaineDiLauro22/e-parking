@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -72,5 +73,17 @@ public class LoginController {
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return new ModelAndView("redirect:/login");
+    }
+
 }
 

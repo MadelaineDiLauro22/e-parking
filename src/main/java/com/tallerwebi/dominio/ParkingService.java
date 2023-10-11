@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ParkingService {
 
-    List<Vehicle> getUserCarsList(Long idUsuario) throws UserNotFoundException;
+    List<Vehicle> getUserCarsList(Long idUsuario) throws UserNotFoundException, VehicleNotFoundException;
 
     void registerParking(ParkingRegisterDTO parkingRegisterDTO, Long idUser) throws UserNotFoundException, VehicleNotFoundException;
 }

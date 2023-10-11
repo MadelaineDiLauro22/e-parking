@@ -4,51 +4,78 @@
 
                     <ul class="d-flex align-items-center justify-content-between list-unstyled mb-0">
 
-                        <li>
+                        <li class="li-f">
 
                             <a class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none" th:href="@{/mobile/home}">
 
-                                <i class="fa-solid fa-house fs-1"></i>
+                                <i class="fa-solid fa-house icon-f"></i>
 
-                               <span>Inicio</span>
-
-                            </a>
-
-                        </li>
-
-                        <li>
-
-                            <a href="#" class=" text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none" >
-
-                                <i class="fa-solid fa-car fs-1"></i>
-
-                                <span>Registros</span>
+                               Inicio
 
                             </a>
 
                         </li>
 
-                        <li>
+                        <li class="li-f">
+
+                            <a th:href="@{/mobile/profile}" class=" text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none" >
+
+                                <i class="fa-solid fa-address-card icon-f"></i>
+
+                                Perfil
+
+                            </a>
+
+                        </li>
+
+                        <li class="li-f">
 
                             <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
 
-                                <i class="fa-solid fa-address-card fs-1"></i>
+                                <i class="fa-solid fa-list-check icon-f"></i>
 
-                                <span>Denuncias</span>
+                                Denuncias
 
                             </a>
 
                         </li>
 
-                        <li>
+                        <li class="li-f">
 
-                            <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
+                            <div class="nav-item dropdown">
 
-                                <i class="fa-solid fa-user fs-1"></i>
+                                <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none align-items-center" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-                                <span>Mi Cuenta</span>
+                                    <i class="fa-solid fa-ellipsis icon-f"></i>
 
-                            </a>
+                                </a>
+
+                                <ul class="dropdown-menu bg-windows" aria-labelledby="navbarDropdown">
+
+
+                                    <li>
+
+                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
+
+                                    </li>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <li>
+
+                                        <a class="dropdown-item text-white text-bold" th:href="@{/logout}">Cerrar sesion</a>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
 
                         </li>
 
@@ -86,6 +113,44 @@
         <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.js}"></script>
 
         <script th:src="@{https://kit.fontawesome.com/c0cf04e4bc.js}" crossorigin="anonymous"></script>
+
+        <script th:inline="javascript">
+            const userId = [[${id}]];
+
+            if(userId != null){
+                const client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
+
+                client.onopen = () => {
+                    client.send(userId);
+                    console.log("Connected!");
+                }
+
+                client.onmessage = (event) => {
+                    const message = event.data;
+                    const notifications = JSON.parse(message);
+                    var countNotif = document.getElementById("count-notif");
+                    var lastNotif = document.getElementById("last-notification");
+                    var countNotifMobile = document.getElementById("count-notif-mobile");
+                    var lastNotifMobile = document.getElementById("last-notification-mobile");
+
+                    countNotif.textContent = notifications.count;
+                    countNotifMobile.textContent = notifications.count;
+
+                    if(notifications.lastMessage !== ""){
+                        lastNotif.textContent = notifications.lastMessage;
+                        lastNotifMobile.textContent = notifications.lastMessage;
+                    }
+                };
+
+                client.onerror = (err) => {
+                    console.log("Error", err);
+                }
+
+                client.onclose = () => {
+                    console.log("Sesión cerrada");
+                }
+            }
+        </script>
 
     </body>
 

@@ -33,9 +33,14 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public List<Vehicle> getUserCarsList(Long idUsuario) {
         MobileUser user = (MobileUser) userRepository.findUserById(idUsuario);
+
         if (user == null) throw new UserNotFoundException();
 
-        return vehicleRepository.findVehiclesByUser(user);
+        List<Vehicle> vehicles = vehicleRepository.findVehiclesByUser(user);
+
+        if(vehicles.isEmpty()) throw new VehicleNotFoundException();
+
+        return vehicles;
     }
 
     @Override
@@ -51,7 +56,8 @@ public class ParkingServiceImpl implements ParkingService {
                 parkingRegisterDTO.getVehiclePic(),
                 parkingRegisterDTO.getTicketPic(),
                 new Geolocation(parkingRegisterDTO.getLat(), parkingRegisterDTO.getLn()),
-                Date.from(Instant.now()));
+                parkingRegisterDTO.getParkingDate()
+                );
 
         parking.setMobileUser(user);
         parking.setVehicle(vehicle);

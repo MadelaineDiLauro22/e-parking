@@ -12,8 +12,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.regex.Matcher;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class LoginControllerTest {
@@ -52,22 +55,28 @@ public class LoginControllerTest {
 	}
 
 	@Test
-	public void loginConUsuarioYPasswordCorrectosDeberiaLLevarAHome(){
+	public void loginConUsuarioYPasswordCorrectosDeberiaLLevarAHomeYEstablecerAtributosEnLaSesion(){
 		// preparacion
 
-		MobileUser usuarioEncontradoMock = mock(MobileUser.class);
+		Long userId = 1L;
+		String nickName = "dami";
+		MobileUser userFound = usuarioMock;
 
-		when(usuarioEncontradoMock.getRol()).thenReturn(UserRole.ADMIN);
+		when(userFound.getRol()).thenReturn(UserRole.ADMIN);
+		when(userFound.getId()).thenReturn(userId);
+		when(userFound.getNickName()).thenReturn(nickName);
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
-		when(loginServiceMock.searchUser(anyString(), anyString())).thenReturn(usuarioEncontradoMock);
+		when(loginServiceMock.searchUser(anyString(), anyString())).thenReturn(userFound);
 
 		// ejecucion
 		ModelAndView modelAndView = loginController.validarLogin(loginDataDTOMock, requestMock);
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/mobile/home"));
-		verify(sessionMock, times(1)).setAttribute("rol", usuarioEncontradoMock.getRol());
+		verify(sessionMock).setAttribute("rol", userFound.getRol());
+		verify(sessionMock).setAttribute("id", userId);
+		verify(sessionMock).setAttribute("nickName", nickName);
 	}
 
 	@Test
@@ -105,5 +114,23 @@ public class LoginControllerTest {
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("new-user"));
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
+	}
+
+	@Test
+	public void whenTheUserCloseSessionSendItToLogin(){
+		MobileUser userFound = usuarioMock;
+
+		when(userFound.getRol()).thenReturn(UserRole.ADMIN);
+
+		when(requestMock.getSession()).thenReturn(sessionMock);
+		when(loginServiceMock.searchUser(anyString(), anyString())).thenReturn(userFound);
+
+		ModelAndView modelAndView = loginController.validarLogin(loginDataDTOMock, requestMock);
+
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/mobile/home"));
+
+		ModelAndView modelAndView1 = loginController.logout(requestMock);
+
+		assertThat(modelAndView1.getViewName(), equalToIgnoringCase("redirect:/login"));
 	}
 }
