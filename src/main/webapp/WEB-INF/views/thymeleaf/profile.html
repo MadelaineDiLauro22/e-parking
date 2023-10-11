@@ -89,15 +89,12 @@
 
     var geolocationElements = document.querySelectorAll(".geolocation");
     var directionElements = document.querySelectorAll(".direction");
-    console.log("Direcciones:" + directionElements.length)
 
     for (let i = 0; i < geolocationElements.length; i++) {
         var geolocation = geolocationElements[i].textContent.split(',');
 
         var lat = geolocation[0];
         var ln = geolocation[1];
-        console.log("lat:"+lat);
-        console.log("ln"+ln);
 
         const url = 'https://dev.virtualearth.net/REST/v1/Locations/' + lat + ',' + ln + '?key=' + credentials;
 
