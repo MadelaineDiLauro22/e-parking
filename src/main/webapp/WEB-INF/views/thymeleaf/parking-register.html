@@ -10,13 +10,6 @@
 
             <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}">
 
-                <div class="divContainer divContainerBorderBottom my-1">
-
-                    <label for="parkingDate" class="text-white text-bold mb-1">Fecha y hora de estacionamiento:</label>
-
-                    <input th:field="*{parkingDate}" id="parkingDate" type="datetime-local" class="form-control my-1">
-                </div>
-
 
                 <div class="divContainer divContainerBorderBottom my-1">
 
@@ -62,6 +55,13 @@
 
                     <input th:field="*{ticketPic}" id="ticketPic"  type="file" accept="image/jpeg" class="form-control my-1">
 
+                </div>
+
+                <div class="divContainer divContainerBorderBottom my-1">
+
+                    <label for="parkingDate" class="text-white text-bold mb-1">Fecha y hora de estacionamiento:</label>
+
+                    <input th:field="*{parkingDate}" id="parkingDate" type="datetime-local" class="form-control my-1">
                 </div>
 
                 <div id="geolocation" class="divContainer">
