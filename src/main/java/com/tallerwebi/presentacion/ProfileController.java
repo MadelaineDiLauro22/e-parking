@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProfileService;
+import com.tallerwebi.dominio.excepcion.NotificationServiceException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.model.Notification;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("mobile/profile")
@@ -43,6 +46,18 @@ public class ProfileController {
         }
     }
 
+    @GetMapping("/profile/notifications")
+    public ModelAndView getNotifications() {
+        try {
+            List<Notification> notifications = profileService.getAllNotificationsByMobileUser((Long) httpSession.getAttribute("id"));
+            ModelAndView model = new ModelAndView("notifications-view");
+            model.addObject("notifications", notifications);
+            return model;
+        } catch (UserNotFoundException e) {
+            return new ModelAndView("error");
+        }
+    }
+
     @GetMapping("vehicle")
     public ModelAndView getRegisterVehicleView() {
         //TODO: implement method
@@ -54,4 +69,5 @@ public class ProfileController {
         //TODO: implement method
         return null;
     }
+
 }
