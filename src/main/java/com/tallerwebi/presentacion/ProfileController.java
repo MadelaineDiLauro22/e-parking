@@ -50,9 +50,9 @@ public class ProfileController {
     public ModelAndView getNotifications() {
         try {
             List<Notification> notifications = profileService.getAllNotificationsByMobileUser((Long) httpSession.getAttribute("id"));
-            ModelAndView model = new ModelAndView("notifications-view");
-            model.addObject("notifications", notifications);
-            return model;
+            ModelMap model = new ModelMap();
+            model.put("notifications", notifications);
+            return new ModelAndView("notifications-view", model);
         } catch (UserNotFoundException e) {
             return new ModelAndView("error");
         }
