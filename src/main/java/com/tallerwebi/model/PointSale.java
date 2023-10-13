@@ -1,5 +1,7 @@
 package com.tallerwebi.model;
 
+import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
+
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -14,5 +16,12 @@ public class PointSale extends ParkingPlace {
     }
 
     public PointSale() {
+    }
+
+    @Override
+    public Ticket generateTicket(ParkingRegisterDTO parking) {
+        Ticket ticket = new Ticket(parking.getAmmountHs(), parking.isPaid(), this);
+        super.getTickets().add(ticket);
+        return ticket;
     }
 }

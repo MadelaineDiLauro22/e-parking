@@ -19,6 +19,8 @@ public class ParkingRegisterDTO {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date parkingDate;
+    private int ammountHs;
+    private boolean isPaid;
 
     public ParkingRegisterDTO() {
     }
@@ -87,5 +89,21 @@ public class ParkingRegisterDTO {
 
     public void setParkingDate(Date parkingDate) {
         this.parkingDate = parkingDate;
+    }
+
+    public int getAmmountHs() {
+        return ammountHs;
+    }
+
+    public void setAmmountHs(int ammountHs) {
+        this.ammountHs = ammountHs;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
     }
 }
