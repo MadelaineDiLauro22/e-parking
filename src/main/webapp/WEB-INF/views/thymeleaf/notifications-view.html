@@ -10,30 +10,13 @@
 
             <div class="py-2">
 
-                <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
-
-                    <div class="d-flex align-items-start justify-content-between">
-
-                        <i class="fa-solid fa-envelope-open-text text-white fs-5"></i>
-
-                        <div>
-                            <h5 class="m-0 px-3" th:text="'Hola'"></h5>
-                            <p class="m-0 px-3" th:text="'Es una notificacion'"></p>
-                        </div>
-
-                    </div>
-
-                    <a href="#"><i class="fa-solid fa-circle-xmark text-blue"></i></a>
-
-                </div>
-
                 <div th:each="notification : ${notifications}">
 
                     <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
 
                         <div class="d-flex align-items-start justify-content-between">
 
-                            <i class="fa-solid fa-car-side text-white fs-5"></i>
+                            <i class="fa-solid fa-envelope-open-text text-white fs-5"></i>
 
                             <div>
                                 <h5 class="m-0 px-3" th:text="${notification.getTitle()}"></h5>

@@ -27,7 +27,7 @@
 
                                 <img th:src="@{/img/logo/Logo2.png}" width="40rem" class="px-1">
 
-                                <a class="navbar-brand text-white text-bold" th:href="@{/#}"> eParking </a>
+                                <a class="navbar-brand text-white text-bold" th:href="@{/mobile/home}"> eParking </a>
 
                             </div>
 
@@ -122,7 +122,7 @@
 
                         <h4 id="last-notification-mobile" class="bg-terciary px-4 py-2 rounded-4 fs-6 text-white d-inline-block text-truncate">No hay notificaciones en este momento.</h4>
 
-                        <a href="#" class="position-relative pb-1">
+                        <a th:href="@{/mobile/profile/notifications}" class="position-relative pb-1">
 
                             <i class="fa-solid fa-bell text-gray fs-1"></i>
 

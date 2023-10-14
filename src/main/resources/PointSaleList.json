@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Punto de Pago: Kiosco Huracan",
+    "geolocation": {
+      "lat": -34.668939683155045,
+      "ln": -58.5609940264316
+    },
+    "feePerHour": 500.0,
+    "feeFraction": 200.0,
+    "fractionTime": 30
+  },
+  {
+    "name": "Punto de Pago: Carlitos",
+    "geolocation": {
+      "lat": -34.67050528318236,
+      "ln": -58.560876717723
+    },
+    "feePerHour": 600.0,
+    "feeFraction": 400.0,
+    "fractionTime": 45
+  },
+  {
+    "name": "Punto de Pago: HxH",
+    "geolocation": {
+      "lat": -34.671417947733744,
+      "ln": -58.56341185554719
+    },
+    "feePerHour": 900.0,
+    "feeFraction": 400.0,
+    "fractionTime": 30
+  },
+  {
+    "name": "Punto de Pago: Unlam",
+    "geolocation": {
+      "lat": -34.668116071760096,
+      "ln": -58.56653341694085
+    },
+    "feePerHour": 150.0,
+    "feeFraction": 75.0,
+    "fractionTime": 30
+  }
+]

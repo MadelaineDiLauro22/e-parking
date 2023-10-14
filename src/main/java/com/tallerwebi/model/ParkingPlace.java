@@ -65,4 +65,8 @@ public abstract class ParkingPlace {
     public List<Ticket> getTickets() {
         return tickets;
     }
+
+    public Long getId() {
+        return id;
+    }
 }
