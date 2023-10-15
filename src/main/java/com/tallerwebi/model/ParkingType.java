@@ -1,5 +1,5 @@
 package com.tallerwebi.model;
 
 public enum ParkingType {
-    STREET, GARAGE;
+    STREET, GARAGE, POINT_SALE;
 }

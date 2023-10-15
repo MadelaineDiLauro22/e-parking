@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.ParkingType;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,11 +22,12 @@ public class ParkingRegisterDTO {
     private Date parkingDate;
     private int ammountHs;
     private boolean isPaid;
+    private ParkingPlace parkingPlace;
 
     public ParkingRegisterDTO() {
     }
 
-    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln) {
+    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln, ParkingPlace parkingPlace) {
         this.parkingType = parkingType;
         this.vehicle = vehicle;
         this.vehiclePic = vehiclePic;
@@ -33,6 +35,7 @@ public class ParkingRegisterDTO {
         this.lat = lat;
         this.ln = ln;
         this.parkingDate = Date.from(Instant.now());
+        this.parkingPlace = parkingPlace;
     }
 
     public ParkingType getParkingType() {

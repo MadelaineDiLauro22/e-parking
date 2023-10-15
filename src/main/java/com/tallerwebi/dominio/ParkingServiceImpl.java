@@ -5,10 +5,7 @@ import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
-import com.tallerwebi.model.Geolocation;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Parking;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +18,6 @@ public class ParkingServiceImpl implements ParkingService {
 
     private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
-
     private final ParkingRepository parkingRepository;
 
     public ParkingServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, ParkingRepository parkingRepository) {
@@ -44,6 +40,12 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
+    public List<ParkingPlace> getParkingPlaces() {
+        //TO DO: llamar al repo de parkingplace
+        return null;
+    }
+
+    @Override
     public void registerParking(ParkingRegisterDTO parkingRegisterDTO, Long idUser) {
         MobileUser user = (MobileUser) userRepository.findUserById(idUser);
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(parkingRegisterDTO.getVehicle());
@@ -61,9 +63,24 @@ public class ParkingServiceImpl implements ParkingService {
 
         parking.setMobileUser(user);
         parking.setVehicle(vehicle);
+
+        if (parking.getParkingType().equals(ParkingType.GARAGE)){
+            //TO DO: para cuando se agrega la entidad Garage
+        }
+        else if (parking.getParkingType().equals(ParkingType.POINT_SALE)){
+            //TO DO: no tiene que ser new PointSale, sino buscar pointsale por id
+            PointSale pointSale = new PointSale();
+            Ticket ticket = pointSale.generateTicket(parkingRegisterDTO);
+            parking.setTicket(ticket);
+        }
+
+
+
         user.registerParking(parking);
 
         userRepository.save(user);
         parkingRepository.save(parking);
+
+
     }
 }

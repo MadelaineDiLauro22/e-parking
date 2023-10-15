@@ -27,6 +27,10 @@ public class Parking implements Comparable<Parking>{
     private Date dateExit;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
@@ -87,6 +91,8 @@ public class Parking implements Comparable<Parking>{
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
+
+    public void setTicket(Ticket ticket) {this.ticket = ticket;}
 
     public void setMobileUser(MobileUser mobileUser) {
         this.user = mobileUser;

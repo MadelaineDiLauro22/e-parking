@@ -5,10 +5,7 @@ import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Parking;
-import com.tallerwebi.model.ParkingType;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -78,7 +75,8 @@ class ParkingServiceImplTest {
                 null,
                 null,
                 (double) 0,
-                (double) 0
+                (double) 0,
+                new PointSale()
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();
