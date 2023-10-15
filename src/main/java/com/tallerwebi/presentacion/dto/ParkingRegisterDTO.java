@@ -109,4 +109,7 @@ public class ParkingRegisterDTO {
     public void setPaid(boolean paid) {
         isPaid = paid;
     }
+    public ParkingPlace getParkingPlace(){
+        return parkingPlace;
+    }
 }

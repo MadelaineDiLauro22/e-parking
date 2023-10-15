@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
+import com.tallerwebi.infraestructura.ParkingPlaceRepository;
 import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
@@ -9,8 +10,6 @@ import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -19,11 +18,13 @@ public class ParkingServiceImpl implements ParkingService {
     private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
     private final ParkingRepository parkingRepository;
+    private final ParkingPlaceRepository parkingPlaceRepository;
 
-    public ParkingServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, ParkingRepository parkingRepository) {
+    public ParkingServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, ParkingRepository parkingRepository, ParkingPlaceRepository parkingPlaceRepository) {
         this.vehicleRepository = vehicleRepository;
         this.userRepository = userRepository;
         this.parkingRepository = parkingRepository;
+        this.parkingPlaceRepository = parkingPlaceRepository;
     }
 
     @Override
@@ -41,8 +42,7 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public List<ParkingPlace> getParkingPlaces() {
-        //TO DO: llamar al repo de parkingplace
-        return null;
+        return parkingPlaceRepository.findAll();
     }
 
     @Override
@@ -69,18 +69,14 @@ public class ParkingServiceImpl implements ParkingService {
         }
         else if (parking.getParkingType().equals(ParkingType.POINT_SALE)){
             //TO DO: no tiene que ser new PointSale, sino buscar pointsale por id
-            PointSale pointSale = new PointSale();
+            PointSale pointSale = (PointSale) parkingPlaceRepository.findById(parkingRegisterDTO.getParkingPlace().getId());
             Ticket ticket = pointSale.generateTicket(parkingRegisterDTO);
             parking.setTicket(ticket);
         }
-
-
 
         user.registerParking(parking);
 
         userRepository.save(user);
         parkingRepository.save(parking);
-
-
     }
 }
