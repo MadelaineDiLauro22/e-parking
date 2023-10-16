@@ -29,7 +29,7 @@ class ParkingServiceImplTest {
     @Mock
     private ParkingRepository mockParkingRepository;
     @Mock
-    private ParkingPlaceRepository parkingPlaceRepository;
+    private ParkingPlaceRepository mockParkingPlaceRepository;
     @Captor
     private ArgumentCaptor<Parking> parkingCaptor;
 
@@ -37,7 +37,7 @@ class ParkingServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockUserRepository, mockParkingRepository, parkingPlaceRepository);
+        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockUserRepository, mockParkingRepository, mockParkingPlaceRepository);
     }
 
     @Test
