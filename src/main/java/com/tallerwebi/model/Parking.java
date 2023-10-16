@@ -93,6 +93,9 @@ public class Parking implements Comparable<Parking>{
     }
 
     public void setTicket(Ticket ticket) {this.ticket = ticket;}
+    public Ticket getTicket(){
+        return ticket;
+    }
 
     public void setMobileUser(MobileUser mobileUser) {
         this.user = mobileUser;

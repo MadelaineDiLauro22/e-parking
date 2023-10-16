@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion.dto;
 
 import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.ParkingType;
+import com.tallerwebi.model.PointSale;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
@@ -111,5 +112,9 @@ public class ParkingRegisterDTO {
     }
     public ParkingPlace getParkingPlace(){
         return parkingPlace;
+    }
+
+    public void setParkingPlace(ParkingPlace parkingPlace) {
+        this.parkingPlace = parkingPlace;
     }
 }

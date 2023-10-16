@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import java.sql.Array;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ class ParkingServiceImplTest {
                 null,
                 (double) 0,
                 (double) 0,
-                new PointSale()
+                getPointSale()
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();
@@ -141,5 +142,27 @@ class ParkingServiceImplTest {
 
         assertThrows(VehicleNotFoundException.class,
                 () -> parkingService.getUserCarsList(userId));
+    }
+
+    @Test
+    void shouldParkingPlaceList(){
+        List<ParkingPlace> parkingPlaces = getParkingPlaceList();
+
+        Mockito.when(mockParkingPlaceRepository.findAll())
+                .thenReturn(parkingPlaces);
+
+        assertEquals(parkingPlaces, parkingService.getParkingPlaces());
+    }
+
+    private List<ParkingPlace> getParkingPlaceList(){
+        List<ParkingPlace> parkingPlaces = new ArrayList<ParkingPlace>();
+        PointSale point1 = new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
+        parkingPlaces.add(point1);
+
+        return parkingPlaces;
+    }
+
+    private PointSale getPointSale(){
+        return new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
     }
 }
