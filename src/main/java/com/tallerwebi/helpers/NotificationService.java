@@ -35,6 +35,7 @@ public class NotificationService extends NotificationSocketHandler {
     @Override
     public void sendMessage()  {
         try {
+            if(super.getWebSocketSession() == null) throw new NotificationServiceException("Websocket session not connected");
             NotificationDTO notifications = getNotifications();
             super.getWebSocketSession().sendMessage(new TextMessage(mapper.getMapper().writeValueAsBytes(notifications)));
         } catch (IOException e) {
@@ -57,6 +58,12 @@ public class NotificationService extends NotificationSocketHandler {
         } catch (Exception e) {
             throw new NotificationServiceException("Can't register notification. Exception: " + e.getMessage());
         }
+    }
+
+    @Transactional
+    public void registerAndSendNotification(NotificationRequestDTO request) {
+        registerNotification(request);
+        if (super.getWebSocketSession().isOpen()) sendMessage();
     }
 
     private NotificationDTO getNotifications() {

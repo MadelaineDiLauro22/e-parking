@@ -7,12 +7,11 @@ import com.tallerwebi.infraestructura.NotificationRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Notification;
-import com.tallerwebi.presentacion.dto.NotificationDTO;
+import com.tallerwebi.model.NotificationType;
 import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -101,7 +100,7 @@ class NotificationServiceTest {
     }
 
     private NotificationRequestDTO createNotificationRequest(String title, String message) {
-        return new NotificationRequestDTO(title, message);
+        return new NotificationRequestDTO(title, message, NotificationType.MESSAGE);
     }
 
 }
