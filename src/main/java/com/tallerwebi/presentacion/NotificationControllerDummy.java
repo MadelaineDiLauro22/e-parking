@@ -2,8 +2,12 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.helpers.Alarm;
 import com.tallerwebi.helpers.NotificationService;
+import com.tallerwebi.presentacion.dto.AlarmRequestDTO;
 import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @RestController
 @RequestMapping("notification")
@@ -24,8 +28,12 @@ public class NotificationControllerDummy {
     }
 
     @PostMapping("/alarm")
-    public void createAlarm() {
-        alarm.createAlarm();
+    public void createAlarm(@RequestBody AlarmRequestDTO dto) {
+        try {
+            alarm.createAlarm(ZonedDateTime.of(dto.getDate(), ZoneId.of("America/Argentina/Buenos_Aires")));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
