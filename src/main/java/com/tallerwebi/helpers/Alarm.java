@@ -26,7 +26,7 @@ public class Alarm {
             now = ZonedDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"));
         }
 
-       notificationService.registerAndSendNotification(new NotificationRequestDTO("Alarm", "this is an alarm", NotificationType.ALARM));
+       notificationService.registerAndSendNotification(new NotificationRequestDTO("Alarma", "Este es un recordatorio para mover el auto", NotificationType.ALARM));
     }
 
 }

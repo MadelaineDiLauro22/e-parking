@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
+import com.tallerwebi.helpers.Alarm;
 import com.tallerwebi.infraestructura.ParkingPlaceRepository;
 import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import java.sql.Array;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ class ParkingServiceImplTest {
     private ParkingRepository mockParkingRepository;
     @Mock
     private ParkingPlaceRepository mockParkingPlaceRepository;
+    @Mock
+    private Alarm mockAlarm;
     @Captor
     private ArgumentCaptor<Parking> parkingCaptor;
 
@@ -38,7 +40,7 @@ class ParkingServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockUserRepository, mockParkingRepository, mockParkingPlaceRepository);
+        parkingService = new ParkingServiceImpl(mockVehicleRepository, mockUserRepository, mockParkingRepository, mockParkingPlaceRepository, mockAlarm);
     }
 
     @Test

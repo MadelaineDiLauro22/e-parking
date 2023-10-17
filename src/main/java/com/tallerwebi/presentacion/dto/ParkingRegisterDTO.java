@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ParkingRegisterDTO {
@@ -22,8 +23,11 @@ public class ParkingRegisterDTO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date parkingDate;
     private int ammountHs;
-    private boolean isPaid;
+    private boolean isPaid = false;
     private ParkingPlace parkingPlace;
+    private boolean enableAlarm = false;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private Date alarmDate;
 
     public ParkingRegisterDTO() {
     }
@@ -116,5 +120,21 @@ public class ParkingRegisterDTO {
 
     public void setParkingPlace(ParkingPlace parkingPlace) {
         this.parkingPlace = parkingPlace;
+    }
+
+    public boolean isEnableAlarm() {
+        return enableAlarm;
+    }
+
+    public void setEnableAlarm(boolean enableAlarm) {
+        this.enableAlarm = enableAlarm;
+    }
+
+    public Date getAlarmDate() {
+        return alarmDate;
+    }
+
+    public void setAlarmDate(Date alarmDate) {
+        this.alarmDate = alarmDate;
     }
 }

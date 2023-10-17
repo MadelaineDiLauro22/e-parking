@@ -66,6 +66,17 @@
                     <input th:field="*{parkingDate}" id="parkingDate" type="datetime-local" class="form-control my-1">
                 </div>
 
+                <div class="divContainer divContainerBorderBottom my-1">
+                    <div>
+                        <label for="enableAlarm" class="text-white text-bold mb-1">Agregar alarma:</label>
+                        <input th:field="*{enableAlarm}" id="enableAlarm" type="checkbox" onchange="renderAlarmDate()">
+                    </div>
+                    <div>
+                        <label for="alarmDate" class="text-white text-bold mb-1">Seleccione fecha y hora:</label>
+                        <input th:field="*{alarmDate}" id="alarmDate" type="datetime-local" class="form-control my-1" disabled="disabled">
+                    </div>
+                </div>
+
                 <div id="geolocation" class="divContainer">
 
                     <input th:field="*{lat}" id="lat" type="text">
@@ -109,6 +120,18 @@
                 div.style.display = "block"
             } else {
                 div.style.display = "none"
+            }
+        }
+    </script>
+    <script>
+        function renderAlarmDate() {
+            let checkbox = document.getElementById("enableAlarm").checked;
+            let date = document.getElementById("alarmDate");
+
+            if(checkbox) {
+                date.removeAttribute("disabled");
+            } else {
+                date.setAttribute("disabled", "disabled")
             }
         }
     </script>
