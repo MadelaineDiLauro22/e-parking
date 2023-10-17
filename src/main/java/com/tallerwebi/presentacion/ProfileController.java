@@ -41,8 +41,8 @@ public class ProfileController {
         }
         catch (UserNotFoundException e){
             ModelMap model = new ModelMap();
-            //TO DO: trabajar mas el error
-            return new ModelAndView("error");
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/error", model);
         }
     }
 
@@ -53,8 +53,10 @@ public class ProfileController {
             ModelMap model = new ModelMap();
             model.put("notifications", notifications);
             return new ModelAndView("notifications-view", model);
-        } catch (UserNotFoundException e) {
-            return new ModelAndView("error");
+        } catch (UserNotFoundException e){
+            ModelMap model = new ModelMap();
+            model.put("error", e.getMessage());
+            return new ModelAndView("redirect:/error", model);
         }
     }
 

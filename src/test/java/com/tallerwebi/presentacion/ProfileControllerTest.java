@@ -44,8 +44,10 @@ public class ProfileControllerTest {
     }
 
     @Test
-    void testCannotGetNotifications() throws UserNotFoundException {
-        when(mockHttpSession.getAttribute("id")).thenReturn(null);
+    void testCannotGetNotifications() {
+        when(mockHttpSession.getAttribute("id")).thenThrow(UserNotFoundException.class);
         profileController.getNotifications();
+        ModelAndView response = profileController.getNotifications();
+        assertEquals("redirect:/error", response.getViewName());
     }
 }
