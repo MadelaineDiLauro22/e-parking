@@ -86,4 +86,9 @@ public class Vehicle {
     public int hashCode() {
         return Objects.hash(patent);
     }
+
+    @Override
+    public String toString(){
+        return model + " - " + patent;
+    }
 }

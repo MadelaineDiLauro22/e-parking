@@ -24,7 +24,7 @@ public class ParkingRegisterDTO {
     private Date parkingDate;
     private int ammountHs;
     private boolean isPaid = false;
-    private ParkingPlace parkingPlace;
+    private Long parkingPlaceId;
     private boolean enableAlarm = false;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date alarmDate;
@@ -32,7 +32,7 @@ public class ParkingRegisterDTO {
     public ParkingRegisterDTO() {
     }
 
-    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln, ParkingPlace parkingPlace) {
+    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln, Long parkingPlaceId) {
         this.parkingType = parkingType;
         this.vehicle = vehicle;
         this.vehiclePic = vehiclePic;
@@ -40,7 +40,7 @@ public class ParkingRegisterDTO {
         this.lat = lat;
         this.ln = ln;
         this.parkingDate = Date.from(Instant.now());
-        this.parkingPlace = parkingPlace;
+        this.parkingPlaceId = parkingPlaceId;
     }
 
     public ParkingType getParkingType() {
@@ -114,12 +114,12 @@ public class ParkingRegisterDTO {
     public void setPaid(boolean paid) {
         isPaid = paid;
     }
-    public ParkingPlace getParkingPlace(){
-        return parkingPlace;
+    public Long getParkingPlaceId(){
+        return parkingPlaceId;
     }
 
-    public void setParkingPlace(ParkingPlace parkingPlace) {
-        this.parkingPlace = parkingPlace;
+    public void setParkingPlaceId(Long parkingPlaceId) {
+        this.parkingPlaceId = parkingPlaceId;
     }
 
     public boolean isEnableAlarm() {

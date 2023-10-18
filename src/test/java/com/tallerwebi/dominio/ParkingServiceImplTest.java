@@ -84,7 +84,7 @@ class ParkingServiceImplTest {
                 null,
                 (double) 0,
                 (double) 0,
-                getPointSale()
+                1L
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();
@@ -196,7 +196,7 @@ class ParkingServiceImplTest {
                 null,
                 (double) 0,
                 (double) 0,
-                getPointSale()
+                1L
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();

@@ -15,7 +15,7 @@
 
                     <label for="parkingType" class="text-white text-bold mb-1">Seleccionar Tipo:</label>
 
-                    <select th:field="*{parkingType}" id="parkingType" onchange="renderTicketImageForm()" class="form-select my-1">
+                    <select th:field="*{parkingType}" id="parkingType" onchange="renderForms()" class="form-select my-1">
 
                         <option value="STREET" selected>Vía Publica</option>
 
@@ -51,7 +51,7 @@
 
                 </div>
 
-                <div id="typeGarage" class="divContainer divContainerBorderBottom my-1" style="display: none">
+                <div id="typeGarage" class="divContainer divContainerBorderBottom my-1" style="display:none">
 
                     <label for="ticketPic" class="text-white text-bold mb-1">Foto de Ticket:</label>
 
@@ -67,29 +67,63 @@
                 </div>
 
                 <div class="divContainer divContainerBorderBottom my-1">
+
                     <div>
+
                         <label for="enableAlarm" class="text-white text-bold mb-1">Agregar alarma:</label>
+
                         <input th:field="*{enableAlarm}" id="enableAlarm" type="checkbox" onchange="renderAlarmDate()">
+
                     </div>
+
                     <div>
+
                         <label for="alarmDate" class="text-white text-bold mb-1">Seleccione fecha y hora:</label>
+
                         <input th:field="*{alarmDate}" id="alarmDate" type="datetime-local" class="form-control my-1" disabled="disabled">
+
                     </div>
-                </div>
-
-                <div id="geolocation" class="divContainer">
-
-                    <input th:field="*{lat}" id="lat" type="text">
-
-                    <input th:field="*{ln}" id="ln"  type="text">
-
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.36433397229!2d-58
-            .565380123487344!3d-34.670753161042825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x
-            95bcc62cc3ef7083%3A0x8867107f425fade5!2sUniversidad%20Nacional%20de%20La%20Matanza!5e0!3m2!
-            1ses-419!2sar!4v1694126930425!5m2!1ses-419!2sar" style="border:0; height: 15rem; width: 100%;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade" class="my-1"></iframe>
 
                 </div>
+
+                <div id="geolocation" class="divContainer divContainerBorderBottom my-1">
+
+                    <label for="geolocation" class="text-white text-bold mb-1">Verifica el parking:</label>
+
+                    <input th:field="*{lat}" id="lat" class="d-none" type="text">
+
+                    <input th:field="*{ln}" id="ln" class="d-none" type="text">
+
+                    <div>
+
+                        <div id="myMap" class="mapRegister"></div>
+
+                        <div id='infoBox'>
+                            <div id='infoboxText'>
+                                <b id='infoboxTitle'></b>
+                                <a id='infoboxDescription'></a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="pointSaleDiv" class="divContainer my-1" style="display:none">
+
+                    <label for="pointSale" class="text-white text-bold mb-1">Tu punto de pago seleccionado:</label>
+
+                    <input th:field="*{parkingPlaceId}" id="pointSale" class="d-none" type="text">
+
+                    <p id="pointSaleText" th:text="'Aún no se ha seleccionado un punto de pago.'" class="text-white"></p>
+
+                    <label for="amountHs" class="text-white text-bold mb-1">Selecciona la cantidad de horas:</label>
+
+                    <input th:field="*{ammountHs}" id="amountHs" class="form-control my-1" type="number" value="0">
+
+                </div>
+
+
 
                 <div class="divContainer my-3">
 
@@ -105,25 +139,43 @@
                 </div>
 
             </form>
+
         </article>
 
 
     </section>
 
+    <script th:inline="javascript">
+        var parkingDateInput = document.getElementById("parkingDate");
 
-    <script>
-        function renderTicketImageForm() {
+        var now = new Date();
+        var formattedNow = now.toISOString().slice(0, 16);
+
+        parkingDateInput.value = formattedNow;
+
+        function renderForms() {
             let parking = document.getElementById("parkingType").value;
-            let div = document.getElementById("typeGarage");
+            let divGarage = document.getElementById("typeGarage");
+            let divPointSale = document.getElementById("pointSaleDiv");
 
-            if (parking === "GARAGE") {
-                div.style.display = "block"
-            } else {
-                div.style.display = "none"
+            switch (parking) {
+                case "GARAGE":
+                    divGarage.style.display = "block";
+                    divPointSale.style.display = "none";
+                    break;
+                case "POINT_SALE":
+                    divPointSale.style.display = "block";
+                    divGarage.style.display = "none";
+                    break;
+                case "STREET":
+                    divPointSale.style.display = "none";
+                    divGarage.style.display = "none";
+                    break;
             }
         }
     </script>
-    <script>
+
+    <script th:inline="javascript">
         function renderAlarmDate() {
             let checkbox = document.getElementById("enableAlarm").checked;
             let date = document.getElementById("alarmDate");
@@ -134,6 +186,223 @@
                 date.setAttribute("disabled", "disabled")
             }
         }
+    </script>
+
+    <script type='text/javascript'
+            src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'
+            async defer></script>
+
+    <script th:inline="javascript">
+
+        var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+        var bingMap = null;
+        var selectedPin = null;
+        const pinPointSale = [];
+
+        function initializeBingMap() {
+            if (navigator.geolocation) {
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                };
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        GetMap(position);
+                    },
+                    function (error) {
+                        alert(error);
+                        GetMap(null);
+                    },
+                    options
+                );
+            } else {
+                GetMap(null);
+            }
+        }
+
+        function GetMap(position) {
+            var lat = null;
+            var long = null;
+
+            if (position != null) {
+                lat = position.coords.latitude;
+                long = position.coords.longitude;
+            } else {
+                lat = -34.670560;
+                long = -58.562780;
+            }
+            document.getElementById("lat").value = lat;
+            document.getElementById("ln").value = long;
+
+            bingMap = new Microsoft.Maps.Map("#myMap", {
+                credentials: credentials,
+                center: new Microsoft.Maps.Location(lat, long),
+                mapTypeId: Microsoft.Maps.MapTypeId.road,
+                zoom: 18
+            });
+
+            var center = bingMap.getCenter();
+
+            const url = `https://dev.virtualearth.net/REST/v1/Locations/${lat},${long}?key=${credentials}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                        var address = data.resourceSets[0].resources[0].address.formattedAddress;
+                        var personalPin = createPin(center, 'red', '¡Estoy aquí!', address);
+
+                        Microsoft.Maps.Events.addHandler(personalPin, 'click', function (e) {
+                            setInfoboxOnPin(personalPin);
+                            personalPin.infobox.setOptions({visible: true})
+                        });
+
+                        adjustPersonalPinMap(personalPin);
+
+                        bingMap.entities.push(personalPin);
+
+                        createPinParkingPlaces();
+                    } else {
+                        console.error('No se encontró ninguna dirección.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud: ', error);
+                });
+        }
+
+        function adjustPersonalPinMap(personalPin) {
+            Microsoft.Maps.Events.addHandler(bingMap, 'click', function (e) {
+                var newCenter = e.location;
+                var newLat = newCenter.latitude;
+                var newLng = newCenter.longitude;
+
+                personalPin.setLocation(newCenter);
+
+                document.getElementById("lat").value = newLat;
+                document.getElementById("ln").value = newLng;
+
+                const newUrl = `https://dev.virtualearth.net/REST/v1/Locations/${newLat},${newLng}?key=${credentials}`;
+
+                fetch(newUrl)
+                    .then(response => response.json())
+                    .then(newData => {
+                        if (newData.resourceSets.length > 0 && newData.resourceSets[0].resources.length > 0) {
+                            personalPin.metadata.description = newData.resourceSets[0].resources[0].address.formattedAddress;
+                        } else {
+                            console.error('No se encontró ninguna dirección.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud: ', error);
+                    });
+                setInfoboxOnPin(personalPin);
+            });
+        }
+
+        function createPinParkingPlaces() {
+            var parkingPlaces = [[${parkingPlaces}]];
+            console.log([[${parkingPlaces}]])
+            var promises = [];
+
+            for (let i = 0; i < parkingPlaces.length; i++) {
+                const lat = parkingPlaces[i].geolocation.lat;
+                const ln = parkingPlaces[i].geolocation.ln;
+                const title = parkingPlaces[i].name;
+                const url = `https://dev.virtualearth.net/REST/v1/Locations/${lat},${ln}?key=${credentials}`;
+
+                promises.push(
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                                const address = data.resourceSets[0].resources[0].address.formattedAddress;
+
+                                const pin = createPin(new Microsoft.Maps.Location(lat, ln), 'blue', title, address);
+
+                                setInfoboxOnPin(pin);
+
+                                Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                                    for (var j = 0; j < pinPointSale.length; j++) {
+                                        pinPointSale[j].infobox.setOptions({ visible: false });
+                                    }
+
+                                    pin.infobox.setOptions({ visible: true });
+
+                                    if (selectedPin) {
+                                        selectedPin.setOptions({ color: 'blue' });
+                                    }
+
+                                    selectedPin = pin;
+
+                                    pin.setOptions({ color: 'green' });
+                                    document.getElementById("pointSale").value = [[${parkingPlaces}]][i].id;
+                                    console.log([[${parkingPlaces}]][i].id);
+                                    document.getElementById("pointSaleText").textContent = parkingPlaces[i].name + " | " + address;
+                                });
+
+                                pinPointSale.push(pin);
+                            } else {
+                                console.error('No se encontró ninguna dirección.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error en la solicitud: ', error);
+                        })
+                );
+            }
+
+            Promise.all(promises)
+                .then(() => {
+                    bingMap.entities.push(pinPointSale);
+                })
+                .catch(error => {
+                    console.error('Error al cargar los datos: ', error);
+                });
+        }
+
+        function createPin(location, color, title, description) {
+            var pin = new Microsoft.Maps.Pushpin(location, {
+                color: color,
+                title: title,
+            });
+            pin.metadata = {description: description};
+            return pin;
+        }
+
+        function setInfoboxOnPin(pin) {
+            var infobox = pin.infobox;
+
+            if (!infobox) {
+                var center = pin.getLocation();
+                var title = pin.getTitle();
+                var description = pin.metadata.description;
+
+                infobox = new Microsoft.Maps.Infobox(center, {
+                    title: title,
+                    description: description,
+                });
+
+                infobox.setMap(bingMap);
+                infobox.setOptions({
+                    visible: false
+                })
+                pin.infobox = infobox;
+            } else {
+                var newCenter = pin.getLocation();
+                var newTitle = pin.getTitle();
+                var newDescription = pin.metadata.description;
+
+                infobox.setLocation(newCenter);
+                infobox.setOptions({
+                    title: newTitle,
+                    description: newDescription,
+                    visible: false
+                });
+            }
+        }
+
     </script>
 
 </main>

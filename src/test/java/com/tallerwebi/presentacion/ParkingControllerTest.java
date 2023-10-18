@@ -125,7 +125,7 @@ class ParkingControllerTest {
     private ParkingRegisterDTO getParkingRegisterDTO(){
         ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
         PointSale pointSale = new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
-        parkingRegisterDTO.setParkingPlace(pointSale);
+        parkingRegisterDTO.setParkingPlaceId(1L);
 
         return parkingRegisterDTO;
     }

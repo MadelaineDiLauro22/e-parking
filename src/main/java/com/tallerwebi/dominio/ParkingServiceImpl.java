@@ -12,6 +12,7 @@ import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -81,9 +82,8 @@ public class ParkingServiceImpl implements ParkingService {
                 throw new ParkingRegisterException(e.getMessage());
             }
         }
-
-        userRepository.save(user);
         parkingRepository.save(parking);
+        userRepository.save(user);
     }
 
     private Parking createNewParking(ParkingRegisterDTO parkingRegisterDTO, MobileUser user, Vehicle vehicle) {
@@ -101,7 +101,7 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     private void createPointSaleTicket(Parking parking, ParkingRegisterDTO parkingRegisterDTO) {
-        PointSale pointSale = (PointSale) parkingPlaceRepository.findById(parkingRegisterDTO.getParkingPlace().getId());
+        PointSale pointSale = (PointSale) parkingPlaceRepository.findById(parkingRegisterDTO.getParkingPlaceId());
         Ticket ticket = pointSale.generateTicket(parkingRegisterDTO);
         parking.setTicket(ticket);
     }

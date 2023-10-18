@@ -33,14 +33,11 @@
 
 </main>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
 <script type='text/javascript'
         src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'
         async defer></script>
 
-<script type='text/javascript'>
+<script th:inline="javascript">
 
     var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
     var bingMap = null;
@@ -106,8 +103,6 @@
                 console.error('Error en la solicitud: ', error);
             });
 
-        var center = bingMap.getCenter();
-
         var pin = new Microsoft.Maps.Pushpin(center, {
             color: 'red'
         });
@@ -124,6 +119,52 @@
         });
 
         bingMap.entities.push(pin);
+        createPinParkingPlaces();
+    }
+
+    function createPinParkingPlaces(){
+        var parkingPlaces = [[${parkingPlaces}]];
+
+        for(var i = 0; i < parkingPlaces.length; i++){
+            const lat = parkingPlaces[i].geolocation.lat;
+            const ln =parkingPlaces[i].geolocation.ln;
+
+            const center = new Microsoft.Maps.Location(lat, ln);
+
+            var pin = new Microsoft.Maps.Pushpin(center, {
+                color: 'blue'
+            });
+
+            const url = `https://dev.virtualearth.net/REST/v1/Locations/${lat},${ln}?key=${credentials}`;
+
+            var address;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                        address = data.resourceSets[0].resources[0].address.formattedAddress;
+                    } else {
+                        console.error('No se encontró ninguna dirección.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud: ', error);
+                });
+
+            var title = parkingPlaces[i].name;
+            Microsoft.Maps.Pushpin.prototype.title = null;
+            pin.title = title;
+            Microsoft.Maps.Pushpin.prototype.description = null;
+            pin.description = address;
+
+            Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                displayEventInfo(center, title, address);
+            });
+
+            bingMap.entities.push(pin);
+        }
+
     }
 
     function displayEventInfo(center, title, description) {
@@ -136,5 +177,7 @@
     }
 
 </script>
+
+
 
 <div th:replace="fragments/footer.html"></div>
