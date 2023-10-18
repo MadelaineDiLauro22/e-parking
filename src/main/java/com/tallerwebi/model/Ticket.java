@@ -1,5 +1,7 @@
 package com.tallerwebi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,7 +15,7 @@ public class Ticket {
     private int ammountHs;
 
     private boolean isPaid;
-
+    @JsonBackReference
     @JoinColumn(name = "parking_place_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private ParkingPlace parking_place;
