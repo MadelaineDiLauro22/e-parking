@@ -58,6 +58,8 @@
 
                                 <i class="fa-solid fa-location-dot text-blue fs-5"></i>
 
+                                <p class="vehicle-parking d-none" th:text="${parking.getVehicle().toString()}"></p>
+
                                 <p class="geolocation d-none " th:text="${parking.getGeolocation()}"></p>
 
                                 <p class="direction m-0 text-truncate px-3" th:text="'No se encontro la dirección correspondiente'"></p>
@@ -67,12 +69,6 @@
                             <a href="#"><i class="fa-solid fa-circle-xmark text-blue"></i></a>
 
                         </div>
-
-                    </div>
-
-                    <div class="text-end">
-
-                        <a class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-3 fs-6 text-center btn-primary" th:href="@{/mobile/parking}"><i class="fa-solid fa-plus fs-6"></i></a>
 
                     </div>
 
@@ -87,6 +83,7 @@
 <script>
     var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
 
+    var vehicleElements = document.querySelectorAll(".vehicle-parking");
     var geolocationElements = document.querySelectorAll(".geolocation");
     var directionElements = document.querySelectorAll(".direction");
 
@@ -102,7 +99,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
-                    directionElements[i].textContent = data.resourceSets[0].resources[0].address.formattedAddress;
+                    directionElements[i].textContent = vehicleElements[i].textContent + " | " + data.resourceSets[0].resources[0].address.formattedAddress;
                 } else {
                     console.error('No se encontró ninguna dirección.');
                 }

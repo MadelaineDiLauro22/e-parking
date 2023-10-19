@@ -3,6 +3,9 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ParkingService;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
+import com.tallerwebi.model.Geolocation;
+import com.tallerwebi.model.ParkingPlace;
+import com.tallerwebi.model.PointSale;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,32 +40,33 @@ class ParkingControllerTest {
     }
 
     @Test
-    void shouldGetViewWithCarList() {
-        Long userId = 1L;
-        Double lat = 1.0;
-        Double lng = 1.0;
+    void shouldGetViewWithCarListAndParkingPlacesList() {
         List<Vehicle> cars = new ArrayList<>();
+        List<ParkingPlace> parkingPlaces = new ArrayList<>();
 
-        Mockito.when(mockParkingService.getUserCarsList(userId))
+        Mockito.when(mockParkingService.getUserCarsList(getUserId()))
                 .thenReturn(cars);
+        Mockito.when(mockParkingService.getParkingPlaces())
+                .thenReturn(parkingPlaces);
 
         ModelAndView response = parkingController.getParkingRegister();
         List<Vehicle> responseList = (List<Vehicle>) response.getModel().get("vehicleList");
+        List<Vehicle> responseListParkingPlaces = (List<Vehicle>) response.getModel().get("parkingPlaces");
 
         assertEquals(PARKING_VIEW_NAME, response.getViewName());
         assertEquals(cars, responseList);
+        assertEquals(parkingPlaces, responseListParkingPlaces);
     }
 
     @Test
     void shouldRegisterParkingAndReturnToHomeWithSuccess() {
-        Long userId = 3L;
-        ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
+        ParkingRegisterDTO parkingRegisterDTO = getParkingRegisterDTO();
 
         Mockito.when(mockHttpSession.getAttribute("id"))
-                .thenReturn(userId);
+                .thenReturn(getUserId());
 
         ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
-        Mockito.verify(mockParkingService).registerParking(parkingRegisterDTO, userId);
+        Mockito.verify(mockParkingService).registerParking(parkingRegisterDTO, getUserId());
 
         assertEquals("redirect:/mobile/home", response.getViewName());
         assertTrue((boolean) response.getModel().get("success"));
@@ -80,7 +84,7 @@ class ParkingControllerTest {
 
         ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
 
-        assertEquals("parking-register", response.getViewName());
+        assertEquals("redirect:/error", response.getViewName());
         assertEquals("Usuario inexistente", response.getModel().get("error"));
     }
 
@@ -95,7 +99,7 @@ class ParkingControllerTest {
 
         ModelAndView response = parkingController.getParkingRegister();
 
-        assertEquals("redirect:/mobile/home", response.getViewName());
+        assertEquals("redirect:/error", response.getViewName());
         assertEquals("Usuario inexistente", response.getModel().get("error"));
     }
 
@@ -110,8 +114,19 @@ class ParkingControllerTest {
 
         ModelAndView response = parkingController.getParkingRegister();
 
-        assertEquals("redirect:/mobile/home", response.getViewName());
+        assertEquals("redirect:/error", response.getViewName());
         assertEquals("Vehículo inexistente", response.getModel().get("error"));
     }
 
+    private Long getUserId(){
+        return 1L;
+    }
+
+    private ParkingRegisterDTO getParkingRegisterDTO(){
+        ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
+        PointSale pointSale = new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
+        parkingRegisterDTO.setParkingPlaceId(1L);
+
+        return parkingRegisterDTO;
+    }
 }

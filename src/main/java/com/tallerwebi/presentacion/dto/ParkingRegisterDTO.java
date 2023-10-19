@@ -1,11 +1,14 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.ParkingType;
+import com.tallerwebi.model.PointSale;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ParkingRegisterDTO {
@@ -19,11 +22,17 @@ public class ParkingRegisterDTO {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date parkingDate;
+    private int ammountHs;
+    private boolean isPaid = false;
+    private Long parkingPlaceId;
+    private boolean enableAlarm = false;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private Date alarmDate;
 
     public ParkingRegisterDTO() {
     }
 
-    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln) {
+    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln, Long parkingPlaceId) {
         this.parkingType = parkingType;
         this.vehicle = vehicle;
         this.vehiclePic = vehiclePic;
@@ -31,6 +40,7 @@ public class ParkingRegisterDTO {
         this.lat = lat;
         this.ln = ln;
         this.parkingDate = Date.from(Instant.now());
+        this.parkingPlaceId = parkingPlaceId;
     }
 
     public ParkingType getParkingType() {
@@ -87,5 +97,44 @@ public class ParkingRegisterDTO {
 
     public void setParkingDate(Date parkingDate) {
         this.parkingDate = parkingDate;
+    }
+
+    public int getAmmountHs() {
+        return ammountHs;
+    }
+
+    public void setAmmountHs(int ammountHs) {
+        this.ammountHs = ammountHs;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
+    }
+    public Long getParkingPlaceId(){
+        return parkingPlaceId;
+    }
+
+    public void setParkingPlaceId(Long parkingPlaceId) {
+        this.parkingPlaceId = parkingPlaceId;
+    }
+
+    public boolean isEnableAlarm() {
+        return enableAlarm;
+    }
+
+    public void setEnableAlarm(boolean enableAlarm) {
+        this.enableAlarm = enableAlarm;
+    }
+
+    public Date getAlarmDate() {
+        return alarmDate;
+    }
+
+    public void setAlarmDate(Date alarmDate) {
+        this.alarmDate = alarmDate;
     }
 }

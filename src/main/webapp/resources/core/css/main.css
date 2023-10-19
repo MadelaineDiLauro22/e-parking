@@ -121,6 +121,11 @@
     height: 75vh !important;
 }
 
+.mapRegister{
+    width: 100% !important;
+    height: 40vh !important;
+}
+
 @media screen and (max-device-width: 1000px) {
 
     .menu-desktop{
@@ -149,6 +154,11 @@
 
     .map{
         height: 65vh !important;
+    }
+
+    .mapRegister{
+        width: 100% !important;
+        height: 30vh !important;
     }
 }
 

@@ -1,5 +1,7 @@
 package com.tallerwebi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -25,6 +27,10 @@ public class Parking implements Comparable<Parking>{
     private Date dateArrival;
 
     private Date dateExit;
+    @JsonManagedReference
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicle_id")
@@ -86,6 +92,11 @@ public class Parking implements Comparable<Parking>{
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public void setTicket(Ticket ticket) {this.ticket = ticket;}
+    public Ticket getTicket(){
+        return ticket;
     }
 
     public void setMobileUser(MobileUser mobileUser) {

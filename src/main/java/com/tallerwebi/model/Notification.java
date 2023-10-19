@@ -9,12 +9,13 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    String title;
-    String message;
+    private String title;
+    private String message;
     @Column(name = "creation_date")
-    Date creationDate;
+    private Date creationDate;
     @Column(name = "is_read")
-    boolean isRead;
+    private boolean isRead;
+    private NotificationType type;
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -54,5 +55,13 @@ public class Notification {
 
     public void setRead(boolean read) {
         isRead = read;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public NotificationType getType() {
+        return type;
     }
 }

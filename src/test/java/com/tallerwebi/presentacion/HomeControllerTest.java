@@ -1,7 +1,10 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ParkingServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
@@ -11,13 +14,16 @@ public class HomeControllerTest {
 
     private static final String HOME_VIEW_NAME = "home";
     private HomeController homeController;
+    @Mock
     private HttpSession sessionMock;
+    @Mock
+    private ParkingServiceImpl parkingService;
 
     @BeforeEach
     public void setUp(){
-        sessionMock = new MockHttpSession();
+        MockitoAnnotations.openMocks(this);
 
-        homeController = new HomeController(sessionMock);
+        homeController = new HomeController(sessionMock, parkingService);
     }
 
     @Test
