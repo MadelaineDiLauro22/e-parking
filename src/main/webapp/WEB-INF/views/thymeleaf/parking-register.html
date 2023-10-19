@@ -129,11 +129,6 @@
                             <label class="form-check-label" for="secondRadio">Tarjeta de crédito/débito</label>
                         </li>
                     </ul>
-                    <div class="text-end">
-                        <li class="list-group-item">
-                            <button type="button" class="btn btn-primary" id="selectButton" style="display: none">Seleccionar</button>
-                        </li>
-                    </div>
 
                     <!-- Modal -->
                     <div class="modal text-shadow-none" id="myModal" tabindex="-1">
@@ -226,19 +221,32 @@
             }
         }
 
-        <!--Modal-->
-        const modal = new bootstrap.Modal(document.getElementById("myModal"));
-        const openModalButton = document.querySelector("[data-bs-target='#myModal']");
-        const saveChangesButton = document.querySelector("[data-bs-dismiss='modal'][data-bs-save-changes]");
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = new bootstrap.Modal(document.getElementById("myModal"));
+            const firstRadio = document.getElementById("firstRadio");
+            const secondRadio = document.getElementById("secondRadio");
 
-        openModalButton.addEventListener("click", () => {
-            document.getElementById("firstRadio").disabled = true;});
+            // Abre el modal al hacer clic en el botón
+            secondRadio.addEventListener("change", function () {
+                if (secondRadio.checked) {
+                    modal.show();
+                } else {
+                    modal.hide();
+                }
+            });
 
-        saveChangesButton.addEventListener("click", () => {
-            modal.hide();});
+            // Cierra el modal al hacer clic en el botón "Aceptar" en el modal
+            const acceptButton = document.querySelector("[data-bs-dismiss='modal'][data-bs-save-changes]");
+            acceptButton.addEventListener("click", () => {
+                modal.hide();
+                firstRadio.disabled = false;
+            });
 
-        modal._element.addEventListener("hidden.bs.modal", () => {
-            document.getElementById("firstRadio").disabled = false;});
+            // Cierra el modal si se hace clic fuera del modal
+            modal._element.addEventListener("hidden.bs.modal", () => {
+                firstRadio.disabled = false;
+            });
+        });
 
         <!--input expiration-->
         function formatExpiration() {
@@ -262,22 +270,6 @@
                 input.value = numericValue;
             }
         }
-
-        /*
-        <!--button select-->
-        document.addEventListener("DOMContentLoaded", function () {
-            const secondRadio = document.getElementById("secondRadio");
-            const selectButton = document.getElementById("selectButton");
-
-            secondRadio.addEventListener("change", () => {
-                if (secondRadio.checked) {
-                    selectButton.style.display = "block";
-                } else {
-                    selectButton.style.display = "none";
-                }
-            });
-        });
-        */
 
     </script>
 
