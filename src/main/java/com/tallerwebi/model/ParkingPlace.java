@@ -3,6 +3,7 @@ package com.tallerwebi.model;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,9 +36,11 @@ public abstract class ParkingPlace {
         this.feePerHour = feePerHour;
         this.feeFraction = feeFraction;
         this.fractionTime = fractionTime;
+        this.tickets = new ArrayList<>();
     }
 
     public ParkingPlace() {
+        this.tickets = new ArrayList<>();
     }
 
     public abstract Ticket generateTicket(ParkingRegisterDTO parking);

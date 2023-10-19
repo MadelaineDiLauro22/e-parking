@@ -160,6 +160,43 @@ class ParkingServiceImplTest {
     }
 
     @Test
+    void shouldRegisterParkingAndGeneratePointSaleTicket() {
+        Date date = Date.from(Instant.now());
+        ParkingRegisterDTO dto = new ParkingRegisterDTO(
+                ParkingType.POINT_SALE,
+                "ABC123",
+                null,
+                null,
+                (double) 0,
+                (double) 0,
+                1L
+        );
+        Long idUser = 1L;
+        MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        ParkingPlace pointSale = new PointSale();
+
+        Mockito.when(mockUserRepository.findUserById(idUser))
+                .thenReturn(user);
+        Mockito.when(mockVehicleRepository.findVehicleByPatent("ABC123"))
+                .thenReturn(vehicle);
+        Mockito.when(mockParkingPlaceRepository.findById(dto.getParkingPlaceId()))
+                .thenReturn(pointSale);
+
+        parkingService.registerParking(dto, idUser);
+        Mockito.verify(mockUserRepository).save(user);
+        Mockito.verify(mockParkingRepository).save(parkingCaptor.capture());
+
+        Parking registered = parkingCaptor.getValue();
+
+        assertEquals(ParkingType.POINT_SALE, registered.getParkingType());
+        assertEquals(vehicle, registered.getVehicle());
+        assertEquals(user, registered.getMobileUser());
+        assertEquals(dto.getParkingDate(),registered.getDateArrival());
+        assertNotNull(registered.getTicket());
+    }
+
+    @Test
     void shouldRegisterAnAlarm() throws InterruptedException {
         Date alarm = Date.from(Instant.now());
         ParkingRegisterDTO parkingRegisterDTO = createRequestAlarm(alarm);
