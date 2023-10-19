@@ -8,7 +8,7 @@
 
             <h1 class="titleView fs-3">Registrar Parking</h1>
 
-            <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}">
+            <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}" onsubmit="return validateForm()">
 
 
                 <div class="divContainer divContainerBorderBottom my-1">
@@ -140,25 +140,25 @@
                                 </div>
                                 <div class="modal-body text-black" >
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control rounded-3" id="floatingInput" placeholder="Nombre completo">
+                                        <input type="text" class="form-control rounded-3" id="floatingInput" placeholder="Nombre completo" form="dummyForm">
                                         <label for="floatingInput">Nombre completo</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="number" class="form-control rounded-3" id="floatingNumber" placeholder="Numero de la tarjeta">
+                                        <input type="number" class="form-control rounded-3" id="floatingNumber" placeholder="Numero de la tarjeta" form="dummyForm">
                                         <label for="floatingNumber">Numero de la tarjeta</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control rounded-3" id="expiration" placeholder="Fecha de vencimiento" maxlength="5" oninput="formatExpiration()">
+                                        <input type="text" class="form-control rounded-3" id="expiration" placeholder="Fecha de vencimiento" maxlength="5" oninput="formatExpiration()" form="dummyForm">
                                         <label for="expiration">Fecha de vencimiento</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="number" class="form-control rounded-3" id="floatingCod" maxlength="4" placeholder="Código de seguridad">
+                                        <input type="number" class="form-control rounded-3" id="floatingCod" maxlength="4" placeholder="Código de seguridad" form="dummyForm">
                                         <label for="floatingCod">Codigo de seguridad</label>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="">Aceptar</button>
                                 </div>
                             </div>
                         </div>
@@ -169,8 +169,6 @@
                     <input th:field="*{ammountHs}" id="amountHs" class="form-control my-1" type="number" value="0">
 
                 </div>
-
-
 
                 <div class="divContainer my-3">
 
@@ -186,7 +184,7 @@
                 </div>
 
             </form>
-
+            <form id="dummyForm" style="display: none;"></form>
         </article>
 
 
@@ -269,6 +267,17 @@
             } else {
                 input.value = numericValue;
             }
+        }
+
+        function validateForm() {
+            var parkingType = document.getElementById("parkingType").value;
+            var pointSale = document.getElementById("pointSale").value;
+
+            if (parkingType === "POINT_SALE" && pointSale === "") {
+                alert("Por favor, selecciona un punto de pago antes de registrar el estacionamiento medido.");
+                return false;
+            }
+            return true;
         }
 
     </script>
@@ -401,7 +410,6 @@
 
         function createPinParkingPlaces() {
             var parkingPlaces = [[${parkingPlaces}]];
-            console.log([[${parkingPlaces}]])
             var promises = [];
 
             for (let i = 0; i < parkingPlaces.length; i++) {
@@ -436,7 +444,6 @@
 
                                     pin.setOptions({ color: 'green' });
                                     document.getElementById("pointSale").value = [[${parkingPlaces}]][i].id;
-                                    console.log([[${parkingPlaces}]][i].id);
                                     document.getElementById("pointSaleText").textContent = parkingPlaces[i].name + " | " + address;
                                 });
 
