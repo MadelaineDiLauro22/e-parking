@@ -117,6 +117,58 @@
 
                     <p id="pointSaleText" th:text="'Aún no se ha seleccionado un punto de pago.'" class="text-white"></p>
 
+
+                    <!--Checkbox-->
+                    <ul class="list-group text-shadow-none">
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="" id="firstRadio" checked>
+                            <label class="form-check-label" for="firstRadio">Efectivo</label>
+                        </li>
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="" id="secondRadio">
+                            <label class="form-check-label" for="secondRadio">Tarjeta de crédito/débito</label>
+                        </li>
+                    </ul>
+                    <div class="text-end">
+                        <li class="list-group-item">
+                            <button type="button" class="btn btn-primary" id="selectButton" style="display: none">Seleccionar</button>
+                        </li>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal text-shadow-none" id="myModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" style="color: black;">Tarjeta de crédito/débito</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-black" >
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control rounded-3" id="floatingInput" placeholder="Nombre completo">
+                                        <label for="floatingInput">Nombre completo</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control rounded-3" id="floatingNumber" placeholder="Numero de la tarjeta">
+                                        <label for="floatingNumber">Numero de la tarjeta</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control rounded-3" id="expiration" placeholder="Fecha de vencimiento" maxlength="5" oninput="formatExpiration()">
+                                        <label for="expiration">Fecha de vencimiento</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control rounded-3" id="floatingCod" maxlength="4" placeholder="Código de seguridad">
+                                        <label for="floatingCod">Codigo de seguridad</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <label for="amountHs" class="text-white text-bold mb-1">Selecciona la cantidad de horas:</label>
 
                     <input th:field="*{ammountHs}" id="amountHs" class="form-control my-1" type="number" value="0">
@@ -173,6 +225,60 @@
                     break;
             }
         }
+
+        <!--Modal-->
+        const modal = new bootstrap.Modal(document.getElementById("myModal"));
+        const openModalButton = document.querySelector("[data-bs-target='#myModal']");
+        const saveChangesButton = document.querySelector("[data-bs-dismiss='modal'][data-bs-save-changes]");
+
+        openModalButton.addEventListener("click", () => {
+            document.getElementById("firstRadio").disabled = true;});
+
+        saveChangesButton.addEventListener("click", () => {
+            modal.hide();});
+
+        modal._element.addEventListener("hidden.bs.modal", () => {
+            document.getElementById("firstRadio").disabled = false;});
+
+        <!--input expiration-->
+        function formatExpiration() {
+            const input = document.getElementById("expiration");
+            const value = input.value;
+
+            const numericValue = value.replace(/\D/g, "");
+
+            const month = numericValue.slice(0, 2);
+            const year = numericValue.slice(2, 4);
+
+            if (parseInt(month) < 1 || parseInt(month) > 12) {
+                input.setCustomValidity("El mes debe estar entre 01 y 12");
+            } else {
+                input.setCustomValidity("");
+            }
+
+            if (numericValue.length >= 2) {
+                input.value = `${month}/${year}`;
+            } else {
+                input.value = numericValue;
+            }
+        }
+
+        /*
+        <!--button select-->
+        document.addEventListener("DOMContentLoaded", function () {
+            const secondRadio = document.getElementById("secondRadio");
+            const selectButton = document.getElementById("selectButton");
+
+            secondRadio.addEventListener("change", () => {
+                if (secondRadio.checked) {
+                    selectButton.style.display = "block";
+                } else {
+                    selectButton.style.display = "none";
+                }
+            });
+        });
+        */
+
     </script>
 
     <script th:inline="javascript">
