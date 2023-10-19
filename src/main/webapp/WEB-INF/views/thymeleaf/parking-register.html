@@ -207,14 +207,17 @@
                 case "GARAGE":
                     divGarage.style.display = "block";
                     divPointSale.style.display = "none";
+                    deleteParkingPlacePin();
                     break;
                 case "POINT_SALE":
                     divPointSale.style.display = "block";
                     divGarage.style.display = "none";
+                    createPinParkingPlaces();
                     break;
                 case "STREET":
                     divPointSale.style.display = "none";
                     divGarage.style.display = "none";
+                    deleteParkingPlacePin();
                     break;
             }
         }
@@ -224,7 +227,6 @@
             const firstRadio = document.getElementById("firstRadio");
             const secondRadio = document.getElementById("secondRadio");
 
-            // Abre el modal al hacer clic en el botón
             secondRadio.addEventListener("change", function () {
                 if (secondRadio.checked) {
                     modal.show();
@@ -233,20 +235,17 @@
                 }
             });
 
-            // Cierra el modal al hacer clic en el botón "Aceptar" en el modal
             const acceptButton = document.querySelector("[data-bs-dismiss='modal'][data-bs-save-changes]");
             acceptButton.addEventListener("click", () => {
                 modal.hide();
                 firstRadio.disabled = false;
             });
 
-            // Cierra el modal si se hace clic fuera del modal
             modal._element.addEventListener("hidden.bs.modal", () => {
                 firstRadio.disabled = false;
             });
         });
 
-        <!--input expiration-->
         function formatExpiration() {
             const input = document.getElementById("expiration");
             const value = input.value;
@@ -368,8 +367,6 @@
                         adjustPersonalPinMap(personalPin);
 
                         bingMap.entities.push(personalPin);
-
-                        createPinParkingPlaces();
                     } else {
                         console.error('No se encontró ninguna dirección.');
                     }
@@ -465,6 +462,10 @@
                 .catch(error => {
                     console.error('Error al cargar los datos: ', error);
                 });
+        }
+
+        function deleteParkingPlacePin(){
+            bingMap.entities.remove(pinPointSale);
         }
 
         function createPin(location, color, title, description) {
