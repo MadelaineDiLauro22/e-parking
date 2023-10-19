@@ -39,6 +39,24 @@
 
 </main>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch("http://localhost:8080/eparking/notification/seen", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then((response) => {
+                console.log("success");
+            })
+            .catch((error) => {
+                console.log("error", error)
+            })
+    })
+</script>
+
 
 
 <div th:replace="fragments/footer.html"></div>

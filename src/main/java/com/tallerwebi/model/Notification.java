@@ -56,4 +56,12 @@ public class Notification {
     public void setRead(boolean read) {
         isRead = read;
     }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
 }
