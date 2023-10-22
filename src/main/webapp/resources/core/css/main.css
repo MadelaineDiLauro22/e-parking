@@ -126,6 +126,41 @@
     height: 40vh !important;
 }
 
+.Infobox, .infobox-body{
+    background-color:#1B1F25 !important;
+    border: none !important;
+    border-radius: 1rem !important;
+}
+
+.infobox-body{
+    padding: 0.5rem !important;
+}
+
+.infobox-close-img{
+    background-image: url("../img/pinIcons/close-img.svg");
+}
+
+.infobox-stalk{
+    display: none !important;
+}
+
+.infobox-close{
+    right: 10px !important;
+    top: 10px !important;
+}
+
+.infobox-title{
+    color:white !important;
+    font-family: 'Roboto', sans-serif !important;
+    text-shadow: 0.188rem 0.188rem 0.125rem rgba(0, 0, 0, 0.40) !important;
+    font-weight: bold !important;
+}
+
+.infobox-info{
+    font-family: 'Roboto', sans-serif !important;
+    text-shadow: 0.188rem 0.188rem 0.125rem rgba(0, 0, 0, 0.40) !important;
+}
+
 @media screen and (max-device-width: 1000px) {
 
     .menu-desktop{
