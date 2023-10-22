@@ -104,6 +104,10 @@
     color: #A47823;
 }
 
+.titleViewBlack{
+    color:#1B1F25;
+}
+
 /* Decorations */
 
 .box-shadow{
@@ -229,6 +233,9 @@
     background-color:#3F4246;
 }
 
+.borderBottom{
+    border-bottom: solid 2px #3F4246;
+}
 #vehiclePic{
     overflow: hidden;
 }
