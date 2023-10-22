@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
+import com.tallerwebi.dominio.excepcion.AlarmNotNullException;
+import com.tallerwebi.dominio.excepcion.ParkingRegisterException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.ParkingPlace;
@@ -55,7 +57,7 @@ public class ParkingController {
             model.put("success", true);
 
             return new ModelAndView("redirect:/mobile/home", model);
-        } catch (UserNotFoundException | VehicleNotFoundException e) {
+        } catch (UserNotFoundException | AlarmNotNullException | ParkingRegisterException | VehicleNotFoundException e) {
             ModelMap model = new ModelMap();
             model.put("error", e.getMessage());
             return new ModelAndView("redirect:/error", model);

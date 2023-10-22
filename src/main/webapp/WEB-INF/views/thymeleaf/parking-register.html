@@ -271,9 +271,14 @@
         function validateForm() {
             var parkingType = document.getElementById("parkingType").value;
             var pointSale = document.getElementById("pointSale").value;
+            var checkRegisterAlarm = document.getElementById("enableAlarm").checked;
+            var dateAlarm = document.getElementById("alarmDate").value;
 
             if (parkingType === "POINT_SALE" && pointSale === "") {
                 alert("Por favor, selecciona un punto de pago antes de registrar el estacionamiento medido.");
+                return false;
+            }else if(checkRegisterAlarm && dateAlarm == ""){
+                alert("Por favor, selecciona hora y fecha para la alarma.");
                 return false;
             }
             return true;
