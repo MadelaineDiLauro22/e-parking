@@ -43,9 +43,7 @@ public class ParkingController {
 
             return new ModelAndView("parking-register", model);
         } catch (UserNotFoundException | VehicleNotFoundException e) {
-            ModelMap model = new ModelMap();
-            model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/error", model);
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
@@ -58,9 +56,7 @@ public class ParkingController {
 
             return new ModelAndView("redirect:/mobile/home", model);
         } catch (UserNotFoundException | AlarmNotNullException | ParkingRegisterException | VehicleNotFoundException e) {
-            ModelMap model = new ModelMap();
-            model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/error", model);
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 

@@ -1,0 +1,38 @@
+<div th:replace="fragments/header.html"></div>
+
+<div th:object="${parking}">
+
+    <p th:text="${parking.getDateArrival()}"></p>
+
+    <p id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></p>
+
+    <p id="direction"></p></div>
+
+<div th:replace="fragments/footer.html"></div>
+
+<script th:inline="javascript">
+    var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+
+    var geolocationElement = document.getElementById("geolocation");
+    var directionElement = document.getElementById("direction");
+
+    var geolocation = geolocationElement.textContent.split(',');
+
+    var lat = geolocation[0];
+    var ln = geolocation[1];
+
+    const url = 'https://dev.virtualearth.net/REST/v1/Locations/' + lat + ',' + ln + '?key=' + credentials;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                directionElement.textContent = "Dirección: " + data.resourceSets[0].resources[0].address.formattedAddress;
+            } else {
+                console.error('No se encontró ninguna dirección.');
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud: ', error);
+        });
+</script>

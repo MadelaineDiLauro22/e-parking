@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProfileService;
+import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Notification;
 import com.tallerwebi.model.Parking;
 import com.tallerwebi.model.Vehicle;
@@ -54,9 +56,8 @@ public class ProfileControllerTest {
     @Test
     void testCannotGetNotifications() {
         when(mockHttpSession.getAttribute("id")).thenThrow(UserNotFoundException.class);
-        profileController.getNotifications();
         ModelAndView response = profileController.getNotifications();
-        assertEquals("redirect:/error", response.getViewName());
+        assertEquals("redirect:/error?errorMessage=null", response.getViewName());
     }
 
     @Test
@@ -84,8 +85,39 @@ public class ProfileControllerTest {
         when(mockProfileService.getVehiclesAndParkingsByMobileUser(anyLong())).thenThrow(UserNotFoundException.class);
         when(mockHttpSession.getAttribute("id")).thenReturn(456L);
         ModelAndView modelAndView = profileController.getProfileView();
-        assertEquals("redirect:/error", modelAndView.getViewName());
+        assertEquals("redirect:/error?errorMessage=null", modelAndView.getViewName());
     }
 
+    @Test
+    void testGetParkingDetail(){
+        Parking parking = new Parking();
+        when(mockProfileService.getParkingById(anyLong(),anyLong())).thenReturn(parking);
+
+        ModelAndView response = profileController.getParkingDetail(anyLong());
+
+        assertEquals("parking_detail-view", response.getViewName());
+    }
+
+    @Test
+    void testCannotGetParkingDetailForNotParkingFound(){
+        Parking parking = new Parking();
+        when(mockHttpSession.getAttribute("id")).thenReturn(1L);
+        when(mockProfileService.getParkingById(anyLong(),anyLong())).thenThrow(ParkingNotFoundException.class);
+
+        ModelAndView response = profileController.getParkingDetail(anyLong());
+
+        assertEquals("redirect:/error?errorMessage=null", response.getViewName());
+    }
+
+    @Test
+    void testCannotGetParkingDetailForNotUserFound(){
+        Parking parking = new Parking();
+        when(mockHttpSession.getAttribute("id")).thenReturn(1L);
+        when(mockProfileService.getParkingById(anyLong(),anyLong())).thenThrow(UserNotFoundException.class);
+
+        ModelAndView response = profileController.getParkingDetail(anyLong());
+
+        assertEquals("redirect:/error?errorMessage=null", response.getViewName());
+    }
 }
 
