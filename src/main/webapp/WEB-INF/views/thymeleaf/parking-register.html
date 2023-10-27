@@ -8,14 +8,16 @@
 
             <h1 class="titleView fs-3">Registrar Parking</h1>
 
-            <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}" onsubmit="return validateForm()">
+            <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}"
+                  onsubmit="return validateForm()">
 
 
                 <div class="divContainer divContainerBorderBottom my-1">
 
                     <label for="parkingType" class="text-white text-bold mb-1">Seleccionar Tipo:</label>
 
-                    <select th:field="*{parkingType}" id="parkingType" onchange="renderForms()" class="form-select my-1">
+                    <select th:field="*{parkingType}" id="parkingType" onchange="renderForms()"
+                            class="form-select my-1">
 
                         <option value="STREET" selected>Vía Publica</option>
 
@@ -31,7 +33,8 @@
 
                     <label for="vehicle" class="text-white text-bold mb-1">Seleccionar Vehículo:</label>
 
-                    <select th:field="*{vehicle}" id="vehicle" th:each="vehicle : ${vehicleList}" class="form-select my-1">
+                    <select th:field="*{vehicle}" id="vehicle" th:each="vehicle : ${vehicleList}"
+                            class="form-select my-1">
 
                         <option th:value="${vehicle.patent}" th:text="${vehicle.brand + ' - ' + vehicle.patent}">
 
@@ -47,7 +50,8 @@
 
                     <label for="vehiclePic" class="text-white text-bold mb-1">Foto del vehículo:</label>
 
-                    <input th:field="*{vehiclePic}" id="vehiclePic"  type="file" accept="image/jpeg" class="form-control my-1">
+                    <input th:field="*{vehiclePic}" id="vehiclePic" type="file" accept="image/jpeg"
+                           class="form-control my-1">
 
                 </div>
 
@@ -55,7 +59,8 @@
 
                     <label for="ticketPic" class="text-white text-bold mb-1">Foto de Ticket:</label>
 
-                    <input th:field="*{ticketPic}" id="ticketPic"  type="file" accept="image/jpeg" class="form-control my-1">
+                    <input th:field="*{ticketPic}" id="ticketPic" type="file" accept="image/jpeg"
+                           class="form-control my-1">
 
                 </div>
 
@@ -68,121 +73,173 @@
 
                 <div class="divContainer divContainerBorderBottom my-1">
 
-                    <div>
+                    <div class="align-checkbox my-1">
 
-                        <label for="enableAlarm" class="text-white text-bold mb-1">Agregar alarma:</label>
+                        <div>
+                            <label for="enableAlarm" class="text-white text-bold">
 
-                        <input th:field="*{enableAlarm}" id="enableAlarm" type="checkbox" onchange="renderAlarmDate()">
-
+                                <input th:field="*{enableAlarm}" id="enableAlarm" type="checkbox"
+                                       onchange="renderAlarmDate()">
+                                <span class="checkbox-label">Agregar alarma</span>
+                            </label>
+                        </div>
                     </div>
 
-                    <div>
-
-                        <label for="alarmDate" class="text-white text-bold mb-1">Seleccione fecha y hora:</label>
-
-                        <input th:field="*{alarmDate}" id="alarmDate" type="datetime-local" class="form-control my-1" disabled="disabled">
-
-                    </div>
-
-                </div>
-
-                <div id="geolocation" class="divContainer divContainerBorderBottom my-1">
-
-                    <label for="geolocation" class="text-white text-bold mb-1">Verifica el parking:</label>
-
-                    <input th:field="*{lat}" id="lat" class="d-none" type="text">
-
-                    <input th:field="*{ln}" id="ln" class="d-none" type="text">
-
-                    <div>
-
-                        <div id="myMap" class="mapRegister"></div>
-
-                        <div id='infoBox'>
-                            <div id='infoboxText'>
-                                <b id='infoboxTitle'></b>
-                                <a id='infoboxDescription'></a>
+                    <div id="alarmOptions" style="display: none">
+                        <div class="divContainerBorderBottom my-1">
+                            <label for="alarmType" id="alarmType">Seleccionar por:</label>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <input type="radio" id="byDateAndHours" name="parkingOption" value="dateAndHours"
+                                           onchange="renderAlarmType()">
+                                    <label for="byDateAndHours">Fecha y hora</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="byHours" name="parkingOption" value="hours"
+                                           onchange="renderAlarmType()">
+                                    <label for="byHours">Cantidad de horas</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="byAmount" name="parkingOption" value="amount"
+                                           onchange="renderAlarmType()">
+                                    <label for="byAmount">Monto máximo</label>
+                                </div>
                             </div>
+                        </div>
+
+
+                        <div id="typeDate" style="display:none">
+                            <label for="alarmDate" class="text-white text-bold mb-1">Seleccione fecha y hora:</label>
+                            <input th:field="*{alarmDate}" id="alarmDate" type="datetime-local"
+                                   class="form-control my-1">
+                        </div>
+
+
+                        <div id="calculateByHours" style="display:none">
+                            <label for="hours">Ingrese las horas:</label>
+                            <input type="number" id="hours" class="form-control my-1">
+                            <label for="hourlyRate">Tarifa por hora:</label>
+                            <input type="number" id="hourlyRate" class="form-control my-1">
+                            <button onclick="calculateByHours()">Calcular Monto</button>
+                            <p id="resultByHours"></p>
+                        </div>
+
+
+                        <div id="calculateByAmount" style="display:none">
+                            <label for="amount">Ingrese el monto:</label>
+                            <input type="number" id="amount" class="form-control my-1">
+                            <label for="hourlyRate2">Tarifa por hora:</label>
+                            <input type="number" id="hourlyRate2" class="form-control my-1">
+                            <button onclick="calculateByAmount()">Calcular Horas</button>
+                            <p id="resultByAmount"></p>
+                        </div>
+                    </div>
+
+
+                    <div id="geolocation" class="divContainer divContainerBorderBottom my-1">
+
+                        <label for="geolocation" class="text-white text-bold mb-1">Verifica el parking:</label>
+
+                        <input th:field="*{lat}" id="lat" class="d-none" type="text">
+
+                        <input th:field="*{ln}" id="ln" class="d-none" type="text">
+
+                        <div>
+
+                            <div id="myMap" class="mapRegister"></div>
+
+                            <div id='infoBox'>
+                                <div id='infoboxText'>
+                                    <b id='infoboxTitle'></b>
+                                    <a id='infoboxDescription'></a>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
 
-                </div>
+                    <div id="pointSaleDiv" class="divContainer my-1" style="display:none">
 
-                <div id="pointSaleDiv" class="divContainer my-1" style="display:none">
+                        <label for="pointSale" class="text-white text-bold mb-1">Tu punto de pago seleccionado:</label>
 
-                    <label for="pointSale" class="text-white text-bold mb-1">Tu punto de pago seleccionado:</label>
+                        <input th:field="*{parkingPlaceId}" id="pointSale" class="d-none" type="text">
 
-                    <input th:field="*{parkingPlaceId}" id="pointSale" class="d-none" type="text">
+                        <p id="pointSaleText" th:text="'Aún no se ha seleccionado un punto de pago.'"
+                           class="text-white"></p>
 
-                    <p id="pointSaleText" th:text="'Aún no se ha seleccionado un punto de pago.'" class="text-white"></p>
 
+                        <!--Checkbox-->
+                        <ul class="list-group text-shadow-none">
+                            <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
+                                       id="firstRadio" checked>
+                                <label class="form-check-label" for="firstRadio">Efectivo</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
+                                       id="secondRadio">
+                                <label class="form-check-label" for="secondRadio">Tarjeta de crédito/débito</label>
+                            </li>
+                        </ul>
 
-                    <!--Checkbox-->
-                    <ul class="list-group text-shadow-none">
-                        <li class="list-group-item">
-                            <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="" id="firstRadio" checked>
-                            <label class="form-check-label" for="firstRadio">Efectivo</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="" id="secondRadio">
-                            <label class="form-check-label" for="secondRadio">Tarjeta de crédito/débito</label>
-                        </li>
-                    </ul>
-
-                    <!-- Modal -->
-                    <div class="modal text-shadow-none" id="myModal" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" style="color: black;">Tarjeta de crédito/débito</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-black" >
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control rounded-3" id="floatingInput" placeholder="Nombre completo" form="dummyForm">
-                                        <label for="floatingInput">Nombre completo</label>
+                        <!-- Modal -->
+                        <div class="modal text-shadow-none" id="myModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" style="color: black;">Tarjeta de crédito/débito</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="number" class="form-control rounded-3" id="floatingNumber" placeholder="Numero de la tarjeta" form="dummyForm">
-                                        <label for="floatingNumber">Numero de la tarjeta</label>
+                                    <div class="modal-body text-black">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control rounded-3" id="floatingInput"
+                                                   placeholder="Nombre completo" form="dummyForm">
+                                            <label for="floatingInput">Nombre completo</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="number" class="form-control rounded-3" id="floatingNumber"
+                                                   placeholder="Numero de la tarjeta" form="dummyForm">
+                                            <label for="floatingNumber">Numero de la tarjeta</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control rounded-3" id="expiration"
+                                                   placeholder="Fecha de vencimiento" maxlength="5"
+                                                   oninput="formatExpiration()" form="dummyForm">
+                                            <label for="expiration">Fecha de vencimiento</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="number" class="form-control rounded-3" id="floatingCod"
+                                                   maxlength="4" placeholder="Código de seguridad" form="dummyForm">
+                                            <label for="floatingCod">Codigo de seguridad</label>
+                                        </div>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control rounded-3" id="expiration" placeholder="Fecha de vencimiento" maxlength="5" oninput="formatExpiration()" form="dummyForm">
-                                        <label for="expiration">Fecha de vencimiento</label>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                                onclick="">Aceptar
+                                        </button>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="number" class="form-control rounded-3" id="floatingCod" maxlength="4" placeholder="Código de seguridad" form="dummyForm">
-                                        <label for="floatingCod">Codigo de seguridad</label>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="">Aceptar</button>
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+                </div>
+                    <div class="divContainer my-3">
+
+                        <input type="submit" value="Registrar" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                 fs-6 text-center btn-primary text-white text-bold">
+
                     </div>
 
-                    <label for="amountHs" class="text-white text-bold mb-1">Selecciona la cantidad de horas:</label>
+                    <div>
 
-                    <input th:field="*{ammountHs}" id="amountHs" class="form-control my-1" type="number" value="0">
+                        <p th:if="${error != null}" th:text="'Error ' + ${error}"></p>
 
-                </div>
-
-                <div class="divContainer my-3">
-
-                    <input type="submit" value="Registrar" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
-             fs-6 text-center btn-primary text-white text-bold">
-
-                </div>
-
-                <div>
-
-                    <p th:if="${error != null}"  th:text="'Error ' + ${error}"></p>
-
-                </div>
-
+                    </div>
             </form>
             <form id="dummyForm" style="display: none;"></form>
         </article>
@@ -277,7 +334,7 @@
             if (parkingType === "POINT_SALE" && pointSale === "") {
                 alert("Por favor, selecciona un punto de pago antes de registrar el estacionamiento medido.");
                 return false;
-            }else if(checkRegisterAlarm && dateAlarm == ""){
+            } else if (checkRegisterAlarm && dateAlarm == "") {
                 alert("Por favor, selecciona hora y fecha para la alarma.");
                 return false;
             }
@@ -285,15 +342,54 @@
         }
 
         function renderAlarmDate() {
-            let checkbox = document.getElementById("enableAlarm").checked;
-            let date = document.getElementById("alarmDate");
+            const enableAlarm = document.getElementById("enableAlarm");
+            const alarmOptions = document.getElementById("alarmOptions"); // Div que contiene las opciones
 
-            if(checkbox) {
-                date.removeAttribute("disabled");
+            if (enableAlarm.checked) {
+                alarmOptions.style.display = "block"; // Mostrar las opciones
             } else {
-                date.setAttribute("disabled", "disabled")
+                alarmOptions.style.display = "none"; // Ocultar las opciones
             }
         }
+
+        function calculateByHours() {
+            const hours = parseFloat(document.getElementById("hours").value);
+            const hourlyRate = parseFloat(document.getElementById("hourlyRate").value);
+            const result = hours * hourlyRate;
+            document.getElementById("resultByHours").textContent = `Monto Final: $${result}`;
+        }
+
+        function calculateByAmount() {
+            const amount = parseFloat(document.getElementById("amount").value);
+            const hourlyRate2 = parseFloat(document.getElementById("hourlyRate2").value);
+            const result = amount / hourlyRate2;
+            document.getElementById("resultByAmount").textContent = `Horas Estimadas: ${result.toFixed(2)} horas`;
+        }
+
+        function renderAlarmType() {
+            const selectedOption = document.querySelector('input[name="parkingOption"]:checked').value;
+
+
+            document.getElementById("typeDate").style.display = "none";
+            document.getElementById("calculateByHours").style.display = "none";
+            document.getElementById("calculateByAmount").style.display = "none";
+
+            switch (selectedOption) {
+                case "dateAndHours":
+                    document.getElementById("typeDate").style.display = "block";
+                    break;
+                case "hours":
+                    document.getElementById("calculateByHours").style.display = "block";
+                    break;
+                case "amount":
+                    document.getElementById("calculateByAmount").style.display = "block";
+                    break;
+                default:
+
+                    break;
+            }
+        }
+
     </script>
 
     <script type='text/javascript'
