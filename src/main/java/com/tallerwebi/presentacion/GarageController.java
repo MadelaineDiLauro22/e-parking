@@ -21,7 +21,7 @@ public class GarageController {
 
         ModelMap model = new ModelMap();
         model.put("vehicleIngressDTO", new VehicleIngressDTO());
-        return new ModelAndView("enter-vehicle", model);
+        return new ModelAndView("garage-enter-vehicle", model);
     }
 
     @PostMapping(value = "/enter/register")

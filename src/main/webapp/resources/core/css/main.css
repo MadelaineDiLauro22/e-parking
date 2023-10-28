@@ -77,6 +77,24 @@
     background-color: #46433F;
 }
 
+.btn-red {
+    background-color: #af1717;
+    border: #46433F;
+}
+
+.btn-red:hover{
+    background-color: #921414;
+}
+
+.btn-green {
+    background-color: #118a06;
+    border: #46433F;
+}
+
+.btn-green:hover{
+    background-color: #117907;
+}
+
 /* Texts */
 
 .text-primary{
@@ -221,6 +239,12 @@
     border-bottom: solid 2px #FEBC3D;
     padding: 5px;
 }
+
+.divContainerBorderBottomBlack{
+    border-bottom: solid 2px #000000;
+    padding: 5px;
+}
+
 .labelForm{
     text-align: left;
     margin-bottom: 5px;

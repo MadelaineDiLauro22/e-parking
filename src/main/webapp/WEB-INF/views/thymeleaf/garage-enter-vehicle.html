@@ -3,44 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
 
-    <main>
+<main role="main" class="container-fluid m-f bg-menu-mobile cover-container w-100 d-flex mx-auto flex-column">
 
-        <section>
-            <div>
-                <label for="patent">Ingresar patente:</label>
-                <input id="patent" >
-                <button>Check</button>
+    <div class="bg-primary w-50 mx-auto m-5 px-3 py-4 rounded-4">
+        <section class="w-85 mx-auto mb-3 px-2 divContainerBorderBottomBlack">
+            <div style="width: fit-content;" class="mx-auto">
+                <label for="patent" class="text-white text-bold mb-1 d-inline">Ingresar patente:</label>
+                <input id="patent" type="text" class="form-control d-inline my-1">
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                        fs-6 text-center btn-primary text-white">Check
+                    </button>
+                </div>
             </div>
         </section>
 
-        <section>
-            <div>
-                <label for="brand">Marca:</label>
-                <input id="brand" >
+        <section class="w-85 mx-auto mb-3 px-5 py-2 divContainerBorderBottomBlack">
+            <div style="width: fit-content;" class="mx-auto">
+                <label for="brand" class="text-white text-bold mb-1 d-inline">Marca:</label>
+                <input id="brand" type="text" class="form-control d-inline my-1">
 
-                <label for="model">Modelo:</label>
-                <input id="model" >
+                <label for="model" class="text-white text-bold mb-1 d-inline">Modelo:</label>
+                <input id="model" type="text" class="form-control d-inline my-1">
 
-                <label for="color">Color:</label>
-                <input id="color" >
+                <label for="color" class="text-white text-bold mb-1 d-inline">Color:</label>
+                <input id="color" type="text" class="form-control d-inline my-1">
             </div>
         </section>
 
-        <section>
-            <label for="userName">Nombre del Usuario:</label>
-            <input id="userName" >
+        <section class="w-85 mx-auto mb-3 px-5 py-2">
+            <div style="width: fit-content;" class="mx-auto">
+                <label for="userName" class="text-white text-bold mb-1 d-inline">Nombre del Usuario:</label>
+                <input id="userName" type="text" class="form-control d-inline my-1">
 
-            <label for="userEmail">Email:</label>
-            <input id="userEmail" >
+                <label for="userEmail" class="text-white text-bold mb-1 d-inline">Email:</label>
+                <input id="userEmail" type="email" class="form-control d-inline my-1">
+            </div>
         </section>
+    </div>
 
-        <section>
-            <button>Ingresar</button>
-        </section>
-    </main>
+    <section class="w-50 mx-auto d-flex justify-content-around mb-3">
+        <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+            fs-6 text-center btn-red text-white">Cancelar
+        </button>
+        <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+            fs-6 text-center btn-green text-white">Ingresar
+        </button>
+    </section>
+</main>
 
 </body>
 </html>
