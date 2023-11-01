@@ -23,6 +23,7 @@ public class DatabaseInitializationConfig {
     public static final String MARCA = "VOLKSWAGEN";
     public static final String MODELO = "FOX";
     public static final String COLOR = "Rojo";
+    private static final String MAIL_ADMIN = "admin@unlam.edu.ar";
     private final UserRepository userRepository;
     private final ParkingPlaceRepository parkingPlaceRepository;
 
@@ -34,12 +35,18 @@ public class DatabaseInitializationConfig {
     @Bean
     public void dataSourceInitializer() throws IOException {
         MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.ADMIN, NOMBRE, NICK_NAME);
+        MobileUser garageUser = new MobileUser(MAIL_ADMIN, PASSWORD, UserRole.ADMIN_GARAGE, NOMBRE, NICK_NAME);
         Vehicle vehicle = new Vehicle(PATENTE, MARCA, MODELO, COLOR);
         vehicle.setUser(user);
         user.registerVehicle(vehicle);
+        Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
+        Garage garage = new Garage("pepe", geolocation, 1.5F, 1.0F, (long) 1.0);
+        garage.setUser(garageUser);
 
         createAndSaveParkingsPlaces();
         userRepository.save(user);
+        userRepository.save(garageUser);
+        parkingPlaceRepository.save(garage);
     }
 
     private void createAndSaveParkingsPlaces() throws IOException {

@@ -2,10 +2,7 @@ package com.tallerwebi.model;
 
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,6 +10,10 @@ import java.util.ArrayList;
 @Table(name = "GARAGE")
 @PrimaryKeyJoinColumn(name = "parking_place_id")
 public class Garage extends ParkingPlace {
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "garage_id")
+    private User user;
 
     @ElementCollection
     private List<String> vehicles;
@@ -42,5 +43,12 @@ public class Garage extends ParkingPlace {
 
     public List<String> getVehicles() {
         return vehicles;
+    }
+
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }
