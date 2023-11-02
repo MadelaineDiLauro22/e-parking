@@ -39,14 +39,10 @@ public class DatabaseInitializationConfig {
         Vehicle vehicle = new Vehicle(PATENTE, MARCA, MODELO, COLOR);
         vehicle.setUser(user);
         user.registerVehicle(vehicle);
-        Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
-        Garage garage = new Garage("pepe", geolocation, 1.5F, 1.0F, (long) 1.0);
-        garage.setUser(garageUser);
 
         createAndSaveParkingsPlaces();
         userRepository.save(user);
         userRepository.save(garageUser);
-        parkingPlaceRepository.save(garage);
     }
 
     private void createAndSaveParkingsPlaces() throws IOException {

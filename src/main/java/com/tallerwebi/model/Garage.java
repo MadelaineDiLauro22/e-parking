@@ -1,5 +1,6 @@
 package com.tallerwebi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ public class Garage extends ParkingPlace {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "garage_id")
-    private User user;
+    private MobileUser user;
 
     @ElementCollection
     private List<String> vehicles;
@@ -45,10 +46,10 @@ public class Garage extends ParkingPlace {
         return vehicles;
     }
 
-    public User getUser() {
+    public MobileUser getUser() {
         return user;
     }
-    public void setUser(User user) {
+    public void setUser(MobileUser user) {
         this.user = user;
     }
 }
