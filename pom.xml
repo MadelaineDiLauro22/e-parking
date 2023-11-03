@@ -124,16 +124,10 @@
             <artifactId>spring-websocket</artifactId>
             <version>5.2.2.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
             <version>5.2.2.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>4.2.6.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

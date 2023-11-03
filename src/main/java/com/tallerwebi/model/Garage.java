@@ -12,7 +12,7 @@ import java.util.Set;
 public class Garage extends ParkingPlace {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name = "garage_id")
+    @JoinColumn (name = "user_id")
     private MobileUser user;
 
     @ElementCollection
