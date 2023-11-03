@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Parking;
 import org.hibernate.Session;
@@ -15,7 +16,6 @@ import java.util.List;
 public class ParkingRepositoryImpl implements ParkingRepository {
 
     private final SessionFactory sessionFactory;
-
     public ParkingRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
