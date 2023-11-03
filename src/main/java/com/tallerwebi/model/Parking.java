@@ -82,6 +82,10 @@ public class Parking implements Comparable<Parking>{
         return dateExit;
     }
 
+    public void setDateExit(Date dateExit) {
+        this.dateExit = dateExit;
+    }
+
     public Vehicle getVehicle() {
         return vehicle;
     }

@@ -7,10 +7,14 @@ import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.*;
+import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletSecurityElement;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Service
 public class GarageServiceImpl implements GarageService {
@@ -30,11 +34,30 @@ public class GarageServiceImpl implements GarageService {
     @Override
     public void registerVehicle(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId) {
         addToGarage(vehicleIngressDTO, garageAdminUserId);
+        Parking parking = createNewParking(vehicleIngressDTO, garageAdminUserId);
+        parkingRepository.save(parking);
     }
 
     @Override
     public void egressVehicle(String vehiclePatent, Long garageAdminUserId) {
         removeFromGarage(vehiclePatent, garageAdminUserId);
+        Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehiclePatent);
+        MobileUser user = vehicle.getUser();
+        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+        ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO(ParkingType.GARAGE, vehiclePatent, null, null, garage.getGeolocation().getLat(), garage.getGeolocation().getLn(), garage.getId());
+
+        List<Parking> parkingList = user.getParkings();
+
+        Parking latestParking = parkingList.get(0);
+
+        for (Parking parking : parkingList) {
+            if (parking.getDateArrival().after(latestParking.getDateArrival())) {
+                latestParking = parking;
+            }
+        }
+        latestParking.setDateExit(Date.from(Instant.now()));
+        garage.generateTicket(parkingRegisterDTO);
+        parkingRepository.save(latestParking);
     }
 
     @Override
@@ -73,5 +96,13 @@ public class GarageServiceImpl implements GarageService {
         if(!garage.removeVehicle(vehiclePatent)){
             throw new VehicleNotFoundException();
         }
+    }
+
+    private Parking createNewParking(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserID){
+        Garage garage = getGarageByAdminUserId(garageAdminUserID);
+        Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehicleIngressDTO.getPatent());
+        MobileUser user = vehicle.getUser();
+        Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), Date.from(Instant.now()));
+        return parking;
     }
 }
