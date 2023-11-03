@@ -1,11 +1,10 @@
 package com.tallerwebi.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "GARAGE")
@@ -17,23 +16,23 @@ public class Garage extends ParkingPlace {
     private MobileUser user;
 
     @ElementCollection
-    private List<String> vehicles;
+    private Set<String> patents;
 
 
     public Garage(String name, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
         super(name, geolocation, feePerHour, feeFraction, fractionTime);
-        this.vehicles = new ArrayList<>();
+        this.patents = new HashSet<>();
     }
 
     public Garage() {
     }
 
     public boolean addVehicle(String patent){
-        return vehicles.add(patent);
+        return patents.add(patent);
     }
 
     public boolean removeVehicle(String patent){
-        return vehicles.remove(patent);
+        return patents.remove(patent);
     }
     @Override
     public Ticket generateTicket(ParkingRegisterDTO parking) {
@@ -42,8 +41,8 @@ public class Garage extends ParkingPlace {
         return ticket;
     }
 
-    public List<String> getVehicles() {
-        return vehicles;
+    public Set<String> getPatents() {
+        return patents;
     }
 
     public MobileUser getUser() {

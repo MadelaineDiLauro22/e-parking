@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface GarageService {
 
-    void registerVehicle(VehicleIngressDTO vehicleIngressDTO, Long userId);
-    void egressVehicle(String vehiclePatent, Long userId);
-    List<Vehicle> getRegisteredVehicles();
+    void registerVehicle(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId);
+    void egressVehicle(String vehiclePatent, Long garageAdminUserId);
+    List<Vehicle> getRegisteredVehicles(Long garageAdminUserId);
     MobileUser getUserByPatent(String patent);
     Vehicle getVehicleByPatent(String patent);
 }

@@ -40,4 +40,11 @@ public class VehicleRepositoryImpl implements VehicleRepository{
     public void save(Vehicle vehicle) {
         sessionFactory.getCurrentSession().save(vehicle);
     }
+
+    @Override
+    public List<Vehicle> findVehiclesByPatents(List<String> patents) {
+        Session session = sessionFactory.getCurrentSession();
+        return (List<Vehicle>) session.createCriteria(Vehicle.class)
+                .add(Restrictions.in("patent", patents)).list();
+    }
 }
