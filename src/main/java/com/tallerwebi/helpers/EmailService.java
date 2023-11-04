@@ -10,6 +10,10 @@ public class EmailService {
 
     private JavaMailSender emailSender;
 
+    public EmailService(JavaMailSender emailSender){
+        this.emailSender = emailSender;
+    }
+
     public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("eparking.unlam@gmail.com");

@@ -16,10 +16,9 @@ import java.util.List;
 public class ParkingRepositoryImpl implements ParkingRepository {
 
     private final SessionFactory sessionFactory;
-    public ParkingRepositoryImpl(SessionFactory sessionFactory) {
+    public ParkingRepositoryImpl(SessionFactory sessionFactory, EmailService emailService) {
         this.sessionFactory = sessionFactory;
     }
-
 
     @Override
     public void save(Parking parking) {
