@@ -1,13 +1,126 @@
 <div th:replace="fragments/header.html"></div>
     <main role="main" class="container-fluid bg-menu-mobile">
         <section class="container mx-auto col-lg-8 p-2 my-3 rounded-4" style="color:#3F4246;">
-            <section class="bg-primary" style="text-align:left">
-                <h2 class="borderBottom titleViewBlack fs-3 pb-4" style="text-align:center">Retirar vehículo</h2>
-                <p>Vehículo: FOX</p>
-                <p>Usuario: Usuario01</p>
-                <p>Cantidad de horas: 4hs</p>
-                <p>Precio final: $300</p>
+            <section class="bg-primary" style="text-align:left; padding:10px">
+                <h2 class="borderBottom titleViewBlack fs-3" style="text-align:center;margin-top:10px;">Retirar vehículo</h2>
+                <div class="d-flex">
+                    <p>Vehículo:  </p>
+                    <p style="color:white;display:inline-block;margin-left:5px"> FOX </p>
+                </div>
+
+                <div class="d-flex">
+                    <p>Usuario:  </p>
+                    <p style="color:white;display:inline-block;margin-left:5px"> Usuario01 </p>
+                </div>
+
+                <div class="d-flex">
+                    <p>Cantidad de horas:  </p>
+                    <p style="color:white;display:inline-block;margin-left:5px"> 4hs </p>
+                </div>
+
+                <div class="d-flex">
+                    <p>Precio final:  </p>
+                    <p style="color:white;display:inline-block;margin-left:5px"> $300 </p>
+                </div>
+                <ul class="list-group text-shadow-none">
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
+                               id="firstRadio" checked>
+                        <label class="form-check-label" for="firstRadio">Efectivo</label>
+                    </li>
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
+                               id="secondRadio">
+                        <label class="form-check-label" for="secondRadio">Tarjeta de crédito/débito</label>
+                    </li>
+                </ul>
+
+                <!-- Modal -->
+                <div class="modal text-shadow-none" id="myModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="color: black;">Tarjeta de crédito/débito</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-black">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control rounded-3" id="floatingInput"
+                                           placeholder="Nombre completo">
+                                    <label for="floatingInput">Nombre completo</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control rounded-3" id="floatingNumber"
+                                           placeholder="Numero de la tarjeta">
+                                    <label for="floatingNumber">Numero de la tarjeta</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control rounded-3" id="expiration"
+                                           placeholder="Fecha de vencimiento" maxlength="5"
+                                           oninput="formatExpiration()">
+                                    <label for="expiration">Fecha de vencimiento</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control rounded-3" id="floatingCod"
+                                           maxlength="4" placeholder="Código de seguridad">
+                                    <label for="floatingCod">Codigo de seguridad</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar
+                                </button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                        onclick="">Aceptar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
+
+            <div>
+                <div class="divContainer my-3">
+
+                    <input type="submit" value="Generar ticket" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                 fs-6 text-center btn-primary text-white text-bold">
+
+                </div>
+
+                <div class="divContainer my-3">
+
+                    <input type="submit" value="Confirmar" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                 fs-6 text-center btn-primary text-white text-bold">
+
+                </div>
+            </div>
+
         </section>
     </main>
 <div th:replace="fragments/footer.html"></div>
+
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = new bootstrap.Modal(document.getElementById("myModal"));
+        const firstRadio = document.getElementById("firstRadio");
+        const secondRadio = document.getElementById("secondRadio");
+
+        secondRadio.addEventListener("change", function () {
+            if (secondRadio.checked) {
+                modal.show();
+            } else {
+                modal.hide();
+            }
+        });
+
+        const acceptButton = document.querySelector("[data-bs-dismiss='modal'][data-bs-save-changes]");
+        acceptButton.addEventListener("click", () => {
+            modal.hide();
+            firstRadio.disabled = false;
+        });
+
+        modal._element.addEventListener("hidden.bs.modal", () => {
+            firstRadio.disabled = false;
+        });
+    });
+</script>

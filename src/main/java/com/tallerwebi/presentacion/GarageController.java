@@ -32,6 +32,13 @@ public class GarageController {
         return new ModelAndView("garage-enter-vehicle", model);
     }
 
+    @RequestMapping("vehicle-remove")
+    public ModelAndView removeVehicle(){
+        ModelMap model = new ModelMap();
+        //model.put("vehicleEgressDTO", new VehicleIngressDTO());
+        return new ModelAndView("vehicle-remove", model);
+    }
+
     @PostMapping(value = "/enter/register")
     public ModelAndView registerVehicle(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO) {
         try{
