@@ -85,8 +85,8 @@
                         </div>
                     </div>
 
-                    <div id="alarmOptions" style="display: none">
-                        <div class="divContainerBorderBottom my-1">
+                    <div>
+                        <div id="alarmOptions" class="divContainerBorderBottom my-1" style="display: none">
                             <label for="alarmType" id="alarmType">Seleccionar por:</label>
                             <div class="d-flex justify-content-between">
                                 <div>
@@ -116,117 +116,111 @@
 
 
                         <div id="calculateByHours" style="display:none">
-                            <label for="hours">Ingrese las horas:</label>
-                            <input type="number" id="hours" class="form-control my-1">
-                            <label for="hourlyRate">Tarifa por hora:</label>
-                            <input type="number" id="hourlyRate" class="form-control my-1">
-                            <button onclick="calculateByHours()">Calcular Monto</button>
-                            <p id="resultByHours"></p>
+                            <label for="hours">Ingrese la cantidad de horas:</label>
+                            <input type="number" id="hours" class="form-control my-1" onchange="calculateByHours()">
                         </div>
 
 
                         <div id="calculateByAmount" style="display:none">
-                            <label for="amount">Ingrese el monto:</label>
-                            <input type="number" id="amount" class="form-control my-1">
-                            <label for="hourlyRate2">Tarifa por hora:</label>
-                            <input type="number" id="hourlyRate2" class="form-control my-1">
-                            <button onclick="calculateByAmount()">Calcular Horas</button>
-                            <p id="resultByAmount"></p>
-                        </div>
-                    </div>
-
-
-                    <div id="geolocation" class="divContainer divContainerBorderBottom my-1">
-
-                        <label for="geolocation" class="text-white text-bold mb-1">Verifica el parking:</label>
-
-                        <input th:field="*{lat}" id="lat" class="d-none" type="text">
-
-                        <input th:field="*{ln}" id="ln" class="d-none" type="text">
-
-                        <div>
-
-                            <div id="myMap" class="mapRegister"></div>
-
-                            <div id='infoBox'>
-                                <div id='infoboxText'>
-                                    <b id='infoboxTitle'></b>
-                                    <a id='infoboxDescription'></a>
-                                </div>
-                            </div>
-
+                            <label for="amount">Ingrese el monto que desea gastar:</label>
+                            <input type="number" id="amount" class="form-control my-1" onchange="calculateByAmount()">
                         </div>
 
+                        <p id="feePerHour" style="display: none;">Tarifa por hora: $ <span id="feePerHourAmmount" type="number">0</span>.</p>
+                        <p id="resultCalculated" style="display: none;">Monto calculado: $ <span id="result" type="number">0</span>.</p>
                     </div>
+                </div>
 
-                    <div id="pointSaleDiv" class="divContainer my-1" style="display:none">
+                <div id="geolocation" class="divContainer divContainerBorderBottom my-1">
 
-                        <label for="pointSale" class="text-white text-bold mb-1">Tu punto de pago seleccionado:</label>
+                    <label for="geolocation" class="text-white text-bold mb-1">Verifica el parking:</label>
 
-                        <input th:field="*{parkingPlaceId}" id="pointSale" class="d-none" type="text">
+                    <input th:field="*{lat}" id="lat" class="d-none" type="text">
 
-                        <p id="pointSaleText" th:text="'Aún no se ha seleccionado un punto de pago.'"
-                           class="text-white"></p>
+                    <input th:field="*{ln}" id="ln" class="d-none" type="text">
 
+                    <div>
 
-                        <!--Checkbox-->
-                        <ul class="list-group text-shadow-none">
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
-                                       id="firstRadio" checked>
-                                <label class="form-check-label" for="firstRadio">Efectivo</label>
-                            </li>
-                            <li class="list-group-item">
-                                <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
-                                       id="secondRadio">
-                                <label class="form-check-label" for="secondRadio">Tarjeta de crédito/débito</label>
-                            </li>
-                        </ul>
+                        <div id="myMap" class="mapRegister"></div>
 
-                        <!-- Modal -->
-                        <div class="modal text-shadow-none" id="myModal" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" style="color: black;">Tarjeta de crédito/débito</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body text-black">
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control rounded-3" id="floatingInput"
-                                                   placeholder="Nombre completo" form="dummyForm">
-                                            <label for="floatingInput">Nombre completo</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="number" class="form-control rounded-3" id="floatingNumber"
-                                                   placeholder="Numero de la tarjeta" form="dummyForm">
-                                            <label for="floatingNumber">Numero de la tarjeta</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control rounded-3" id="expiration"
-                                                   placeholder="Fecha de vencimiento" maxlength="5"
-                                                   oninput="formatExpiration()" form="dummyForm">
-                                            <label for="expiration">Fecha de vencimiento</label>
-                                        </div>
-                                        <div class="form-floating mb-3">
-                                            <input type="number" class="form-control rounded-3" id="floatingCod"
-                                                   maxlength="4" placeholder="Código de seguridad" form="dummyForm">
-                                            <label for="floatingCod">Codigo de seguridad</label>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar
-                                        </button>
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                                                onclick="">Aceptar
-                                        </button>
-                                    </div>
-                                </div>
+                        <div id='infoBox'>
+                            <div id='infoboxText'>
+                                <b id='infoboxTitle'></b>
+                                <a id='infoboxDescription'></a>
                             </div>
                         </div>
 
                     </div>
+
+                </div>
+
+                <div id="pointSaleDiv" class="divContainer my-1" style="display:none">
+
+                    <label for="pointSale" class="text-white text-bold mb-1">Tu punto de pago seleccionado:</label>
+
+                    <input th:field="*{parkingPlaceId}" id="pointSale" class="d-none" type="text">
+
+                    <p id="pointSaleText" th:text="'Aún no se ha seleccionado un punto de pago.'"
+                       class="text-white"></p>
+
+
+                    <!--Checkbox-->
+                    <ul class="list-group text-shadow-none">
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
+                                   id="firstRadio" checked>
+                            <label class="form-check-label" for="firstRadio">Efectivo</label>
+                        </li>
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1" type="radio" name="listGroupRadio" value=""
+                                   id="secondRadio">
+                            <label class="form-check-label" for="secondRadio">Tarjeta de crédito/débito</label>
+                        </li>
+                    </ul>
+
+                    <!-- Modal -->
+                    <div class="modal text-shadow-none" id="myModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" style="color: black;">Tarjeta de crédito/débito</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-black">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control rounded-3" id="floatingInput"
+                                               placeholder="Nombre completo" form="dummyForm">
+                                        <label for="floatingInput">Nombre completo</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control rounded-3" id="floatingNumber"
+                                               placeholder="Numero de la tarjeta" form="dummyForm">
+                                        <label for="floatingNumber">Numero de la tarjeta</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control rounded-3" id="expiration"
+                                               placeholder="Fecha de vencimiento" maxlength="5"
+                                               oninput="formatExpiration()" form="dummyForm">
+                                        <label for="expiration">Fecha de vencimiento</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control rounded-3" id="floatingCod"
+                                               maxlength="4" placeholder="Código de seguridad" form="dummyForm">
+                                        <label for="floatingCod">Codigo de seguridad</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                            onclick="">Aceptar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                     <div class="divContainer my-3">
 
@@ -264,16 +258,22 @@
                 case "GARAGE":
                     divGarage.style.display = "block";
                     divPointSale.style.display = "none";
+                    document.getElementById("enableAlarm").checked = false;
+                    renderAlarmDate();
                     deleteParkingPlacePin();
                     break;
                 case "POINT_SALE":
                     divPointSale.style.display = "block";
                     divGarage.style.display = "none";
+                    document.getElementById("enableAlarm").checked = false;
+                    renderAlarmDate();
                     createPinParkingPlaces();
                     break;
                 case "STREET":
                     divPointSale.style.display = "none";
                     divGarage.style.display = "none";
+                    document.getElementById("enableAlarm").checked = false;
+                    renderAlarmDate();
                     deleteParkingPlacePin();
                     break;
             }
@@ -343,27 +343,37 @@
 
         function renderAlarmDate() {
             const enableAlarm = document.getElementById("enableAlarm");
-            const alarmOptions = document.getElementById("alarmOptions"); // Div que contiene las opciones
+            const alarmOptions = document.getElementById("alarmOptions");
 
             if (enableAlarm.checked) {
-                alarmOptions.style.display = "block"; // Mostrar las opciones
+                let parking = document.getElementById("parkingType").value;
+
+                switch (parking) {
+                    case "GARAGE":
+                        alarmOptions.style.display = "none";
+                        document.getElementById("typeDate").style.display = "block";
+                        document.getElementById("calculateByHours").style.display = "none";
+                        document.getElementById("calculateByAmount").style.display = "none";
+                        document.getElementById("feePerHour").style.display = "none";
+                        document.getElementById("resultCalculated").style.display = "none";
+                        break;
+                    case "POINT_SALE":
+                        document.getElementById("typeDate").style.display = "none";
+                        alarmOptions.style.display = "block";
+                        break;
+                    case "STREET":
+                        alarmOptions.style.display = "none";
+                        document.getElementById("typeDate").style.display = "block";
+                        document.getElementById("calculateByHours").style.display = "none";
+                        document.getElementById("calculateByAmount").style.display = "none";
+                        document.getElementById("feePerHour").style.display = "none";
+                        document.getElementById("resultCalculated").style.display = "none";
+                        break;
+                }
             } else {
-                alarmOptions.style.display = "none"; // Ocultar las opciones
+                alarmOptions.style.display = "none";
+                document.getElementById("typeDate").style.display = "none";
             }
-        }
-
-        function calculateByHours() {
-            const hours = parseFloat(document.getElementById("hours").value);
-            const hourlyRate = parseFloat(document.getElementById("hourlyRate").value);
-            const result = hours * hourlyRate;
-            document.getElementById("resultByHours").textContent = `Monto Final: $${result}`;
-        }
-
-        function calculateByAmount() {
-            const amount = parseFloat(document.getElementById("amount").value);
-            const hourlyRate2 = parseFloat(document.getElementById("hourlyRate2").value);
-            const result = amount / hourlyRate2;
-            document.getElementById("resultByAmount").textContent = `Horas Estimadas: ${result.toFixed(2)} horas`;
         }
 
         function renderAlarmType() {
@@ -377,17 +387,37 @@
             switch (selectedOption) {
                 case "dateAndHours":
                     document.getElementById("typeDate").style.display = "block";
+                    document.getElementById("feePerHour").style.display = "none";
+                    document.getElementById("resultCalculated").style.display = "none";
                     break;
                 case "hours":
                     document.getElementById("calculateByHours").style.display = "block";
+                    document.getElementById("feePerHour").style.display = "block";
+                    document.getElementById("resultCalculated").style.display = "block";
                     break;
                 case "amount":
                     document.getElementById("calculateByAmount").style.display = "block";
+                    document.getElementById("feePerHour").style.display = "block";
+                    document.getElementById("resultCalculated").style.display = "block";
                     break;
                 default:
 
                     break;
             }
+        }
+
+        function calculateByHours() {
+            const hours = parseFloat(document.getElementById("hours").value);
+            const hourlyRate = parseFloat(document.getElementById("feePerHourAmmount").textContent);
+            const result = (hours * hourlyRate);
+            document.getElementById("result").textContent = result;
+        }
+
+        function calculateByAmount() {
+            const amount = parseFloat(document.getElementById("amount").value);
+            const hourlyRate = parseFloat(document.getElementById("feePerHourAmmount").textContent);
+            const result = (amount / hourlyRate);
+            document.getElementById("result").textContent = result;
         }
 
     </script>

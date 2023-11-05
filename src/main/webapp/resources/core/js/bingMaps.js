@@ -148,6 +148,7 @@ function createPinParkingPlaces() {
                                 pin.setOptions({icon: customIconUrlSelected});
                                 document.getElementById("pointSale").value = parkingPlaces[i].id;
                                 document.getElementById("pointSaleText").textContent = parkingPlaces[i].name + " | " + address;
+                                document.getElementById("feePerHourAmmount").textContent = parkingPlaces[i].feePerHour;
                             });
                         } else {
                             clickFunctionToInfoboxPin(pin);
