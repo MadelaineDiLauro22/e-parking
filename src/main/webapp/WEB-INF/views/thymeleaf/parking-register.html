@@ -90,17 +90,17 @@
                             <label for="alarmType" id="alarmType">Seleccionar por:</label>
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <input type="radio" id="byDateAndHours" name="parkingOption" value="dateAndHours"
+                                    <input th:field="*{alarmType}" type="radio" id="byDateAndHours" name="parkingOption" value="NORMAL"
                                            onchange="renderAlarmType()">
                                     <label for="byDateAndHours">Fecha y hora</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="byHours" name="parkingOption" value="hours"
+                                    <input th:field="*{alarmType}" type="radio" id="byHours" name="parkingOption" value="AMOUNT_HS"
                                            onchange="renderAlarmType()">
                                     <label for="byHours">Cantidad de horas</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="byAmount" name="parkingOption" value="amount"
+                                    <input th:field="*{alarmType}" type="radio" id="byAmount" name="parkingOption" value="AMOUNT_DESIRED"
                                            onchange="renderAlarmType()">
                                     <label for="byAmount">Monto máximo</label>
                                 </div>
@@ -117,16 +117,16 @@
 
                         <div id="calculateByHours" style="display:none">
                             <label for="hours">Ingrese la cantidad de horas:</label>
-                            <input type="number" id="hours" class="form-control my-1" onchange="calculateByHours()">
+                            <input th:field="*{ammountHrsAlarm}" type="number" id="hours" class="form-control my-1" onchange="calculateByHours()">
                         </div>
 
 
                         <div id="calculateByAmount" style="display:none">
                             <label for="amount">Ingrese el monto que desea gastar:</label>
-                            <input type="number" id="amount" class="form-control my-1" onchange="calculateByAmount()">
+                            <input th:field="*{amountDesired}" type="number" id="amount" class="form-control my-1" onchange="calculateByAmount()">
                         </div>
 
-                        <p id="feePerHour" style="display: none;">Tarifa por hora: $ <span id="feePerHourAmmount" type="number">0</span>.</p>
+                        <p id="feePerHour" style="display: none;">Tarifa por hora: $ <span  id="feePerHourAmmount" type="number">0</span>.</p>
                         <p id="resultCalculated" style="display: none;">Monto calculado: $ <span id="result" type="number">0</span>.</p>
                     </div>
                 </div>
