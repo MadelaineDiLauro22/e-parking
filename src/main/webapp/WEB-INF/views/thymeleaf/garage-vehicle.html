@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+  <main role="main" class="container-fluid m-f bg-menu-mobile cover-container w-100 d-flex mx-auto flex-column">
+
+    <div class="bg-primary w-50 mx-auto m-5 px-3 py-4 rounded-4">
+    <article class="w-85 mx-auto mb-3 px-2">
+      <h2 class="titleView fs-2 py-4 divContainerBorderBottomBlack">Vehiculo: <span th:text="${auto}"></span></h2>
+      <h3 class="">Cliente: <span th:text="${cliente}"></span></h3>
+      <h3 class="">Usuario: <span th:text="${usuario}"></span></h3>
+      <h3 class="">Patente: <span th:text="${patente}"></span></h3>
+      <h3 class="">Marca: <span th:text="${marca}"></span></h3>
+      <h3 class="">Modelo: <span th:text="${modelo}"></span></h3>
+      <h3 class="">Color: <span th:text="${color}"></span></h3>
+
+    </article>
+
+    <section class="w-50 mx-auto d-flex justify-content-around mb-3">
+      <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+            fs-6 text-center btn-red text-white">Retirar
+      </button>
+      <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+            fs-6 text-center btn-green text-white">Volver
+      </button>
+    </section>
+    </div>
+  </main>
+</body>
+</html>
