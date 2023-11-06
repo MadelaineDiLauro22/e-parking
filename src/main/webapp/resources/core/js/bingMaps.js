@@ -2,6 +2,8 @@ var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnT
 var bingMap = null;
 var selectedPin = null;
 const pinPointSale = [];
+const pinGarage = [];
+const pinParkingPlace = [];
 
 function initializeBingMap() {
     if (navigator.geolocation) {
@@ -76,7 +78,7 @@ function GetMap(position) {
             console.error('Error en la solicitud: ', error);
         });
     if(viewName === "home") {
-        createPinParkingPlaces();
+        createPinParkingPlaces('All');
     }
 }
 
@@ -109,7 +111,7 @@ function adjustPersonalPinMap(personalPin) {
     });
 }
 
-function createPinParkingPlaces() {
+function createPinParkingPlaces(type) {
     var parkingPlaces = parkingPlacesData;
     var promises = [];
 
@@ -125,12 +127,28 @@ function createPinParkingPlaces() {
                 .then(data => {
                     if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
                         const address = data.resourceSets[0].resources[0].address.formattedAddress;
+                        let pin;
 
-                        const pin = createPin(new Microsoft.Maps.Location(lat, ln), title, address, "POINT_SALE");
+                        if (viewName === "home" && type === 'All'){
+                            pin = createPin(new Microsoft.Maps.Location(lat, ln), title, address, parkingPlaces[i].type);
+                            setInfoboxOnPin(pin);
+                        }
+
+
+                        if (viewName === "parking-register") {
+                            if(type === 'PointSale' && parkingPlaces[i].type === 'PointSale'){
+                                pin = createPin(new Microsoft.Maps.Location(lat, ln), title, address, parkingPlaces[i].type);
+                                setInfoboxOnPin(pin);
+                            }
+                            else if(type === 'Garage' && parkingPlaces[i].type === 'Garage'){
+                                pin = createPin(new Microsoft.Maps.Location(lat, ln), title, address, parkingPlaces[i].type);
+                                setInfoboxOnPin(pin);
+                            }
+                        }
 
                         setInfoboxOnPin(pin);
 
-                        if (viewName === "parking-register") {
+                        if (viewName === "parking-register" && type === "PointSale") {
                             Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                                 for (var j = 0; j < pinPointSale.length; j++) {
                                     pinPointSale[j].infobox.setOptions({visible: false});
@@ -149,12 +167,13 @@ function createPinParkingPlaces() {
                                 document.getElementById("pointSale").value = parkingPlaces[i].id;
                                 document.getElementById("pointSaleText").textContent = parkingPlaces[i].name + " | " + address;
                                 document.getElementById("feePerHourAmmount").textContent = parkingPlaces[i].feePerHour;
-                                document.getElementById("feePerHourValue").value = parkingPlaces[i].feePerHour;
                             });
                         } else {
                             clickFunctionToInfoboxPin(pin);
                         }
-                        pinPointSale.push(pin);
+                        if(type === 'PointSale') pinPointSale.push(pin);
+                        if(type === 'Garage') pinGarage.push(pin);
+                        if(type === 'All') pinParkingPlace.push(pin);
                     } else {
                         console.error('No se encontró ninguna dirección.');
                     }
@@ -167,7 +186,9 @@ function createPinParkingPlaces() {
 
     Promise.all(promises)
         .then(() => {
-            bingMap.entities.push(pinPointSale);
+            if(type === 'PointSale') bingMap.entities.push(pinPointSale);
+            if(type === 'Garage') bingMap.entities.push(pinGarage);
+            if(type === 'All') bingMap.entities.push(pinParkingPlace);
         })
         .catch(error => {
             console.error('Error al cargar los datos: ', error);
@@ -180,11 +201,13 @@ function createPin(location, title, description, type) {
         case "PERSONAL":
             customIconUrl = "/eparking/img/pinIcons/loc-icon.png";
             break;
-        case "POINT_SALE":
+        case "PointSale":
             customIconUrl = "/eparking/img/pinIcons/point-icon.png";
             break;
-        case "GARAGE":
+        case "Garage":
             customIconUrl = "/eparking/img/pinIcons/garage-icon.png";
+            break;
+        default:
             break;
     }
 
@@ -195,6 +218,7 @@ function createPin(location, title, description, type) {
 
     var pin = new Microsoft.Maps.Pushpin(location, iconOptions);
     pin.metadata = {description: description};
+
     return pin;
 }
 
@@ -239,6 +263,9 @@ function clickFunctionToInfoboxPin(pin) {
     });
 }
 
-function deleteParkingPlacePin(){
+function deleteParkingPlacePin(type){
+    if(type === 'Garage')
     bingMap.entities.remove(pinPointSale);
+    if(type === 'PointSale')
+    bingMap.entities.remove(pinGarage);
 }

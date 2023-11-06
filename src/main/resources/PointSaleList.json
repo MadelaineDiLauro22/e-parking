@@ -124,19 +124,5 @@
     "feePerHour":550.0,
     "feeFraction":200.0,
     "fractionTime":40
-  },
-  {
-    "name":"Punto de Pago 20",
-    "geolocation":{"lat":-34.731848,"ln":-58.555741},
-    "feePerHour":700.0,
-    "feeFraction":350.0,
-    "fractionTime":30
-  },
-  {
-    "name":"Punto de Pago 21",
-    "geolocation":{"lat":-34.693987,"ln":-58.551225},
-    "feePerHour":700.0,
-    "feeFraction":350.0,
-    "fractionTime":30
   }
 ]

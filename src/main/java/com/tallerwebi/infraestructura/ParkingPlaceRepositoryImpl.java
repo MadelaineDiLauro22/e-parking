@@ -36,7 +36,7 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository{
 
     @Override
     public List<ParkingPlace> findAll() {
-        return (List<ParkingPlace>) sessionFactory.getCurrentSession().createCriteria(ParkingPlace.class).list();
+        return sessionFactory.getCurrentSession().createCriteria(ParkingPlace.class).list();
     }
 
     @Override

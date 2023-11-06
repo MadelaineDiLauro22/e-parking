@@ -7,6 +7,7 @@ import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,16 +34,24 @@ public class DatabaseInitializationConfig {
     }
 
     @Bean
+    @Transactional
     public void dataSourceInitializer() throws IOException {
-        MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.ADMIN, NOMBRE, NICK_NAME);
+        MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.USER, NOMBRE, NICK_NAME);
         MobileUser garageUser = new MobileUser(MAIL_ADMIN, PASSWORD, UserRole.ADMIN_GARAGE, NOMBRE, NICK_NAME);
         Vehicle vehicle = new Vehicle(PATENTE, MARCA, MODELO, COLOR);
+
         vehicle.setUser(user);
         user.registerVehicle(vehicle);
 
+        Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
+        Garage garage = new Garage("Pepe", 30, geolocation, 1.5F, 1.0F, (long) 1.0);
+        garage.setUser(garageUser);
+
         createAndSaveParkingsPlaces();
+
         userRepository.save(user);
         userRepository.save(garageUser);
+        parkingPlaceRepository.save(garage);
     }
 
     private void createAndSaveParkingsPlaces() throws IOException {

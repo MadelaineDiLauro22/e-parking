@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.VehicleAlreadyParkException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
+import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.infraestructura.ParkingPlaceRepository;
 import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
@@ -9,9 +10,9 @@ import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletSecurityElement;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,12 +24,14 @@ public class GarageServiceImpl implements GarageService {
     private final VehicleRepository vehicleRepository;
     private final ParkingPlaceRepository parkingPlaceRepository;
     private final ParkingRepository parkingRepository;
+    private final EmailService emailService;
 
-    public GarageServiceImpl(UserRepository userRepository, VehicleRepository vehicleRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository) {
+    public GarageServiceImpl(UserRepository userRepository, VehicleRepository vehicleRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
         this.parkingRepository = parkingRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -39,11 +42,17 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    public void sendOtp(String email) throws MailException {
+        emailService.sendSimpleMessage(email, "Confirmación de ingreso", "");
+    }
+
+    @Override
     public void egressVehicle(String vehiclePatent, Long garageAdminUserId) {
-        removeFromGarage(vehiclePatent, garageAdminUserId);
+        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+        removeFromGarage(vehiclePatent, garage);
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehiclePatent);
         MobileUser user = vehicle.getUser();
-        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+
         ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO(ParkingType.GARAGE, vehiclePatent, null, null, garage.getGeolocation().getLat(), garage.getGeolocation().getLn(), garage.getId());
 
         List<Parking> parkingList = user.getParkings();
@@ -55,6 +64,7 @@ public class GarageServiceImpl implements GarageService {
                 latestParking = parking;
             }
         }
+
         latestParking.setDateExit(Date.from(Instant.now()));
         garage.generateTicket(parkingRegisterDTO);
         parkingRepository.save(latestParking);
@@ -80,7 +90,8 @@ public class GarageServiceImpl implements GarageService {
         return vehicleRepository.findVehicleByPatent(patent);
     }
 
-    private Garage getGarageByAdminUserId(Long garageAdminUserId) {
+    @Override
+    public Garage getGarageByAdminUserId(Long garageAdminUserId) {
         return (Garage) parkingPlaceRepository.findGarageByUser(userRepository.findUserById(garageAdminUserId));
     }
 
@@ -91,8 +102,7 @@ public class GarageServiceImpl implements GarageService {
         }
     }
 
-    private void removeFromGarage(String vehiclePatent, Long garageAdminUserId) {
-        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+    private void removeFromGarage(String vehiclePatent, Garage garage) {
         if(!garage.removeVehicle(vehiclePatent)){
             throw new VehicleNotFoundException();
         }
@@ -103,6 +113,8 @@ public class GarageServiceImpl implements GarageService {
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehicleIngressDTO.getPatent());
         MobileUser user = vehicle.getUser();
         Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), Date.from(Instant.now()));
+        parking.setMobileUser(user);
+
         return parking;
     }
 }

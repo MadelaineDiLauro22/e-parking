@@ -4,12 +4,11 @@ import com.tallerwebi.dominio.ParkingService;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.Geolocation;
-import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.PointSale;
 import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.presentacion.dto.ParkingPlaceResponseDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -42,7 +41,7 @@ class ParkingControllerTest {
     @Test
     void shouldGetViewWithCarListAndParkingPlacesList() {
         List<Vehicle> cars = new ArrayList<>();
-        List<ParkingPlace> parkingPlaces = new ArrayList<>();
+        List<ParkingPlaceResponseDTO> parkingPlaces = new ArrayList<>();
 
         Mockito.when(mockParkingService.getUserCarsList(getUserId()))
                 .thenReturn(cars);

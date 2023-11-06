@@ -13,130 +13,130 @@
 
     <body class="d-flex min-vh-100">
 
-        <div th:class="${id} ? 'bg-home cover-container w-100 d-flex mx-auto flex-column' : 'bg-login cover-container w-100 d-flex mx-auto flex-column'">
+    <div th:class="${rol == 'USER'} ? 'bg-home cover-container w-100 d-flex mx-auto flex-column' : (${rol == 'ADMIN_GARAGE'} ? 'bg-windows cover-container w-100 d-flex mx-auto flex-column' : 'bg-login cover-container w-100 d-flex mx-auto flex-column')">
 
-            <header class="mb-auto">
+                <header class="mb-auto">
 
-                <div th:if="${id != null}">
+                    <div th:if="${id != null}">
 
-                    <nav class="navbar navbar-expand-lg menu-desktop">
+                        <nav th:class="${rol == 'USER'} ? 'navbar navbar-expand-lg menu-desktop' : 'navbar navbar-expand-lg menu-desktop-garage'">
 
-                        <div class="container">
+                            <div class="container">
 
-                            <div class="d-flex nav-width">
+                                <div class="d-flex nav-width">
 
-                                <img th:src="@{/img/logo/Logo2.png}" width="40rem" class="px-1">
+                                    <img th:src="@{/img/logo/Logo2.png}" width="40rem" class="px-1">
 
-                                <a class="navbar-brand text-white text-bold" th:href="@{/mobile/home}"> eParking </a>
+                                    <a class="navbar-brand text-white text-bold" th:href="@{/mobile/home}"> eParking </a>
+
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-center mx-auto badge-desktop">
+
+                                    <h4 id="last-notification" class="bg-secondary px-3 py-2 rounded-4 fs-6 text-white d-inline-block text-truncate">No hay notificaciones en este momento.</h4>
+
+                                    <a th:href="@{/mobile/profile/notifications}" class="position-relative px-2 pb-1">
+
+                                        <i th:class="${rol == 'USER'} ? 'fa-solid fa-bell text-primary fs-3' : 'fa-solid fa-bell text-white fs-3'"></i>
+
+                                        <span id="count-notif" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                                                    0
+
+                                                    <span class="visually-hidden">unread messages</span>
+
+                                        </span>
+
+                                    </a>
+
+                                </div>
+
+
+                                <div class="justify-content-end nav-width" id="navbarNav">
+
+                                    <ul class="navbar-nav align-items-center">
+
+                                        <li class="nav-item active">
+
+                                            <a class="nav-link px-2 text-white text-bold" th:href="@{/mobile/home}">Inicio</a>
+
+                                        </li>
+
+                                        <li class="nav-item">
+
+                                            <a class="nav-link text-white text-bold" th:href="@{/mobile/profile}">Perfil</a>
+
+                                        </li>
+
+                                        <li class="nav-item">
+
+                                            <a class="nav-link text-white text-bold" th:href="@{/#}">Denuncias</a>
+
+                                        </li>
+
+
+
+                                        <li class="navbar-nav ml-auto">
+
+                                            <div class="nav-item dropdown">
+
+                                                <a class="nav-link text-white text-bold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-ellipsis"></i></a>
+
+                                                <ul th:class="${rol == 'USER'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
+
+                                                    <li>
+
+                                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
+
+                                                    </li>
+
+                                                    <li>
+
+                                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
+
+                                                    </li>
+
+                                                    <div class="dropdown-divider"></div>
+
+                                                    <li>
+
+                                                        <a class="dropdown-item text-white text-bold" th:href="@{/logout}">Cerrar sesion</a>
+
+                                                    </li>
+
+                                                </ul>
+
+                                            </div>
+
+                                        </li>
+
+                                    </ul>
+
+                                </div>
 
                             </div>
 
-                            <div class="d-flex align-items-center justify-content-center mx-auto badge-desktop">
+                        </nav>
 
-                                <h4 id="last-notification" class="bg-secondary px-3 py-2 rounded-4 fs-6 text-white d-inline-block text-truncate">No hay notificaciones en este momento.</h4>
+                        <div class="d-flex p-3 align-items-center justify-content-center mx-auto badge-mobile">
 
-                                <a th:href="@{/mobile/profile/notifications}" class="position-relative px-2 pb-1">
+                            <h4 id="last-notification-mobile" th:class="${rol == 'USER'} ? 'bg-terciary px-4 py-2 rounded-4 fs-6 text-white d-inline-block text-truncate' : 'bg-secondary px-4 py-2 rounded-4 fs-6 text-white d-inline-block text-truncate'">No hay notificaciones en este momento.</h4>
 
-                                    <i class="fa-solid fa-bell text-primary fs-3"></i>
+                            <a th:href="@{/mobile/profile/notifications}" class="position-relative pb-1">
 
-                                    <span id="count-notif" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <i th:class="${rol == 'USER'} ? 'fa-solid fa-bell text-gray fs-1' : 'fa-solid fa-bell text-white fs-1'"></i>
 
-                                                0
+                                <span id="count-notif-mobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                99
+                                <span class="visually-hidden">unread messages</span>
 
-                                                <span class="visually-hidden">unread messages</span>
+                              </span>
 
-                                    </span>
-
-                                </a>
-
-                            </div>
-
-
-                            <div class="justify-content-end nav-width" id="navbarNav">
-
-                                <ul class="navbar-nav align-items-center">
-
-                                    <li class="nav-item active">
-
-                                        <a class="nav-link px-2 text-white text-bold" th:href="@{/mobile/home}">Inicio</a>
-
-                                    </li>
-
-                                    <li class="nav-item">
-
-                                        <a class="nav-link text-white text-bold" th:href="@{/mobile/profile}">Perfil</a>
-
-                                    </li>
-
-                                    <li class="nav-item">
-
-                                        <a class="nav-link text-white text-bold" th:href="@{/#}">Denuncias</a>
-
-                                    </li>
-
-
-
-                                    <li class="navbar-nav ml-auto">
-
-                                        <div class="nav-item dropdown">
-
-                                            <a class="nav-link text-white text-bold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-ellipsis"></i></a>
-
-                                            <ul class="dropdown-menu end-0 bg-windows" aria-labelledby="navbarDropdown">
-
-                                                <li>
-
-                                                    <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
-
-                                                </li>
-
-                                                <li>
-
-                                                    <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
-
-                                                </li>
-
-                                                <div class="dropdown-divider"></div>
-
-                                                <li>
-
-                                                    <a class="dropdown-item text-white text-bold" th:href="@{/logout}">Cerrar sesion</a>
-
-                                                </li>
-
-                                            </ul>
-
-                                        </div>
-
-                                    </li>
-
-                                </ul>
-
-                            </div>
+                            </a>
 
                         </div>
 
-                    </nav>
-
-                    <div class="d-flex p-3 align-items-center justify-content-center mx-auto badge-mobile">
-
-                        <h4 id="last-notification-mobile" class="bg-terciary px-4 py-2 rounded-4 fs-6 text-white d-inline-block text-truncate">No hay notificaciones en este momento.</h4>
-
-                        <a th:href="@{/mobile/profile/notifications}" class="position-relative pb-1">
-
-                            <i class="fa-solid fa-bell text-gray fs-1"></i>
-
-                            <span id="count-notif-mobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            99
-                            <span class="visually-hidden">unread messages</span>
-
-                          </span>
-
-                        </a>
-
                     </div>
 
-                </div>
 
-
-            </header>
+                </header>

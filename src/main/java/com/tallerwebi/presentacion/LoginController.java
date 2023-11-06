@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.LoginService;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.model.MobileUser;
+import com.tallerwebi.model.UserRole;
 import com.tallerwebi.presentacion.dto.LoginDataDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,10 +38,17 @@ public class LoginController {
 
         MobileUser usuarioBuscado = (MobileUser) loginService.searchUser(loginDataDTO.getEmail(), loginDataDTO.getPassword());
         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("rol", usuarioBuscado.getRol());
+
+            request.getSession().setAttribute("rol", usuarioBuscado.getRol().toString());
             request.getSession().setAttribute("id", usuarioBuscado.getId());
             request.getSession().setAttribute("nickName", usuarioBuscado.getNickName());
-            return new ModelAndView("redirect:/mobile/home");
+
+            if(usuarioBuscado.getRol() == UserRole.USER){
+                return new ModelAndView("redirect:/mobile/home");
+            }
+            else{
+                return new ModelAndView("redirect:/web/admin");
+            }
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }

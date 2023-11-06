@@ -1,5 +1,7 @@
 package com.tallerwebi.helpers;
 
+import com.tallerwebi.model.UserRole;
+import org.hibernate.usertype.UserType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,9 +34,11 @@ public class SessionInterceptor implements HandlerInterceptor {
 
             Long userId = (Long) request.getSession().getAttribute("id");
             String userNickname = (String) request.getSession().getAttribute("nickName");
+            String rol = (String) request.getSession().getAttribute("rol");
 
             modelAndView.addObject("id", userId);
             modelAndView.addObject("nickName", userNickname);
+            modelAndView.addObject("rol", rol);
         }
     }
 

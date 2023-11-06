@@ -26,7 +26,6 @@ public class ParkingRegisterDTO {
     private int ammountHs;
     private int ammountHrsAlarm;
     private float amountDesired;
-
     private AlarmType alarmType = AlarmType.NORMAL;
     private boolean isPaid = false;
     private Long parkingPlaceId;

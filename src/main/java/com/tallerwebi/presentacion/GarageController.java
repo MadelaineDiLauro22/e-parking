@@ -1,13 +1,11 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.GarageService;
+import com.tallerwebi.model.Garage;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -16,7 +14,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("web/admin")
 public class GarageController {
 
-    private GarageService garageService;
+    private final GarageService garageService;
     private final HttpSession session;
 
     public GarageController(GarageService garageService, HttpSession session) {
@@ -24,11 +22,19 @@ public class GarageController {
         this.session = session;
     }
 
+    @GetMapping
+    public ModelAndView getHomeGarage(){
+        ModelMap model = new ModelMap();
+        Garage garage = garageService.getGarageByAdminUserId((Long) session.getAttribute("id"));
+        model.put("garage", garage);
+        return new ModelAndView("home-garage", model);
+    }
+
     @RequestMapping("/enter")
     public ModelAndView enterVehicle() {
-
         ModelMap model = new ModelMap();
         model.put("vehicleIngressDTO", new VehicleIngressDTO());
+
         return new ModelAndView("garage-enter-vehicle", model);
     }
 
@@ -36,19 +42,25 @@ public class GarageController {
     public ModelAndView removeVehicle(){
         ModelMap model = new ModelMap();
         //model.put("vehicleEgressDTO", new VehicleIngressDTO());
+
         return new ModelAndView("vehicle-remove", model);
     }
 
     @PostMapping(value = "/enter/register")
-    public ModelAndView registerVehicle(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO) {
-        try{
-            garageService.registerVehicle(vehicleIngressDTO, (Long) session.getAttribute("id"));
+    public ModelAndView validationRegisterVehicle(@RequestParam("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO, @RequestParam("otp") String enteredOTP) {
+        try {
+            String storedOTP = /*garageService.getStoredOTPForUser(vehicleIngressDTO.getEmail())*/"";
 
-            ModelMap model = new ModelMap();
-            model.put("success", true);
-            return new ModelAndView("redirect:/web/admin/enter", model);
-        }
-        catch (Exception e){
+            if (enteredOTP.equals(storedOTP)) {
+                garageService.registerVehicle(vehicleIngressDTO, (Long) session.getAttribute("id"));
+                ModelMap model = new ModelMap();
+                model.put("success", true);
+
+                return new ModelAndView("redirect:/web/admin/enter", model);
+            } else {
+                return new ModelAndView("redirect:/error?errorMessage=El código OTP ingresado es incorrecto.");
+            }
+        } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
@@ -60,6 +72,7 @@ public class GarageController {
 
             ModelMap model = new ModelMap();
             model.put("success", true);
+
             return new ModelAndView("redirect:/web/admin/egress", model);
         }
         catch (Exception e){
@@ -67,7 +80,19 @@ public class GarageController {
         }
     }
 
+    @PostMapping(value = "/enter/send-otp")
+    public ModelAndView sendOtp(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO) {
+        try{
+            garageService.sendOtp(vehicleIngressDTO.getUserEmail());
 
+            ModelMap model = new ModelMap();
+            model.put("vehiclesIngressDto", vehicleIngressDTO);
+            model.put("success", true);
 
-
+            return new ModelAndView("redirect:/web/admin/otp-validate", model);
+        }
+        catch (Exception e){
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
+    }
 }

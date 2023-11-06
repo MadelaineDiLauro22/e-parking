@@ -5,8 +5,8 @@ import com.tallerwebi.dominio.excepcion.AlarmNotNullException;
 import com.tallerwebi.dominio.excepcion.ParkingRegisterException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
-import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.presentacion.dto.ParkingPlaceResponseDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,7 +35,7 @@ public class ParkingController {
     public ModelAndView getParkingRegister() {
         try {
             List<Vehicle> list = parkingService.getUserCarsList((Long) session.getAttribute("id"));
-            List<ParkingPlace> parkingPlaceList = parkingService.getParkingPlaces();
+            List<ParkingPlaceResponseDTO> parkingPlaceList = parkingService.getParkingPlaces();
             ModelMap model = new ModelMap();
             model.put("vehicleList", list);
             model.put("parkingRegister", new ParkingRegisterDTO());

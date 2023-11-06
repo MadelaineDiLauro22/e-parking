@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-</head>
-<body>
+<div th:replace="fragments/header.html"></div>
 
-<main role="main" class="container-fluid m-f bg-menu-mobile cover-container w-100 d-flex mx-auto flex-column">
+<main role="main" class="container-fluid m-f">
 
     <div class="bg-primary w-50 mx-auto m-5 px-3 py-4 rounded-4">
         <section class="w-85 mx-auto mb-3 px-2 divContainerBorderBottomBlack">
@@ -55,7 +47,5 @@
             fs-6 text-center btn-green text-white">Ingresar
         </button>
     </section>
-</main>
 
-</body>
-</html>
+<div th:replace="fragments/footer.html"></div>

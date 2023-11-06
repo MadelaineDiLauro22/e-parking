@@ -1,5 +1,6 @@
 package com.tallerwebi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
 import javax.persistence.*;
@@ -14,14 +15,15 @@ public class Garage extends ParkingPlace {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "user_id")
     private MobileUser user;
-
     @ElementCollection
     private Set<String> patents;
+    private int numberOfCars;
 
 
-    public Garage(String name, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
+    public Garage(String name, int numberOfCars, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
         super(name, geolocation, feePerHour, feeFraction, fractionTime);
         this.patents = new HashSet<>();
+        this.numberOfCars = numberOfCars;
     }
 
     public Garage() {
@@ -50,5 +52,13 @@ public class Garage extends ParkingPlace {
     }
     public void setUser(MobileUser user) {
         this.user = user;
+    }
+
+    public int getNumberOfCars() {
+        return numberOfCars;
+    }
+
+    public void setNumberOfCars(int numberOfCars) {
+        this.numberOfCars = numberOfCars;
     }
 }

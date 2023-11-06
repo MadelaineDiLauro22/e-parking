@@ -62,7 +62,7 @@ public class LoginControllerTest {
 		String nickName = "dami";
 		MobileUser userFound = usuarioMock;
 
-		when(userFound.getRol()).thenReturn(UserRole.ADMIN);
+		when(userFound.getRol()).thenReturn(UserRole.USER);
 		when(userFound.getId()).thenReturn(userId);
 		when(userFound.getNickName()).thenReturn(nickName);
 
@@ -74,7 +74,7 @@ public class LoginControllerTest {
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/mobile/home"));
-		verify(sessionMock).setAttribute("rol", userFound.getRol());
+		verify(sessionMock).setAttribute("rol", userFound.getRol().toString());
 		verify(sessionMock).setAttribute("id", userId);
 		verify(sessionMock).setAttribute("nickName", nickName);
 	}
@@ -120,7 +120,7 @@ public class LoginControllerTest {
 	public void whenTheUserCloseSessionSendItToLogin(){
 		MobileUser userFound = usuarioMock;
 
-		when(userFound.getRol()).thenReturn(UserRole.ADMIN);
+		when(userFound.getRol()).thenReturn(UserRole.USER);
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 		when(loginServiceMock.searchUser(anyString(), anyString())).thenReturn(userFound);

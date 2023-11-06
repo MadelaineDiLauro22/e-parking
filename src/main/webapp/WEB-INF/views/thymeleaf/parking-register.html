@@ -260,21 +260,24 @@
                     divPointSale.style.display = "none";
                     document.getElementById("enableAlarm").checked = false;
                     renderAlarmDate();
-                    deleteParkingPlacePin();
+                    deleteParkingPlacePin("Garage");
+                    createPinParkingPlaces("Garage");
                     break;
                 case "POINT_SALE":
                     divPointSale.style.display = "block";
                     divGarage.style.display = "none";
                     document.getElementById("enableAlarm").checked = false;
                     renderAlarmDate();
-                    createPinParkingPlaces();
+                    deleteParkingPlacePin("PointSale");
+                    createPinParkingPlaces("PointSale");
                     break;
                 case "STREET":
                     divPointSale.style.display = "none";
                     divGarage.style.display = "none";
                     document.getElementById("enableAlarm").checked = false;
                     renderAlarmDate();
-                    deleteParkingPlacePin();
+                    deleteParkingPlacePin("Garage");
+                    deleteParkingPlacePin("PointSale");
                     break;
             }
         }

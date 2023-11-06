@@ -7,18 +7,19 @@ import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.*;
+import com.tallerwebi.presentacion.dto.ParkingPlaceResponseDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import javax.transaction.Transactional;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+@Transactional
 @Service
 public class ParkingServiceImpl implements ParkingService {
 
@@ -50,8 +51,21 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public List<ParkingPlace> getParkingPlaces() {
-        return parkingPlaceRepository.findAll();
+    public List<ParkingPlaceResponseDTO> getParkingPlaces() {
+        List<ParkingPlace> parkingPlacesList = parkingPlaceRepository.findAll();
+        List<ParkingPlaceResponseDTO> parkingPlaceResponseDTOS = new ArrayList<>();
+        for (ParkingPlace parkingPlace:parkingPlacesList) {
+            ParkingPlaceResponseDTO parkingPlaceResponseDTO = new ParkingPlaceResponseDTO(parkingPlace.getClass().getSimpleName(), parkingPlace.getId(), parkingPlace.getName(),
+                    parkingPlace.getGeolocation(), parkingPlace.getFeePerHour(), parkingPlace.getFeeFraction(), parkingPlace.getFractionTime());
+            if(parkingPlace instanceof Garage){
+                parkingPlaceResponseDTO.setUserId(((Garage) parkingPlace).getUser().getId());
+                parkingPlaceResponseDTO.setNumberOfCars(((Garage) parkingPlace).getNumberOfCars());
+                Hibernate.initialize(((Garage) parkingPlace).getPatents());
+                parkingPlaceResponseDTO.setPatents(((Garage) parkingPlace).getPatents());
+            }
+            parkingPlaceResponseDTOS.add(parkingPlaceResponseDTO);
+        }
+        return parkingPlaceResponseDTOS;
     }
 
     @Override

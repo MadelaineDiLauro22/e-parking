@@ -7,6 +7,11 @@
     background-color: #1B1F25 !important;
 }
 
+.menu-desktop-garage{
+    display: block !important;
+    background-color: #FEBC3D !important;
+}
+
 .menu-mobile{
     display: block;
     display: none !important;
@@ -14,6 +19,11 @@
 
 .footer-desktop{
     display: flex !important;
+}
+
+.footer-desktop-garage{
+    display: flex !important;
+    background-color: #FEBC3D !important;
 }
 
 .badge-desktop{
@@ -53,6 +63,8 @@
 .bg-windows{
     background-color: #1B1F25;
 }
+
+
 
 .bg-login{
     background: rgb(12,13,13);
@@ -189,11 +201,19 @@
         display: none !important;
     }
 
+    .menu-desktop-garage{
+        display: none !important;
+    }
+
     .menu-mobile{
         display: block !important;
     }
 
     .footer-desktop{
+        display: none !important;
+    }
+
+    .footer-desktop-garage{
         display: none !important;
     }
 

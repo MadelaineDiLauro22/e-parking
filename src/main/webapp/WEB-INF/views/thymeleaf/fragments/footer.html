@@ -1,6 +1,6 @@
         <footer class="mt-auto p-0">
             <nav>
-                <div th:if="${id != null}" class="menu-mobile bg-menu-mobile py-3 px-3 fixed-bottom">
+                <div th:if="${id != null}" th:class="${rol == 'USER'} ? 'menu-mobile bg-menu-mobile py-3 px-3 fixed-bottom' : 'menu-mobile bg-home py-3 px-3 fixed-bottom'">
 
                     <ul class="d-flex align-items-center justify-content-between list-unstyled mb-0">
 
@@ -50,8 +50,7 @@
 
                                 </a>
 
-                                <ul class="dropdown-menu bg-windows" aria-labelledby="navbarDropdown">
-
+                                <ul th:class="${rol == 'USER'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
 
                                     <li>
 
