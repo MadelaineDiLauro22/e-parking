@@ -11,13 +11,13 @@
 
     <div class="bg-primary w-50 mx-auto m-5 px-3 py-4 rounded-4">
     <article class="w-85 mx-auto mb-3 px-2">
-      <h2 class="titleView fs-2 py-4 divContainerBorderBottomBlack">Vehiculo: <span th:text="${auto}"></span></h2>
-      <h3 class="">Cliente: <span th:text="${cliente}"></span></h3>
-      <h3 class="">Usuario: <span th:text="${usuario}"></span></h3>
-      <h3 class="">Patente: <span th:text="${patente}"></span></h3>
-      <h3 class="">Marca: <span th:text="${marca}"></span></h3>
-      <h3 class="">Modelo: <span th:text="${modelo}"></span></h3>
-      <h3 class="">Color: <span th:text="${color}"></span></h3>
+      <h2 class="titleView fs-2 py-4 divContainerBorderBottomBlack">Vehiculo: <span th:text="${vehicle.getModel()}"></span></h2>
+      <!--<h3 class="">Cliente: <span th:text="${mobileUser.nickName}"></span></h3>-->
+      <!--<h3 class="">Usuario: <span th:text="${mobileUser.name}"></span></h3>-->
+      <h3 class="">Patente: <span th:text="${vehicle.getPatent()}"></span></h3>
+      <h3 class="">Marca: <span th:text="${vehicle.getBrand()}"></span></h3>
+      <h3 class="">Modelo: <span th:text="${vehicle.getModel()}"></span></h3>
+      <h3 class="">Color: <span th:text="${vehicle.getColor()}"></span></h3>
 
     </article>
 

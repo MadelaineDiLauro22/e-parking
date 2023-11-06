@@ -2,6 +2,8 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.GarageService;
 import com.tallerwebi.model.Garage;
+import com.tallerwebi.model.MobileUser;
+import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -94,5 +96,16 @@ public class GarageController {
         catch (Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
+    }
+
+    @RequestMapping("/view")
+    public ModelAndView viewGarageVehicle(@RequestParam(name = "patent") String patent){
+        ModelMap model = new ModelMap();
+        Vehicle vehicle = garageService.getVehicleByPatent(patent);
+        //MobileUser mobileUser = garageService.getUserByPatent(patent);
+
+        model.put("vehicle", vehicle);
+        //model.put("mobileUser",mobileUser);
+        return new ModelAndView("garage-vehicle", model);
     }
 }
