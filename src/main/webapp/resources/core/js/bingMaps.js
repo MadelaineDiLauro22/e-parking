@@ -131,18 +131,15 @@ function createPinParkingPlaces(type) {
 
                         if (viewName === "home" && type === 'All'){
                             pin = createPin(new Microsoft.Maps.Location(lat, ln), title, address, parkingPlaces[i].type);
-                            setInfoboxOnPin(pin);
                         }
 
 
                         if (viewName === "parking-register") {
                             if(type === 'PointSale' && parkingPlaces[i].type === 'PointSale'){
                                 pin = createPin(new Microsoft.Maps.Location(lat, ln), title, address, parkingPlaces[i].type);
-                                setInfoboxOnPin(pin);
                             }
                             else if(type === 'Garage' && parkingPlaces[i].type === 'Garage'){
                                 pin = createPin(new Microsoft.Maps.Location(lat, ln), title, address, parkingPlaces[i].type);
-                                setInfoboxOnPin(pin);
                             }
                         }
 
@@ -224,14 +221,13 @@ function createPin(location, title, description, type) {
 
 function setInfoboxOnPin(pin) {
     var infoboxOffset = new Microsoft.Maps.Point(0, -170);
-    var infobox = pin.infobox;
 
-    if (!infobox) {
+    if (!pin.infobox) {
         var center = pin.getLocation();
         var title = pin.getTitle();
         var description = pin.metadata.description;
 
-        infobox = new Microsoft.Maps.Infobox(center, {
+        var infobox = new Microsoft.Maps.Infobox(center, {
             title: title,
             description: description,
         });

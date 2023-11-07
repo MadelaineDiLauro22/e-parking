@@ -1,22 +1,25 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.OTPNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleAlreadyParkException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.helpers.EmailService;
-import com.tallerwebi.infraestructura.ParkingPlaceRepository;
-import com.tallerwebi.infraestructura.ParkingRepository;
-import com.tallerwebi.infraestructura.UserRepository;
-import com.tallerwebi.infraestructura.VehicleRepository;
+import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
+import com.tallerwebi.presentacion.dto.OTPDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+@Transactional
 @Service
 public class GarageServiceImpl implements GarageService {
 
@@ -25,25 +28,37 @@ public class GarageServiceImpl implements GarageService {
     private final ParkingPlaceRepository parkingPlaceRepository;
     private final ParkingRepository parkingRepository;
     private final EmailService emailService;
+    private final OTPRepository otpRepository;
 
-    public GarageServiceImpl(UserRepository userRepository, VehicleRepository vehicleRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, EmailService emailService) {
+    public GarageServiceImpl(UserRepository userRepository, VehicleRepository vehicleRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, EmailService emailService, OTPRepository otpRepository) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
         this.parkingRepository = parkingRepository;
         this.emailService = emailService;
+        this.otpRepository = otpRepository;
     }
 
     @Override
-    public void registerVehicle(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId) {
-        addToGarage(vehicleIngressDTO, garageAdminUserId);
-        Parking parking = createNewParking(vehicleIngressDTO, garageAdminUserId);
-        parkingRepository.save(parking);
+    public void registerVehicle(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId) {
+        if(otpRepository.exists(vehicleIngressDTO.getUserEmail(),garageAdminUserId, otpDto.getOtpKey())){
+            addToGarage(vehicleIngressDTO, garageAdminUserId);
+            Parking parking = createNewParking(vehicleIngressDTO, garageAdminUserId);
+            parkingRepository.save(parking);
+        }
+       else{
+           throw new OTPNotFoundException("No se encontro el OTP.");
+        }
     }
 
     @Override
-    public void sendOtp(String email) throws MailException {
-        emailService.sendSimpleMessage(email, "Confirmación de ingreso", "");
+    public void sendOtp(String email, Long idGarage) throws MailException {
+        int min = 100000;
+        int max = 999999;
+        int randomNum = ThreadLocalRandom.current().nextInt(min, max);
+        OTP otp = new OTP(String.valueOf(randomNum),email, idGarage);
+        otpRepository.save(otp);
+        emailService.sendSimpleMessage(email, "Clave de ingreso:", String.valueOf(randomNum));
     }
 
     @Override

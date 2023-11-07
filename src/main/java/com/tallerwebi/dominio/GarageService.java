@@ -2,15 +2,15 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.model.Garage;
 import com.tallerwebi.model.MobileUser;
+import com.tallerwebi.presentacion.dto.OTPDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import com.tallerwebi.model.Vehicle;
 import java.util.List;
 
 public interface GarageService {
     Garage getGarageByAdminUserId(Long garageAdminUserId);
-    void registerVehicle(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId);
-    void sendOtp(String email);
-    //OTP getStoredOTPForUser(String email);
+    void registerVehicle(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId);
+    void sendOtp(String email, Long id);
     void egressVehicle(String vehiclePatent, Long garageAdminUserId);
     List<Vehicle> getRegisteredVehicles(Long garageAdminUserId);
     MobileUser getUserByPatent(String patent);
