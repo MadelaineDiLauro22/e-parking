@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("web/admin")
@@ -29,7 +30,17 @@ public class GarageController {
     public ModelAndView getHomeGarage(){
         ModelMap model = new ModelMap();
         Garage garage = garageService.getGarageByAdminUserId((Long) session.getAttribute("id"));
-        model.put("garage", garage);
+        List<Vehicle> vehicleList = garageService.getRegisteredVehicles((Long) session.getAttribute("id"));
+        int cantVehicles = vehicleList.size();
+        int capacity = garage.getNumberOfCars() - cantVehicles;
+        if(garage != null){
+            model.put("garage", garage);
+            model.put("capacity", capacity);
+            model.put("vehicles", vehicleList);
+            model.put("cantVehicles", cantVehicles);
+        } else{
+            model.put("error", "No se ha encontrado un garage");
+        }
         return new ModelAndView("home-garage", model);
     }
 
@@ -50,7 +61,7 @@ public class GarageController {
     }
 
     @PostMapping(value = "/egress")
-    public ModelAndView egressVehicle(@RequestParam(name = "vehiclePatent") String vehiclePatent) {
+    public ModelAndView egressVehicle(@RequestParam(name = "patent") String vehiclePatent) {
         try{
             garageService.egressVehicle(vehiclePatent, (Long) session.getAttribute("id"));
 

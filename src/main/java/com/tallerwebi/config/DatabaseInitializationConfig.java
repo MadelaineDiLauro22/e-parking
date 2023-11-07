@@ -37,19 +37,27 @@ public class DatabaseInitializationConfig {
     @Transactional
     public void dataSourceInitializer() throws IOException {
         MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.USER, NOMBRE, NICK_NAME);
+        MobileUser user2 = new MobileUser("test2@unlam.edu.ar", PASSWORD, UserRole.USER, "SegundoTest", "SegundoTestUser");
         MobileUser garageUser = new MobileUser(MAIL_ADMIN, PASSWORD, UserRole.ADMIN_GARAGE, NOMBRE, NICK_NAME);
         Vehicle vehicle = new Vehicle(PATENTE, MARCA, MODELO, COLOR);
+        Vehicle vehicle2 = new Vehicle("123", "Fiat", "Fitito", "Rojo");
 
         vehicle.setUser(user);
+        vehicle2.setUser(user2);
+
         user.registerVehicle(vehicle);
+        user2.registerVehicle(vehicle2);
 
         Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
         Garage garage = new Garage("Pepe", 30, geolocation, 1.5F, 1.0F, (long) 1.0);
         garage.setUser(garageUser);
+        garage.addVehicle(vehicle.getPatent());
+        garage.addVehicle(vehicle2.getPatent());
 
         createAndSaveParkingsPlaces();
 
         userRepository.save(user);
+        userRepository.save(user2);
         userRepository.save(garageUser);
         parkingPlaceRepository.save(garage);
     }
