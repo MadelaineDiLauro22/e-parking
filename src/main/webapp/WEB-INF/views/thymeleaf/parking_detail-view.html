@@ -1,14 +1,45 @@
-<div th:replace="fragments/header.html"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<main role="main" class="container-fluid m-f bg-menu-mobile cover-container w-100 d-flex mx-auto flex-column">
+    <div th:replace="fragments/header.html"></div>
 
-<div th:object="${parking}">
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Nombre: </strong> <span th:text="${parking.getName()}" class="text-muted"></span></p>
 
-    <p th:text="${parking.getDateArrival()}"></p>
+            <p><strong>Foto del Vehículo:</strong>
+                <span th:each="vehiclePicture : ${parking.getVehiclePicture()}">
+        <img th:src="${vehiclePicture}" class="img-thumbnail" alt="Foto del Vehículo">
+    </span>
+            </p>
 
-    <p id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></p>
+            <p><strong>Horario de Ingreso: </strong> <span th:text="${parking.getDateArrival()}" class="text-muted"></span></p>
 
-    <p id="direction"></p></div>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Tipo de Parking: </strong> <span th:text="${parking.getParkingType()}" class="text-muted"></span></p>
 
-<div th:replace="fragments/footer.html"></div>
+            <p><strong>Foto del Ticket:</strong>
+                <span th:if="${parking.hasTicket()}">
+        <img th:src="${#strings.replace(parking.getTicketPicture(), 'data:image/jpeg;base64,', '')}" class="img-thumbnail" alt="Foto del Ticket">
+                </span>
+            </p>
+
+            <p id="direction" class="text-muted"><strong>Dirección: </strong> <span  id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></span></p>
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>
 
 <script th:inline="javascript">
     var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
@@ -27,7 +58,9 @@
         .then(response => response.json())
         .then(data => {
             if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
-                directionElement.textContent = "Dirección: " + data.resourceSets[0].resources[0].address.formattedAddress;
+                var formattedAddress = data.resourceSets[0].resources[0].address.formattedAddress;
+                directionElement.textContent = "Dirección: " + formattedAddress;
+
             } else {
                 console.error('No se encontró ninguna dirección.');
             }
@@ -35,4 +68,5 @@
         .catch(error => {
             console.error('Error en la solicitud: ', error);
         });
+
 </script>
