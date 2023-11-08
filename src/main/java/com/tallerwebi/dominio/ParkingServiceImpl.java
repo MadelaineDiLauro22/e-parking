@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.time.LocalDateTime;
+
 @Transactional
 @Service
 public class ParkingServiceImpl implements ParkingService {
@@ -134,26 +136,23 @@ public class ParkingServiceImpl implements ParkingService {
         if (dateTime == null) throw new AlarmNotNullException();
         alarm.createAlarm(ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")));
     }
-    private void createAlarmWithAmountHrs(int ammountHrsAlarm) throws InterruptedException, AlarmNotNullException {
-        if (ammountHrsAlarm == 0) throw new AlarmNotNullException();
-        Date dateTime = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTime);
-        calendar.add(Calendar.HOUR,ammountHrsAlarm);
-        Date newDate = calendar.getTime();
-        alarm.createAlarm(ZonedDateTime.ofInstant(newDate.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")));
-    }
-    private void createAlarmWithAmountDesired(float ammountDesired, Long parkingPlaceId) throws InterruptedException, AlarmNotNullException {
-        if(parkingPlaceId == null) throw new ParkingNotFoundException();
-        if (ammountDesired == 0) throw new AlarmNotNullException();
+    private void createAlarmWithAmountHrs(int amountHrsAlarm) throws InterruptedException, AlarmNotNullException {
+        if (amountHrsAlarm == 0) throw new AlarmNotNullException();
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime newDateTime = dateTime.plusHours(amountHrsAlarm);
+        ZonedDateTime zonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
+        alarm.createAlarm(zonedDateTime);
+         }
+    private void createAlarmWithAmountDesired(float amountDesired, Long parkingPlaceId) throws InterruptedException, AlarmNotNullException {
+        if (parkingPlaceId == null) throw new ParkingNotFoundException();
+        if (amountDesired == 0) throw new AlarmNotNullException();
         PointSale pointSale = (PointSale) parkingPlaceRepository.findById(parkingPlaceId);
-        float hours = ammountDesired / pointSale.getFeePerHour();
-        int addedHours = (int) hours;
-        Date dateTime = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTime);
-        calendar.add(Calendar.HOUR,addedHours);
-        Date newDate = calendar.getTime();
-        alarm.createAlarm(ZonedDateTime.ofInstant(newDate.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")));
+        if(pointSale == null) throw  new ParkingNotFoundException();
+        float hours = amountDesired / pointSale.getFeePerHour();
+        int addedHours = Math.round(hours);
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime newDateTime = dateTime.plusHours(addedHours);
+        ZonedDateTime zonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
+        alarm.createAlarm(zonedDateTime);
     }
 }

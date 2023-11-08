@@ -16,12 +16,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.argThat;
 
 class ParkingServiceImplTest {
 
@@ -207,6 +211,33 @@ class ParkingServiceImplTest {
 
         Mockito.verify(mockAlarm).createAlarm(ZonedDateTime.ofInstant(alarm.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")));
     }
+    @Test
+    void shouldRegisterAnAlarmWithAmountHrsType() throws InterruptedException {
+        int hours = 2;
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime newDateTime = dateTime.plusHours(hours);
+        ZonedDateTime expectedZonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
+        ParkingRegisterDTO parkingRegisterDTO = createRequestAlarmAmountHrs(hours);
+
+        parkingService.registerParking(parkingRegisterDTO, 1L);
+
+        Mockito.verify(mockAlarm).createAlarm(argThat(zonedDateTime -> Math.abs(ChronoUnit.MILLIS.between(zonedDateTime, expectedZonedDateTime)) < 1000
+        ));
+    }
+    @Test
+    void shouldRegisterAnAlarmWithAmountDesired() throws InterruptedException {
+        float amount = 1000.0F;
+        float hours = amount / 5.0F;
+        int addedHours = Math.round(hours);
+        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime newDateTime = dateTime.plusHours(addedHours);
+        ParkingRegisterDTO parkingRegisterDTO = createRequestAlarmAmountDesired(amount);
+        ZonedDateTime expectedZonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
+        parkingService.registerParking(parkingRegisterDTO, 1L);
+
+        Mockito.verify(mockAlarm).createAlarm(argThat
+                (zonedDateTime -> Math.abs(ChronoUnit.MILLIS.between(zonedDateTime, expectedZonedDateTime)) < 1000));
+    }
 
     @Test
     void whenRegisterAlarm_ifIsEnabledAndDateNull_shouldThrowException() {
@@ -248,6 +279,62 @@ class ParkingServiceImplTest {
         Mockito.when(mockVehicleRepository.findVehicleByPatent("ABC123"))
                 .thenReturn(vehicle);
 
+        return req;
+    }
+    private ParkingRegisterDTO createRequestAlarmAmountHrs(int hours) {
+        ParkingRegisterDTO req =  new ParkingRegisterDTO(
+                ParkingType.STREET,
+                "ABC123",
+                null,
+                null,
+                (double) 0,
+                (double) 0,
+                1L
+        );
+        Long idUser = 1L;
+        MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        req.setEnableAlarm(true);
+        req.setAlarmType(AlarmType.AMOUNT_HS);
+        req.setAmmountHrsAlarm(hours);
+
+        Mockito.when(mockUserRepository.findUserById(idUser))
+                .thenReturn(user);
+        Mockito.when(mockVehicleRepository.findVehicleByPatent("ABC123"))
+                .thenReturn(vehicle);
+
+        return req;
+    }
+    private ParkingRegisterDTO createRequestAlarmAmountDesired(float amount) {
+        ParkingRegisterDTO req =  new ParkingRegisterDTO(
+                ParkingType.STREET,
+                "ABC123",
+                null,
+                null,
+                (double) 0,
+                (double) 0,
+                1L
+        );
+        Long idUser = 1L;
+        MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        req.setEnableAlarm(true);
+        req.setAlarmType(AlarmType.AMOUNT_DESIRED);
+        req.setAmountDesired(amount);
+
+        Geolocation geolocation = new Geolocation(34.052235, -118.243683);
+        String name = "Downtown Parking";
+        float feePerHour = 5.0f;
+        float feeFraction = 1.25f;
+        long fractionTime = 15;
+        PointSale pointSale = new PointSale(name, geolocation, feePerHour, feeFraction, fractionTime);
+
+
+        Mockito.when(mockUserRepository.findUserById(idUser))
+                .thenReturn(user);
+        Mockito.when(mockVehicleRepository.findVehicleByPatent("ABC123"))
+                .thenReturn(vehicle);
+        Mockito.when(mockParkingPlaceRepository.findById(anyLong())).thenReturn(pointSale);
         return req;
     }
 }
