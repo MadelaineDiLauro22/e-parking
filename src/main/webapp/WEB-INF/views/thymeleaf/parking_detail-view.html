@@ -1,47 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-</head>
-<body>
-<main role="main" class="container-fluid m-f bg-menu-mobile cover-container w-100 d-flex mx-auto flex-column">
-    <div th:replace="fragments/header.html"></div>
+<div th:replace="fragments/header.html"></div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <p><strong>Nombre: </strong> <span th:text="${parking.getName()}" class="text-muted"></span></p>
+    <main role="main" class="container-fluid m-f">
 
-            <p><strong>Foto del Vehículo:</strong>
-                <span th:each="vehiclePicture : ${parking.getVehiclePicture()}">
-        <img th:src="${vehiclePicture}" class="img-thumbnail" alt="Foto del Vehículo">
-    </span>
-            </p>
+    <section class="row">
 
-            <p><strong>Horario de Ingreso: </strong> <span th:text="${parking.getDateArrival()}" class="text-muted"></span></p>
+        <article>
 
-        </div>
-        <div class="col-md-6">
-            <p><strong>Tipo de Parking: </strong> <span th:text="${parking.getParkingType()}" class="text-muted"></span></p>
+            <div class="col-md-6">
 
-            <p><strong>Foto del Ticket:</strong>
-                <span th:if="${parking.hasTicket()}">
-        <img th:src="${#strings.replace(parking.getTicketPicture(), 'data:image/jpeg;base64,', '')}" class="img-thumbnail" alt="Foto del Ticket">
-                </span>
-            </p>
+                <p><strong>Nombre: </strong> <span th:text="${parking.getName()}" class="text-muted"></span></p>
 
-            <p id="direction" class="text-muted"><strong>Dirección: </strong> <span  id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></span></p>
-        </div>
-    </div>
+                <div th:if="${parking.hasVehiclePictures()}">
+
+                    <p><strong>Foto del Vehículo:</strong></p>
+
+                    <img th:src="${vehiclePicture}" class="img-thumbnail" alt="Foto del Vehículo">
+
+                </div>
+
+                <p><strong>Horario de Ingreso: </strong> <span th:text="${parking.getDateArrival()}" class="text-muted"></span></p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <p><strong>Tipo de Parking: </strong> <span th:text="${parking.getParkingType()}" class="text-muted"></span></p>
+
+                <div th:if="${parking.hasTicket()}">
+
+                    <p><strong>Foto del Ticket:</strong></p>
+
+                    <img th:src="${ticketPicture}" class="img-thumbnail" alt="Foto del Ticket">
+
+                </div>
+
+                <p id="direction" class="text-muted"><strong>Dirección: </strong> <span  id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></span></p>
+
+            </div>
+
+        </article>
+
+    </section>
 
 </main>
 
-</body>
-</html>
-
 <script th:inline="javascript">
+    var image = [[${vehiclePicture}]];
+    console.log(image);
+
     var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
 
     var geolocationElement = document.getElementById("geolocation");
@@ -70,3 +76,5 @@
         });
 
 </script>
+
+<div th:replace="fragments/footer.html"></div>

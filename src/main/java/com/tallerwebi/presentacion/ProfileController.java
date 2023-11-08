@@ -10,10 +10,12 @@ import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -73,6 +75,13 @@ public class ProfileController {
             ModelMap model = new ModelMap();
             Parking parking = profileService.getParkingById((Long) httpSession.getAttribute("id"), parkingId);
             model.put("parking", parking);
+
+            String vehiclePicture = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(parking.getVehiclePicture());
+            model.put("vehiclePicture", vehiclePicture);
+
+            String ticketPicture = "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture());
+            model.put("ticketPicture", ticketPicture);
+
             return new ModelAndView("parking_detail-view", model);
         } catch (UserNotFoundException | ParkingNotFoundException e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
