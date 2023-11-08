@@ -8,4 +8,9 @@ public class VehicleNotFoundException extends RuntimeException{
     public VehicleNotFoundException(){
         super("Vehículo inexistente");
     }
+
+    public VehicleNotFoundException(String patent) {
+        super(String.format("El vehiculo con la patente %s no existe", patent));
+    }
+
 }

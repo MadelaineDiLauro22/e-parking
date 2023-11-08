@@ -103,7 +103,8 @@ public class SpringWebConfig implements WebMvcConfigurer, WebSocketConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SessionInterceptor())
                 .addPathPatterns("/mobile/**")
-                .addPathPatterns("/web/**");
+                .addPathPatterns("/web/**")
+                .excludePathPatterns("/web/api/**");
     }
 
     @Override
