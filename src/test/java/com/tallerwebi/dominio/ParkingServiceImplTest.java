@@ -9,6 +9,7 @@ import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.infraestructura.VehicleRepository;
 import com.tallerwebi.model.*;
+import com.tallerwebi.presentacion.dto.ParkingPlaceResponseDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -153,16 +154,15 @@ class ParkingServiceImplTest {
         assertThrows(VehicleNotFoundException.class,
                 () -> parkingService.getUserCarsList(userId));
     }
-    @Disabled
     @Test
     void shouldParkingPlaceList(){
-        //TO DO: Refactorizar
-        List<ParkingPlace> parkingPlaces = getParkingPlaceList();
+        List<ParkingPlace> parkingPlaces = new ArrayList<>();
+        List<ParkingPlaceResponseDTO> parkingPlacesDTO = new ArrayList<>();
 
         Mockito.when(mockParkingPlaceRepository.findAll())
                 .thenReturn(parkingPlaces);
 
-        assertEquals(parkingPlaces, parkingService.getParkingPlaces());
+        assertEquals(parkingPlacesDTO, parkingService.getParkingPlaces());
     }
 
     @Test
@@ -246,14 +246,6 @@ class ParkingServiceImplTest {
         assertThrows(ParkingRegisterException.class, () -> parkingService.registerParking(parkingRegisterDTO, 1L));
     }
 
-    private List<ParkingPlace> getParkingPlaceList(){
-        List<ParkingPlace> parkingPlaces = new ArrayList<ParkingPlace>();
-        PointSale point1 = new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
-        parkingPlaces.add(point1);
-
-        return parkingPlaces;
-    }
-
     private PointSale getPointSale(){
         return new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
     }
@@ -306,7 +298,7 @@ class ParkingServiceImplTest {
         return req;
     }
     private ParkingRegisterDTO createRequestAlarmAmountDesired(float amount) {
-        ParkingRegisterDTO req =  new ParkingRegisterDTO(
+        ParkingRegisterDTO req = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
                 null,
