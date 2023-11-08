@@ -3,23 +3,18 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProfileService;
 import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Notification;
-import com.tallerwebi.model.Parking;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -90,8 +85,12 @@ public class ProfileControllerTest {
 
     @Test
     void testGetParkingDetail(){
-        Parking parking = new Parking();
-        when(mockProfileService.getParkingById(anyLong(),anyLong())).thenReturn(parking);
+        Parking parking = new Parking(ParkingType.GARAGE,new byte[8],new byte[8],new Geolocation(21312.231,12312.23),new Date());
+
+        Mockito.when(mockHttpSession.getAttribute("id"))
+                .thenReturn(1L);
+        when(mockProfileService.getParkingById(anyLong(),anyLong()))
+                .thenReturn(parking);
 
         ModelAndView response = profileController.getParkingDetail(anyLong());
 
