@@ -55,7 +55,6 @@ public class GarageController {
     @RequestMapping("vehicle-remove")
     public ModelAndView removeVehicle() {
         ModelMap model = new ModelMap();
-        //model.put("vehicleEgressDTO", new VehicleIngressDTO());
 
         return new ModelAndView("vehicle-remove", model);
     }
@@ -110,7 +109,6 @@ public class GarageController {
             @RequestParam(required = false) String userEmail
     ) {
         ModelMap modelMap = new ModelMap();
-        //model.put("vehicleIngressDto", vehicleIngressDTO);
         modelMap.put("otp", new OTPDTO(
                 patent,
                 brand,
@@ -127,10 +125,8 @@ public class GarageController {
     public ModelAndView viewGarageVehicle(@RequestParam(name = "patent") String patent) {
         ModelMap model = new ModelMap();
         Vehicle vehicle = garageService.getVehicleByPatent(patent);
-        //MobileUser mobileUser = garageService.getUserByPatent(patent);
 
         model.put("vehicle", vehicle);
-        //model.put("mobileUser",mobileUser);
         return new ModelAndView("garage-vehicle", model);
     }
 
