@@ -60,9 +60,11 @@ public class GarageController {
         return new ModelAndView("vehicle-remove", model);
     }
 
-    @PostMapping(value = "/egress")
+    //TODO: Por ahora lo cambio a GET porque sino no ejecuta el request desde el navegador, debería ser POST y el navegador tirar un request con fetch
+    @GetMapping(value = "/egress")
     public ModelAndView egressVehicle(@RequestParam(name = "patent") String vehiclePatent) {
         try{
+            //TODO: egressVehicle tira un error
             garageService.egressVehicle(vehiclePatent, (Long) session.getAttribute("id"));
 
             ModelMap model = new ModelMap();
