@@ -86,11 +86,20 @@ public class GarageController {
             model.put("vehiclesIngressDto", vehicleIngressDTO);
             model.put("success", true);
 
-            return new ModelAndView("redirect:/web/admin/otp-validate", model);
+            return new ModelAndView("redirect:/web/admin/enter/otp-validate", model);
         }
         catch (Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/enter/otp-validate")
+    public ModelAndView otpValidate(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO, @ModelAttribute("otp") OTPDTO otpDTO){
+        ModelMap model = new ModelMap();
+        model.put("vehicleIngressDto", vehicleIngressDTO);
+        model.put("otp", new OTPDTO());
+
+        return new ModelAndView("otp-validate", model);
     }
 
 
@@ -106,7 +115,7 @@ public class GarageController {
     }
 
     @PostMapping(value = "/enter/register")
-    public ModelAndView validationRegisterVehicle(@RequestParam("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO, @ModelAttribute("otp") OTPDTO otpDTO) {
+    public ModelAndView validationRegisterVehicle(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO, @ModelAttribute("otp") OTPDTO otpDTO) {
         try {
             garageService.registerVehicle(vehicleIngressDTO, otpDTO, (Long) session.getAttribute("id"));
             ModelMap model = new ModelMap();
