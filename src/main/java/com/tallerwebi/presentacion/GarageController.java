@@ -27,18 +27,18 @@ public class GarageController {
     }
 
     @GetMapping
-    public ModelAndView getHomeGarage(){
+    public ModelAndView getHomeGarage() {
         ModelMap model = new ModelMap();
         Garage garage = garageService.getGarageByAdminUserId((Long) session.getAttribute("id"));
         List<Vehicle> vehicleList = garageService.getRegisteredVehicles((Long) session.getAttribute("id"));
         int cantVehicles = vehicleList.size();
         int capacity = garage.getNumberOfCars() - cantVehicles;
-        if(garage != null){
+        if (garage != null) {
             model.put("garage", garage);
             model.put("capacity", capacity);
             model.put("vehicles", vehicleList);
             model.put("cantVehicles", cantVehicles);
-        } else{
+        } else {
             model.put("error", "No se ha encontrado un garage");
         }
         return new ModelAndView("home-garage", model);
@@ -53,7 +53,7 @@ public class GarageController {
     }
 
     @RequestMapping("vehicle-remove")
-    public ModelAndView removeVehicle(){
+    public ModelAndView removeVehicle() {
         ModelMap model = new ModelMap();
         //model.put("vehicleEgressDTO", new VehicleIngressDTO());
 
@@ -63,7 +63,7 @@ public class GarageController {
     //TODO: Por ahora lo cambio a GET porque sino no ejecuta el request desde el navegador, debería ser POST y el navegador tirar un request con fetch
     @GetMapping(value = "/egress")
     public ModelAndView egressVehicle(@RequestParam(name = "patent") String vehiclePatent) {
-        try{
+        try {
             //TODO: egressVehicle tira un error
             garageService.egressVehicle(vehiclePatent, (Long) session.getAttribute("id"));
 
@@ -71,35 +71,55 @@ public class GarageController {
             model.put("success", true);
 
             return new ModelAndView("redirect:/web/admin/egress", model);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
     @PostMapping(value = "/enter/send-otp")
     public ModelAndView sendOtp(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO) {
-        try{
+        try {
             garageService.sendOtp(vehicleIngressDTO.getUserEmail(), (Long) session.getAttribute("id"));
 
             ModelMap model = new ModelMap();
             model.put("vehiclesIngressDto", vehicleIngressDTO);
             model.put("success", true);
 
-            return new ModelAndView("redirect:/web/admin/enter/otp-validate", model);
-        }
-        catch (Exception e){
+            return new ModelAndView(
+                    String.format("redirect:/web/admin/enter/otp-validate?patent=%s&brand=%s&model=%s&color=%s&userName=%s&userEmail=%s",
+                            vehicleIngressDTO.getPatent(),
+                            vehicleIngressDTO.getBrand(),
+                            vehicleIngressDTO.getModel(),
+                            vehicleIngressDTO.getColor(),
+                            vehicleIngressDTO.getUserName(),
+                            vehicleIngressDTO.getUserEmail()
+                    ),
+                    model);
+        } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
     @RequestMapping(value = "/enter/otp-validate")
-    public ModelAndView otpValidate(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO, @ModelAttribute("otp") OTPDTO otpDTO){
-        ModelMap model = new ModelMap();
-        model.put("vehicleIngressDto", vehicleIngressDTO);
-        model.put("otp", new OTPDTO());
+    public ModelAndView otpValidate(
+            @RequestParam String patent,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String model,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) String userEmail
+    ) {
+        ModelMap modelMap = new ModelMap();
+        //model.put("vehicleIngressDto", vehicleIngressDTO);
+        modelMap.put("otp", new OTPDTO(
+                patent,
+                brand,
+                model,
+                color,
+                userName,
+                userEmail));
 
-        return new ModelAndView("otp-validate", model);
+        return new ModelAndView("otp-validate", modelMap);
     }
 
 
