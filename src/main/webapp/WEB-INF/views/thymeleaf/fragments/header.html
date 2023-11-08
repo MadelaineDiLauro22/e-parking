@@ -27,7 +27,7 @@
 
                                     <img th:src="@{/img/logo/Logo2.png}" width="40rem" class="px-1">
 
-                                    <a class="navbar-brand text-white text-bold" th:href="@{/mobile/home}"> eParking </a>
+                                    <a class="navbar-brand text-white text-bold" th:href="@{${rol == 'ADMIN_GARAGE' ? '/web/admin' : '/mobile/home'}}"> eParking </a>
 
                                 </div>
 
@@ -58,7 +58,7 @@
 
                                         <li class="nav-item active">
 
-                                            <a class="nav-link px-2 text-white text-bold" th:href="@{/mobile/home}">Inicio</a>
+                                            <a class="nav-link px-2 text-white text-bold" th:href="@{${rol == 'ADMIN_GARAGE' ? '/web/admin' : '/mobile/home'}}">Inicio</a>
 
                                         </li>
 
@@ -68,7 +68,7 @@
 
                                         </li>
 
-                                        <li class="nav-item">
+                                        <li class="nav-item" th:if="${rol == 'USER'}">
 
                                             <a class="nav-link text-white text-bold" th:href="@{/#}">Denuncias</a>
 
@@ -84,19 +84,19 @@
 
                                                 <ul th:class="${rol == 'USER'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
 
-                                                    <li>
+                                                    <li th:if="${rol == 'USER'}">
 
                                                         <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
 
                                                     </li>
 
-                                                    <li>
+                                                    <li th:if="${rol == 'USER'}">
 
                                                         <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
 
                                                     </li>
 
-                                                    <div class="dropdown-divider"></div>
+                                                    <div class="dropdown-divider" th:if="${rol == 'USER'}"></div>
 
                                                     <li>
 

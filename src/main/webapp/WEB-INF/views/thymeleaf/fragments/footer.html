@@ -6,7 +6,7 @@
 
                         <li class="li-f">
 
-                            <a class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none" th:href="@{/mobile/home}">
+                            <a class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none" th:href="@{${rol == 'ADMIN_GARAGE' ? '/web/admin' : '/mobile/home'}}">
 
                                 <i class="fa-solid fa-house icon-f"></i>
 
@@ -28,7 +28,7 @@
 
                         </li>
 
-                        <li class="li-f">
+                        <li class="li-f" th:if="${rol == 'USER'}">
 
                             <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
 
@@ -52,19 +52,19 @@
 
                                 <ul th:class="${rol == 'USER'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
 
-                                    <li>
+                                    <li th:if="${rol == 'USER'}">
 
                                         <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
 
                                     </li>
 
-                                    <li>
+                                    <li th:if="${rol == 'USER'}">
 
                                         <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
 
                                     </li>
 
-                                    <div class="dropdown-divider"></div>
+                                    <div class="dropdown-divider" th:if="${rol == 'USER'}"></div>
 
                                     <li>
 
