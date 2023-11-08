@@ -71,66 +71,6 @@
                     <input th:field="*{parkingDate}" id="parkingDate" type="datetime-local" class="form-control my-1">
                 </div>
 
-                <div class="divContainer divContainerBorderBottom my-1">
-
-                    <div class="align-checkbox my-1">
-
-                        <div>
-                            <label for="enableAlarm" class="text-white text-bold">
-
-                                <input th:field="*{enableAlarm}" id="enableAlarm" type="checkbox"
-                                       onchange="renderAlarmDate()">
-                                <span class="checkbox-label">Agregar alarma</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div id="alarmOptions" class="divContainerBorderBottom my-1" style="display: none">
-                            <label for="alarmType" id="alarmType">Seleccionar por:</label>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <input th:field="*{alarmType}" type="radio" id="byDateAndHours" name="parkingOption" value="NORMAL"
-                                           onchange="renderAlarmType()">
-                                    <label for="byDateAndHours">Fecha y hora</label>
-                                </div>
-                                <div>
-                                    <input th:field="*{alarmType}" type="radio" id="byHours" name="parkingOption" value="AMOUNT_HS"
-                                           onchange="renderAlarmType()">
-                                    <label for="byHours">Cantidad de horas</label>
-                                </div>
-                                <div>
-                                    <input th:field="*{alarmType}" type="radio" id="byAmount" name="parkingOption" value="AMOUNT_DESIRED"
-                                           onchange="renderAlarmType()">
-                                    <label for="byAmount">Monto máximo</label>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div id="typeDate" style="display:none">
-                            <label for="alarmDate" class="text-white text-bold mb-1">Seleccione fecha y hora:</label>
-                            <input th:field="*{alarmDate}" id="alarmDate" type="datetime-local"
-                                   class="form-control my-1">
-                        </div>
-
-
-                        <div id="calculateByHours" style="display:none">
-                            <label for="hours">Ingrese la cantidad de horas:</label>
-                            <input th:field="*{ammountHrsAlarm}" type="number" id="hours" class="form-control my-1" onchange="calculateByHours()">
-                        </div>
-
-
-                        <div id="calculateByAmount" style="display:none">
-                            <label for="amount">Ingrese el monto que desea gastar:</label>
-                            <input th:field="*{amountDesired}" type="number" id="amount" class="form-control my-1" onchange="calculateByAmount()">
-                        </div>
-
-                        <p id="feePerHour" style="display: none;">Tarifa por hora: $ <span  id="feePerHourAmmount" type="number">0</span>.</p>
-                        <p id="resultCalculated" style="display: none;">Monto calculado: $ <span id="result" type="number">0</span>.</p>
-                    </div>
-                </div>
-
                 <div id="geolocation" class="divContainer divContainerBorderBottom my-1">
 
                     <label for="geolocation" class="text-white text-bold mb-1">Verifica el parking:</label>
@@ -222,6 +162,68 @@
                     </div>
 
                 </div>
+
+                <div class="divContainer divContainerBorderBottom my-1">
+
+                    <div class="align-checkbox my-1">
+
+                        <div>
+                            <label for="enableAlarm" class="text-white text-bold">
+
+                                <input th:field="*{enableAlarm}" id="enableAlarm" type="checkbox"
+                                       onchange="renderAlarmDate()">
+                                <span class="checkbox-label">Agregar alarma</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div id="alarmOptions" class="divContainerBorderBottom my-1" style="display: none">
+                            <label for="alarmType" id="alarmType">Seleccionar por:</label>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <input th:field="*{alarmType}" type="radio" id="byDateAndHours" name="parkingOption" value="NORMAL"
+                                           onchange="renderAlarmType('NORMAL')">
+                                    <label for="byDateAndHours">Fecha y hora</label>
+                                </div>
+                                <div>
+                                    <input th:field="*{alarmType}" type="radio" id="byHours" name="parkingOption" value="AMOUNT_HS"
+                                           onchange="renderAlarmType('AMOUNT_HS')">
+                                    <label for="byHours">Cantidad de horas</label>
+                                </div>
+                                <div>
+                                    <input th:field="*{alarmType}" type="radio" id="byAmount" name="parkingOption" value="AMOUNT_DESIRED"
+                                           onchange="renderAlarmType('AMOUNT_DESIRED')">
+                                    <label for="byAmount">Monto máximo</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="typeDate" style="display:none">
+                            <label for="alarmDate" class="text-white text-bold mb-1">Seleccione fecha y hora:</label>
+                            <input th:field="*{alarmDate}" id="alarmDate" type="datetime-local"
+                                   class="form-control my-1">
+                        </div>
+
+
+                        <div id="calculateByHours" style="display:none">
+                            <label for="hours">Ingrese la cantidad de horas:</label>
+                            <input th:field="*{ammountHrsAlarm}" type="number" id="hours" class="form-control my-1" onchange="calculateByHours()">
+                        </div>
+
+
+                        <div id="calculateByAmount" style="display:none">
+                            <label for="amount">Ingrese el monto que desea gastar:</label>
+                            <input th:field="*{amountDesired}" type="number" id="amount" class="form-control my-1" onchange="calculateByAmount()">
+                        </div>
+
+                        <p id="feePerHour" style="display: none;">Tarifa por hora: $ <span  id="feePerHourAmmount" type="number">0</span>.</p>
+                        <p id="resultCalculated" style="display: none;">Monto calculado: $ <span id="result" type="number">0</span>.</p>
+                        <p id="resultHours" style="display: none;">Cantidad de Horas: <span id="hoursTotal" type="number">0</span>.</p>
+                    </div>
+                </div>
+
                     <div class="divContainer my-3">
 
                         <input type="submit" value="Registrar" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
@@ -361,7 +363,7 @@
                         document.getElementById("resultCalculated").style.display = "none";
                         break;
                     case "POINT_SALE":
-                        document.getElementById("typeDate").style.display = "none";
+                        document.getElementById("typeDate").style.display = "block";
                         alarmOptions.style.display = "block";
                         break;
                     case "STREET":
@@ -379,29 +381,33 @@
             }
         }
 
-        function renderAlarmType() {
-            const selectedOption = document.querySelector('input[name="parkingOption"]:checked').value;
-
+        function renderAlarmType(selectedOption) {
 
             document.getElementById("typeDate").style.display = "none";
             document.getElementById("calculateByHours").style.display = "none";
             document.getElementById("calculateByAmount").style.display = "none";
 
             switch (selectedOption) {
-                case "dateAndHours":
+                case "NORMAL":
+                    document.getElementById("amount").value = 0;
+                    document.getElementById("hours").value = 0;
+                    document.getElementById("result").textContent = 0;
+                    document.getElementById("hoursTotal").textContent = 0;
                     document.getElementById("typeDate").style.display = "block";
                     document.getElementById("feePerHour").style.display = "none";
                     document.getElementById("resultCalculated").style.display = "none";
                     break;
-                case "hours":
+                case "AMOUNT_HS":
                     document.getElementById("calculateByHours").style.display = "block";
                     document.getElementById("feePerHour").style.display = "block";
                     document.getElementById("resultCalculated").style.display = "block";
+                    document.getElementById("resultHours").style.display = "none";
                     break;
-                case "amount":
+                case "AMOUNT_DESIRED":
                     document.getElementById("calculateByAmount").style.display = "block";
                     document.getElementById("feePerHour").style.display = "block";
-                    document.getElementById("resultCalculated").style.display = "block";
+                    document.getElementById("resultHours").style.display = "block";
+                    document.getElementById("resultCalculated").style.display = "none";
                     break;
                 default:
 
@@ -412,15 +418,13 @@
         function calculateByHours() {
             const hours = parseFloat(document.getElementById("hours").value);
             const hourlyRate = parseFloat(document.getElementById("feePerHourAmmount").textContent);
-            const result = (hours * hourlyRate);
-            document.getElementById("result").textContent = result;
+            document.getElementById("result").textContent = (hours * hourlyRate);
         }
 
         function calculateByAmount() {
             const amount = parseFloat(document.getElementById("amount").value);
             const hourlyRate = parseFloat(document.getElementById("feePerHourAmmount").textContent);
-            const result = (amount / hourlyRate);
-            document.getElementById("result").textContent = result;
+            document.getElementById("hoursTotal").textContent = (amount / hourlyRate);
         }
 
     </script>
