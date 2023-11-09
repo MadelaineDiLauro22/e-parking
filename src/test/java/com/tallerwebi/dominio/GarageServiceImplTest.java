@@ -12,9 +12,7 @@ import org.mockito.*;
 import org.springframework.mail.MailException;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +21,6 @@ import static org.mockito.Mockito.*;
 public class GarageServiceImplTest {
 
     private GarageService garageService;
-    @Mock
     private GarageServiceImpl garageServiceImpl;
     @Mock
     private UserRepository userRepository;
@@ -155,5 +152,72 @@ public class GarageServiceImplTest {
         parking.setMobileUser(user);
         parkingList.add(parking);
         garage.addVehicle(vehicle.getPatent());
+    }
+
+    @Test
+    void testGetRegisteredVehicles() {
+        Long garageAdminUserId = 1L;
+        MobileUser user = new MobileUser();
+        Garage garage = mock(Garage.class);
+        List<Vehicle> expectedVehicles = Arrays.asList(new Vehicle(), new Vehicle());
+
+        when(userRepository.findUserById(garageAdminUserId)).thenReturn(user);
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+        when(garage.getPatents()).thenReturn(new HashSet<>(Arrays.asList("ABC123", "XYZ789")));
+        when(vehicleRepository.findVehiclesByPatents(any())).thenReturn(expectedVehicles);
+
+        List<Vehicle> actualVehicles = garageService.getRegisteredVehicles(garageAdminUserId);
+
+        assertEquals(expectedVehicles, actualVehicles);
+
+        verify(userRepository).findUserById(garageAdminUserId);
+        verify(parkingPlaceRepository).findGarageByUser(user);
+        verify(garage).getPatents();
+        verify(vehicleRepository).findVehiclesByPatents(any());
+    }
+
+    @Test
+    void testGetUserByPatent() {
+        String patent = "ABC123";
+        Vehicle vehicle = new Vehicle();
+        MobileUser user = new MobileUser();
+        vehicle.setUser(user);
+
+        when(vehicleRepository.findVehicleByPatent(patent)).thenReturn(vehicle);
+
+        MobileUser resultUser = garageService.getUserByPatent(patent);
+
+        assertEquals(user, resultUser);
+        verify(vehicleRepository, times(1)).findVehicleByPatent(patent);
+    }
+
+    @Test
+    void testGetVehicleByPatent() {
+        String patent = "ABC123";
+        Vehicle vehicle = new Vehicle();
+
+        when(vehicleRepository.findVehicleByPatent(patent)).thenReturn(vehicle);
+
+        Vehicle resultVehicle = garageService.getVehicleByPatent(patent);
+
+        assertEquals(vehicle, resultVehicle);
+        verify(vehicleRepository, times(1)).findVehicleByPatent(patent);
+    }
+
+    @Test
+    void testGetGarageByAdminUserId() {
+        Long adminUserId = 1L;
+        MobileUser user = new MobileUser();
+        Garage garage = mock(Garage.class);
+
+        when(userRepository.findUserById(adminUserId)).thenReturn(user);
+
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+
+        Garage resultGarage = garageService.getGarageByAdminUserId(adminUserId);
+
+        assertEquals(garage, resultGarage);
+        verify(userRepository, times(1)).findUserById(adminUserId);
+        verify(parkingPlaceRepository, times(1)).findGarageByUser(user);
     }
 }
