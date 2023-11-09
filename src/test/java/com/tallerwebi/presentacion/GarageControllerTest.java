@@ -59,7 +59,7 @@ public class GarageControllerTest {
         ModelAndView response = garageController.validationRegisterVehicle(vehicleIngressDTO, otpdto);
         Mockito.verify(garageService).registerVehicle(vehicleIngressDTO, otpdto, getUserId());
 
-        assertEquals("redirect:/web/admin/enter", response.getViewName());
+        assertEquals("redirect:/web/admin/", response.getViewName());
         assertTrue((boolean) response.getModel().get("success"));
     }
     private Long getUserId(){
