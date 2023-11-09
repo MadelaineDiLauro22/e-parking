@@ -51,7 +51,6 @@ public class DatabaseInitializationConfig {
         Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
         Garage garage = new Garage("Pepe", 30, geolocation, 1.5F, 1.0F, (long) 1.0);
         garage.setUser(garageUser);
-        garage.addVehicle(vehicle.getPatent());
         garage.addVehicle(vehicle2.getPatent());
 
         createAndSaveParkingsPlaces();

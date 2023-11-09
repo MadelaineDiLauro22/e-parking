@@ -4,11 +4,11 @@
 
     <section class="row">
 
-        <article>
+        <article class="container text-white bg-windows mx-auto col-lg-8 p-2 my-3 rounded-4">
 
-            <div class="col-md-6">
+            <div>
 
-                <p><strong>Nombre: </strong> <span th:text="${parking.getName()}" class="text-muted"></span></p>
+                <p th:if="${parking.name}"><strong>Nombre: </strong> <span th:text="${parking.getName()}" class="text-muted"></span></p>
 
                 <div th:if="${parking.hasVehiclePictures()}">
 
@@ -34,7 +34,9 @@
 
                 </div>
 
-                <p id="direction" class="text-muted"><strong>Dirección: </strong> <span  id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></span></p>
+                <p id="direction" class="text-white"><strong>Dirección: </strong> <span  id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></span></p>
+
+                <div id="myMap" class="mapRegister"></div>
 
             </div>
 

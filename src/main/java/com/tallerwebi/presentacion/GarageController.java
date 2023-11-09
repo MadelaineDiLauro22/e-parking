@@ -61,15 +61,15 @@ public class GarageController {
 
     //TODO: Por ahora lo cambio a GET porque sino no ejecuta el request desde el navegador, debería ser POST y el navegador tirar un request con fetch
     @GetMapping(value = "/egress")
-    public ModelAndView egressVehicle(@RequestParam(name = "patent") String vehiclePatent) {
+    public ModelAndView egressVehicle(@RequestParam(name = "patent") String patent) {
         try {
             //TODO: egressVehicle tira un error
-            garageService.egressVehicle(vehiclePatent, (Long) session.getAttribute("id"));
+            garageService.egressVehicle(patent, (Long) session.getAttribute("id"));
 
             ModelMap model = new ModelMap();
             model.put("success", true);
 
-            return new ModelAndView("redirect:/web/admin/egress", model);
+            return new ModelAndView("redirect:/web/admin/", model);
         } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
@@ -137,7 +137,7 @@ public class GarageController {
             ModelMap model = new ModelMap();
             model.put("success", true);
 
-            return new ModelAndView("redirect:/web/admin/enter", model);
+            return new ModelAndView("redirect:/web/admin/", model);
         } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
