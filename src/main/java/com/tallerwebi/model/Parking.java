@@ -82,6 +82,10 @@ public class Parking implements Comparable<Parking>{
         return dateExit;
     }
 
+    public void setDateExit(Date dateExit) {
+        this.dateExit = dateExit;
+    }
+
     public Vehicle getVehicle() {
         return vehicle;
     }
@@ -107,4 +111,13 @@ public class Parking implements Comparable<Parking>{
     public int compareTo(Parking parking) {
         return parking.dateArrival.compareTo(this.dateArrival);
     }
+
+    public boolean hasTicket() {
+        return ticketPicture != null && ticketPicture.length > 0;
+    }
+    public boolean hasVehiclePictures() {
+        return vehiclePicture != null && vehiclePicture.length > 0;
+    }
+
+
 }

@@ -78,5 +78,7 @@ public class MobileUser extends User {
         return notifications;
     }
 
-
+    public void setParkings(List<Parking> parkings) {
+        this.parkings = parkings;
+    }
 }

@@ -1,0 +1,30 @@
+<div th:replace="fragments/header.html"></div>
+
+  <main role="main" class="container-fluid m-f">
+    <section>
+
+      <article class="container text-white bg-home mx-auto col-lg-8 p-4 my-2 rounded-4 box-shadow">
+
+        <form action="#" th:action="@{/web/admin/enter/register}" method="POST" th:object="${otp}">
+
+          <label for="otpKey" class="text-white text-bold mb-1 d-inline">Ingresa la clave del usuario:</label>
+          <input id="otpKey" th:field="*{otpKey}" type="text" class="form-control d-inline my-1">
+
+          <input id="patent" th:field="*{patent}" type="text" style="display: none">
+          <input id="brand" th:field="*{brand}" type="text" style="display: none">
+          <input id="model" th:field="*{model}" type="text" style="display: none">
+          <input id="color" th:field="*{color}" type="text" style="display: none">
+          <input id="userName" th:field="*{userName}" type="text" style="display: none">
+          <input id="userEmail" th:field="*{userEmail}" type="text" style="display: none">
+
+          <input class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+            fs-6 text-center btn-green text-white" type="submit" value="Ingresar"/>
+        </form>
+
+      </article>
+
+    </section>
+
+  </main>
+
+<div th:replace="fragments/footer.html"></div>

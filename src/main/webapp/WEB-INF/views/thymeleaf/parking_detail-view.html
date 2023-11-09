@@ -1,0 +1,82 @@
+<div th:replace="fragments/header.html"></div>
+
+    <main role="main" class="container-fluid m-f">
+
+    <section class="row">
+
+        <article class="container text-white bg-windows mx-auto col-lg-8 p-2 my-3 rounded-4">
+
+            <div>
+
+                <p th:if="${parking.name}"><strong>Nombre: </strong> <span th:text="${parking.getName()}" class="text-muted"></span></p>
+
+                <div th:if="${parking.hasVehiclePictures()}">
+
+                    <p><strong>Foto del Vehículo:</strong></p>
+
+                    <img th:src="${vehiclePicture}" class="img-thumbnail" alt="Foto del Vehículo">
+
+                </div>
+
+                <p><strong>Horario de Ingreso: </strong> <span th:text="${parking.getDateArrival()}" class="text-muted"></span></p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <p><strong>Tipo de Parking: </strong> <span th:text="${parking.getParkingType()}" class="text-muted"></span></p>
+
+                <div th:if="${parking.hasTicket()}">
+
+                    <p><strong>Foto del Ticket:</strong></p>
+
+                    <img th:src="${ticketPicture}" class="img-thumbnail" alt="Foto del Ticket">
+
+                </div>
+
+                <p id="direction" class="text-white"><strong>Dirección: </strong> <span  id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></span></p>
+
+                <div id="myMap" class="mapRegister"></div>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</main>
+
+<script th:inline="javascript">
+    var image = [[${vehiclePicture}]];
+    console.log(image);
+
+    var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+
+    var geolocationElement = document.getElementById("geolocation");
+    var directionElement = document.getElementById("direction");
+
+    var geolocation = geolocationElement.textContent.split(',');
+
+    var lat = geolocation[0];
+    var ln = geolocation[1];
+
+    const url = 'https://dev.virtualearth.net/REST/v1/Locations/' + lat + ',' + ln + '?key=' + credentials;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                var formattedAddress = data.resourceSets[0].resources[0].address.formattedAddress;
+                directionElement.textContent = "Dirección: " + formattedAddress;
+
+            } else {
+                console.error('No se encontró ninguna dirección.');
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud: ', error);
+        });
+
+</script>
+
+<div th:replace="fragments/footer.html"></div>

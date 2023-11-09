@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.tallerwebi.model.AlarmType;
 import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.ParkingType;
 import com.tallerwebi.model.PointSale;
@@ -23,6 +24,9 @@ public class ParkingRegisterDTO {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date parkingDate;
     private int ammountHs;
+    private int ammountHrsAlarm;
+    private float amountDesired;
+    private AlarmType alarmType = AlarmType.NORMAL;
     private boolean isPaid = false;
     private Long parkingPlaceId;
     private boolean enableAlarm = false;
@@ -41,6 +45,8 @@ public class ParkingRegisterDTO {
         this.ln = ln;
         this.parkingDate = Date.from(Instant.now());
         this.parkingPlaceId = parkingPlaceId;
+
+
     }
 
     public ParkingType getParkingType() {
@@ -137,4 +143,27 @@ public class ParkingRegisterDTO {
     public void setAlarmDate(Date alarmDate) {
         this.alarmDate = alarmDate;
     }
+
+    public int getAmmountHrsAlarm() {
+        return ammountHrsAlarm;
+    }
+    public void setAmmountHrsAlarm(int ammountHrsAlarm) {
+        this.ammountHrsAlarm = ammountHrsAlarm;
+    }
+
+    public AlarmType getAlarmType() {
+        return alarmType;
+    }
+    public void setAlarmType(AlarmType alarmType) {
+        this.alarmType = alarmType;
+    }
+
+    public float getAmountDesired() {
+        return amountDesired;
+    }
+
+    public void setAmountDesired(float amountDesired) {
+        this.amountDesired = amountDesired;
+    }
+
 }

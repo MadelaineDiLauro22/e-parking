@@ -1,10 +1,12 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ParkingService;
+import com.tallerwebi.dominio.excepcion.AlarmNotNullException;
+import com.tallerwebi.dominio.excepcion.ParkingRegisterException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
-import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.presentacion.dto.ParkingPlaceResponseDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,7 +35,7 @@ public class ParkingController {
     public ModelAndView getParkingRegister() {
         try {
             List<Vehicle> list = parkingService.getUserCarsList((Long) session.getAttribute("id"));
-            List<ParkingPlace> parkingPlaceList = parkingService.getParkingPlaces();
+            List<ParkingPlaceResponseDTO> parkingPlaceList = parkingService.getParkingPlaces();
             ModelMap model = new ModelMap();
             model.put("vehicleList", list);
             model.put("parkingRegister", new ParkingRegisterDTO());
@@ -41,9 +43,7 @@ public class ParkingController {
 
             return new ModelAndView("parking-register", model);
         } catch (UserNotFoundException | VehicleNotFoundException e) {
-            ModelMap model = new ModelMap();
-            model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/error", model);
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
@@ -55,10 +55,8 @@ public class ParkingController {
             model.put("success", true);
 
             return new ModelAndView("redirect:/mobile/home", model);
-        } catch (UserNotFoundException | VehicleNotFoundException e) {
-            ModelMap model = new ModelMap();
-            model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/error", model);
+        } catch (UserNotFoundException | AlarmNotNullException | ParkingRegisterException | VehicleNotFoundException e) {
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 

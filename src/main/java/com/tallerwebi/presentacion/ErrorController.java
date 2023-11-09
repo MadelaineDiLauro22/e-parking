@@ -15,8 +15,10 @@ public class ErrorController {
     public ErrorController(HttpSession session) { this.session = session;}
 
     @GetMapping
-    public ModelAndView getErrorController(){
-        return new ModelAndView("error");
+    public ModelAndView getErrorController(@RequestParam("errorMessage") String errorMessage){
+        ModelMap model = new ModelMap();
+        model.put("error", errorMessage);
+        return new ModelAndView("error", model);
     }
 
 }

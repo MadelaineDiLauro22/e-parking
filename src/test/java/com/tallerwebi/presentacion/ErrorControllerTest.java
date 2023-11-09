@@ -20,8 +20,10 @@ public class ErrorControllerTest {
 
     @Test
     public void shouldGetErrorPage(){
-        ModelAndView page = errorController.getErrorController();
+        String errorMessage = "error";
+        ModelAndView page = errorController.getErrorController(errorMessage);
         assertEquals("error", page.getViewName());
+        assertEquals(errorMessage, page.getModel().get("error"));
     }
 
 }

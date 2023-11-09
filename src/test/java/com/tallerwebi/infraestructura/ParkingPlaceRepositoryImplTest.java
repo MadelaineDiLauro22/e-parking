@@ -2,10 +2,15 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
+import com.tallerwebi.model.Garage;
+import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.PointSale;
+import org.hibernate.Criteria;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,6 +29,8 @@ class ParkingPlaceRepositoryImplTest {
 
     @Autowired
     private ParkingPlaceRepository parkingPlaceRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     @Rollback
@@ -60,5 +67,18 @@ class ParkingPlaceRepositoryImplTest {
         parkingPlaceRepository.save(parkingPlace2);
         parkingPlaceRepository.save(parkingPlace3);
         return list;
+    }
+    @Transactional
+    @Rollback
+    @Test
+    public void testFindGarageByUser() {
+        Garage garage = new Garage();
+        MobileUser user = new MobileUser();
+        garage.setUser(user);
+
+        userRepository.save(user);
+        parkingPlaceRepository.save(garage);
+        Garage response = (Garage) parkingPlaceRepository.findGarageByUser(user);
+        assertEquals(garage, response);
     }
 }

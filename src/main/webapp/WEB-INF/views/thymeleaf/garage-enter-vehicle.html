@@ -1,0 +1,80 @@
+<div th:replace="fragments/header.html"></div>
+
+<main role="main" class="container-fluid m-f">
+    <form action="#" th:action="@{/web/admin/enter/send-otp}" method="POST" th:object="${vehicleIngressDTO}">
+        <div class="bg-primary w-50 mx-auto m-5 px-3 py-4 rounded-4">
+            <section class="w-85 mx-auto mb-3 px-2 divContainerBorderBottomBlack">
+                <div style="width: fit-content;" class="mx-auto">
+                    <label for="patent" class="text-white text-bold mb-1 d-inline">Ingresar patente:</label>
+                    <input id="patent" th:field="*{patent}" type="text" class="form-control d-inline my-1">
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                        fs-6 text-center btn-primary text-white" type="button" onclick="checkIfUserExist()">Check
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="w-85 mx-auto mb-3 px-5 py-2 divContainerBorderBottomBlack">
+                <div style="width: fit-content;" class="mx-auto">
+                    <label for="brand" class="text-white text-bold mb-1 d-inline">Marca:</label>
+                    <input id="brand" th:field="*{brand}" type="text" class="form-control d-inline my-1">
+
+                    <label for="model" class="text-white text-bold mb-1 d-inline">Modelo:</label>
+                    <input id="model" th:field="*{model}" type="text" class="form-control d-inline my-1">
+
+                    <label for="color" class="text-white text-bold mb-1 d-inline">Color:</label>
+                    <input id="color" th:field="*{color}" type="text" class="form-control d-inline my-1">
+                </div>
+            </section>
+
+            <section class="w-85 mx-auto mb-3 px-5 py-2">
+                <div style="width: fit-content;" class="mx-auto">
+                    <label for="userName" class="text-white text-bold mb-1 d-inline">Nombre del Usuario:</label>
+                    <input id="userName" th:field="*{userName}" type="text" class="form-control d-inline my-1">
+
+                    <label for="userEmail" class="text-white text-bold mb-1 d-inline">Email:</label>
+                    <input id="userEmail" th:field="*{userEmail}" type="email" class="form-control d-inline my-1">
+                </div>
+            </section>
+        </div>
+
+        <section class="w-50 mx-auto d-flex justify-content-around mb-3">
+            <a th:href="@{/web/admin/}" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+            fs-6 text-center btn-red text-white">Cancelar
+            </a>
+            <input class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+            fs-6 text-center btn-green text-white" type="submit" value="Ingresar"/>
+        </section>
+    </form>
+
+    <script>
+        function checkIfUserExist() {
+            let patent = document.getElementById("patent").value;
+
+            fetch("http://localhost:8080/eparking/web/api/admin/check/" + patent, {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+                .then((response) => {
+                    if (!response.ok) throw new Error("No se puede checkear la patente en este momento")
+                    return response.json();
+                })
+                .then((res) => {
+                    console.log(res);
+                    document.getElementById("patent").value = res.patent;
+                    document.getElementById("brand").value = res.brand;
+                    document.getElementById("model").value = res.model;
+                    document.getElementById("color").value = res.color;
+                    document.getElementById("userName").value = res.userName;
+                    document.getElementById("userEmail").value = res.userEmail;
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+
+        }
+    </script>
+
+    <div th:replace="fragments/footer.html"></div>

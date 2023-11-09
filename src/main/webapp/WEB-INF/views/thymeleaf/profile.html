@@ -65,8 +65,11 @@
                                 <p class="direction m-0 text-truncate px-3" th:text="'No se encontro la dirección correspondiente'"></p>
 
                             </div>
+                            <div class="d-flex justify-content-around">
+                                <a th:href="@{/mobile/profile/parking(id=${parking.getId()})}"><i class="fa-solid fa-rectangle-list text-blue me-2"></i></a>
+                                <a href="#"><i class="fa-solid fa-circle-xmark text-danger"></i></a>
+                            </div>
 
-                            <a href="#"><i class="fa-solid fa-circle-xmark text-blue"></i></a>
 
                         </div>
 

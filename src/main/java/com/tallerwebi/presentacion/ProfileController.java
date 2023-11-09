@@ -2,19 +2,20 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProfileService;
 import com.tallerwebi.dominio.excepcion.NotificationServiceException;
+import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.model.Notification;
+import com.tallerwebi.model.Parking;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.Base64Utils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -40,9 +41,7 @@ public class ProfileController {
             return new ModelAndView("profile", model);
         }
         catch (UserNotFoundException e){
-            ModelMap model = new ModelMap();
-            model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/error", model);
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
@@ -54,9 +53,7 @@ public class ProfileController {
             model.put("notifications", notifications);
             return new ModelAndView("notifications-view", model);
         } catch (UserNotFoundException e){
-            ModelMap model = new ModelMap();
-            model.put("error", e.getMessage());
-            return new ModelAndView("redirect:/error", model);
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
@@ -72,4 +69,22 @@ public class ProfileController {
         return null;
     }
 
+    @GetMapping("/parking")
+    public ModelAndView getParkingDetail(@RequestParam(name = "id") Long parkingId){
+        try{
+            ModelMap model = new ModelMap();
+            Parking parking = profileService.getParkingById((Long) httpSession.getAttribute("id"), parkingId);
+            model.put("parking", parking);
+
+            String vehiclePicture = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(parking.getVehiclePicture());
+            model.put("vehiclePicture", vehiclePicture);
+
+            String ticketPicture = "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture());
+            model.put("ticketPicture", ticketPicture);
+
+            return new ModelAndView("parking_detail-view", model);
+        } catch (UserNotFoundException | ParkingNotFoundException e){
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
+    }
 }
