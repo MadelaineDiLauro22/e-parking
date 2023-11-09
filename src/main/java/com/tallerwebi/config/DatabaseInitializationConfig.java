@@ -43,7 +43,7 @@ public class DatabaseInitializationConfig {
         Vehicle vehicle2 = new Vehicle("123", "Fiat", "Fitito", "Rojo");
 
         vehicle.setUser(user);
-        vehicle2.setUser(user2);
+        vehicle2.setUser(user);
 
         user.registerVehicle(vehicle);
         user2.registerVehicle(vehicle2);

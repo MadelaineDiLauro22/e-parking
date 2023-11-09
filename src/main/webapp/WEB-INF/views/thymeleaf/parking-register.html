@@ -33,10 +33,10 @@
 
                     <label for="vehicle" class="text-white text-bold mb-1">Seleccionar Vehículo:</label>
 
-                    <select th:field="*{vehicle}" id="vehicle" th:each="vehicle : ${vehicleList}"
+                    <select th:field="*{vehicle}" id="vehicle"
                             class="form-select my-1">
 
-                        <option th:value="${vehicle.patent}" th:text="${vehicle.brand + ' - ' + vehicle.patent}">
+                        <option th:each="vehicle : ${vehicleList}" th:value="${vehicle.patent}" th:text="${vehicle.brand + ' - ' + vehicle.patent}">
 
                             Marca - Patente
 
