@@ -64,7 +64,6 @@ public class GarageServiceImpl implements GarageService {
     @Override
     public void egressVehicle(String vehiclePatent, Long garageAdminUserId) {
         Garage garage = getGarageByAdminUserId(garageAdminUserId);
-        removeFromGarage(vehiclePatent, garage);
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehiclePatent);
         MobileUser user = vehicle.getUser();
 
@@ -83,6 +82,7 @@ public class GarageServiceImpl implements GarageService {
         latestParking.setDateExit(Date.from(Instant.now()));
         garage.generateTicket(parkingRegisterDTO);
         parkingRepository.save(latestParking);
+        removeFromGarage(vehiclePatent, garage);
     }
 
     @Override
@@ -129,6 +129,7 @@ public class GarageServiceImpl implements GarageService {
         MobileUser user = vehicle.getUser();
         Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), Date.from(Instant.now()));
         parking.setMobileUser(user);
+        parking.setVehicle(vehicle);
 
         return parking;
     }

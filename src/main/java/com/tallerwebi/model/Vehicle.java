@@ -74,6 +74,10 @@ public class Vehicle {
         this.user = user;
     }
 
+    public void setPatent(String patent) {
+        this.patent = patent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,4 +95,5 @@ public class Vehicle {
     public String toString(){
         return model + " - " + patent;
     }
+
 }

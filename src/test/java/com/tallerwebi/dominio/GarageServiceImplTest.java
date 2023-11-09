@@ -5,17 +5,17 @@ import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
-import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.mail.MailException;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,6 +38,12 @@ public class GarageServiceImplTest {
     @Mock
     private OTPRepository otpRepository;
 
+    @Captor
+    private ArgumentCaptor<Parking> parkingArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<OTP> otpArgumentCaptor;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -51,31 +57,59 @@ public class GarageServiceImplTest {
         assertNotNull(garageService);
     }
 
-    /*@Test
+    @Test
     public void testRegisterVehicleSuccess() {
-       VehicleIngressDTO vehicleIngressDTO = new VehicleIngressDTO();
-        OTPDTO otpDto = new OTPDTO("1L");
-        Long garageAdminUserId = 123L;
-        when(otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())).thenReturn(true);
+        VehicleIngressDTO dto = new VehicleIngressDTO();
+        dto.setPatent("ABC123");
+        Long idUser = 1L;
+        MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        vehicle.setUser(user);
+        Garage garage = new Garage();
+        OTPDTO otp = new OTPDTO("123");
 
-        garageService.addToGarage(vehicleIngressDTO, garageAdminUserId);
+        Mockito.when(otpRepository.exists(dto.getUserEmail(), idUser, otp.getOtpKey())).thenReturn(true);
+        Mockito.when(userRepository.findUserById(idUser))
+                .thenReturn(user);
+        Mockito.when(vehicleRepository.findVehicleByPatent("ABC123"))
+                .thenReturn(vehicle);
+        Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
 
-        verify(garageServiceImpl, times(1)).addToGarage(vehicleIngressDTO, garageAdminUserId);
-    }*/
+        garageService.registerVehicle(dto, otp, idUser);
+        Mockito.verify(parkingRepository).save(parkingArgumentCaptor.capture());
+
+        Parking registered = parkingArgumentCaptor.getValue();
+
+        assertEquals(ParkingType.GARAGE, registered.getParkingType());
+        assertEquals(vehicle, registered.getVehicle());
+        assertEquals(user, registered.getMobileUser());
+    }
 
     @Test
-    public void testRegisterVehicleException() throws OTPNotFoundException {
-        GarageServiceImpl garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository);
+    public void testRegisterVehicleWithInvalidOTP() {
         VehicleIngressDTO vehicleIngressDTO = new VehicleIngressDTO();
-        OTPDTO otpDto = new OTPDTO("1L");
-        Long garageAdminUserId = 123L;
+        OTPDTO otpDto = new OTPDTO();
+        Long garageAdminUserId = 1L;
+
         when(otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())).thenReturn(false);
+
+        assertThrows(OTPNotFoundException.class, () -> {
+            garageService.registerVehicle(vehicleIngressDTO, otpDto, garageAdminUserId);
+        });
     }
 
     @Test
     public void testSendOtpSuccess() {
-        emailService.sendSimpleMessage("email", "Clave de ingreso:", "1");
-        verify(emailService).sendSimpleMessage("email", "Clave de ingreso:", "1");
+        String email = "abc@mail.com";
+        Long idGarage = 1L;
+
+        garageService.sendOtp(email, idGarage);
+
+        Mockito.verify(otpRepository).save(otpArgumentCaptor.capture());
+
+        OTP otp = otpArgumentCaptor.getValue();
+
+        verify(emailService).sendSimpleMessage(email, "Clave de ingreso:", otp.getOtpKey());
     }
 
     @Test
@@ -83,28 +117,43 @@ public class GarageServiceImplTest {
         doNothing().when(emailService).sendSimpleMessage("email", "Clave de ingreso:", "1");
     }
 
-    /*@Test
+    @Test
     public void testEgressVehicle() {
-        String vehiclePatent = "ABC123";
-        Long garageAdminUserId = 1L;
-
-        Garage garage = new Garage();
-        when(garageService.getGarageByAdminUserId(garageAdminUserId)).thenReturn(garage);
-
-        Vehicle vehicle = new Vehicle();
-        when(vehicleRepository.findVehicleByPatent(vehiclePatent)).thenReturn(vehicle);
-
+        Long idUser = 1L;
+        VehicleIngressDTO dto = new VehicleIngressDTO();
         MobileUser user = new MobileUser();
+        Parking parking = new Parking(ParkingType.GARAGE, null, null, null, Date.from(Instant.now()));
+        Garage garage = new Garage("Mi Garage", 10, new Geolocation(0.0, 0.0), 5.0f, 0.25f, 15L);
+        Vehicle vehicle = new Vehicle();
         List<Parking> parkingList = new ArrayList<>();
-        Parking latestParking = new Parking();
-        parkingList.add(latestParking);
+
+        configSetUpEgressVehicleClasses(dto, user, parking, garage, vehicle, parkingList);
+
+        Mockito.when(userRepository.findUserById(idUser))
+                .thenReturn(user);
+        Mockito.when(vehicleRepository.findVehicleByPatent(dto.getPatent()))
+                .thenReturn(vehicle);
+        Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+
+        garageService.egressVehicle(dto.getPatent(), idUser);
+
+        Mockito.verify(parkingRepository).save(parkingArgumentCaptor.capture());
+        Parking registered = parkingArgumentCaptor.getValue();
+
+        assertEquals(ParkingType.GARAGE, registered.getParkingType());
+        assertEquals(vehicle, registered.getVehicle());
+        assertEquals(user, registered.getMobileUser());
+        assertFalse(garage.removeVehicle(vehicle.getPatent()));
+    }
+
+    private void configSetUpEgressVehicleClasses(VehicleIngressDTO dto, MobileUser user, Parking parking, Garage garage, Vehicle vehicle, List<Parking> parkingList) {
+        dto.setPatent("ABC123");
         user.setParkings(parkingList);
         vehicle.setUser(user);
-
-        ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO(ParkingType.GARAGE, vehiclePatent, null, null, 1.0, 2.0, garage.getId());
-
-        garageService.egressVehicle(vehiclePatent, garageAdminUserId);
-
-        verify(parkingRepository, times(1)).save(latestParking);
-    }*/
+        vehicle.setPatent("ABC123");
+        parking.setVehicle(vehicle);
+        parking.setMobileUser(user);
+        parkingList.add(parking);
+        garage.addVehicle(vehicle.getPatent());
+    }
 }
