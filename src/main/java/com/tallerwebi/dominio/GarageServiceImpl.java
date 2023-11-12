@@ -13,6 +13,7 @@ import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,13 +53,14 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
-    public void sendOtp(String email, Long idGarage) throws MailException {
+    public void sendOtp(String email, Long idGarage) throws MailException, MessagingException {
         int min = 100000;
         int max = 999999;
         int randomNum = ThreadLocalRandom.current().nextInt(min, max);
         OTP otp = new OTP(String.valueOf(randomNum),email, idGarage);
+        String messageWithStyles = "<html><body style='text-align: center; background: #FFFFFF;'><div style='background: #74ACDF; height: 33%;'></div><div style='background: #FFFFFF; height: 33%;'><h1 style='margin-top: 40px;'>Código: " + String.valueOf(randomNum) + "</h1></div><div style='background: #74ACDF; height: 33%;'></div></body></html>";
         otpRepository.save(otp);
-        emailService.sendSimpleMessage(email, "Clave de ingreso:", String.valueOf(randomNum));
+        emailService.sendMimeMessage(email, "Clave de ingreso:", messageWithStyles);
     }
 
     @Override

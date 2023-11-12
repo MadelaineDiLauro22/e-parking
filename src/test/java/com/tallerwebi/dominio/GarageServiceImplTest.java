@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.mail.MailException;
 
+import javax.mail.MessagingException;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -95,8 +96,9 @@ public class GarageServiceImplTest {
         });
     }
 
+
     @Test
-    public void testSendOtpSuccess() {
+    public void testSendOtpSuccess() throws MessagingException {
         String email = "abc@mail.com";
         Long idGarage = 1L;
 
@@ -105,8 +107,9 @@ public class GarageServiceImplTest {
         Mockito.verify(otpRepository).save(otpArgumentCaptor.capture());
 
         OTP otp = otpArgumentCaptor.getValue();
+        String messageWithStyles = "<html><body style='text-align: center; background: #FFFFFF;'><div style='background: #74ACDF; height: 33%;'></div><div style='background: #FFFFFF; height: 33%;'><h1 style='margin-top: 40px;'>Código: " + otp.getOtpKey() + "</h1></div><div style='background: #74ACDF; height: 33%;'></div></body></html>";
 
-        verify(emailService).sendSimpleMessage(email, "Clave de ingreso:", otp.getOtpKey());
+        verify(emailService).sendMimeMessage(email, "Clave de ingreso:", messageWithStyles);
     }
 
     @Test
