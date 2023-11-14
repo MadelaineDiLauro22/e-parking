@@ -17,8 +17,12 @@ public class Parking implements Comparable<Parking>{
 
     private ParkingType parkingType;
 
+    @Lob
+    @Column(name = "vehicle_picture")
     private byte[] vehiclePicture;
 
+    @Lob
+    @Column(name = "ticket_picture")
     private byte[] ticketPicture;
 
     @Embedded

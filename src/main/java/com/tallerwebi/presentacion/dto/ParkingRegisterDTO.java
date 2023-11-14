@@ -5,6 +5,7 @@ import com.tallerwebi.model.ParkingPlace;
 import com.tallerwebi.model.ParkingType;
 import com.tallerwebi.model.PointSale;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -16,8 +17,8 @@ public class ParkingRegisterDTO {
 
     private ParkingType parkingType;
     private String vehicle;
-    private byte[] vehiclePic;
-    private byte[] ticketPic;
+    private MultipartFile vehiclePic;
+    private MultipartFile ticketPic;
     private Double lat;
     private Double ln;
     @Temporal(TemporalType.DATE)
@@ -36,7 +37,7 @@ public class ParkingRegisterDTO {
     public ParkingRegisterDTO() {
     }
 
-    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, byte[] vehiclePic, byte[] ticketPic, Double lat, Double ln, Long parkingPlaceId) {
+    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, MultipartFile vehiclePic, MultipartFile ticketPic, Double lat, Double ln, Long parkingPlaceId) {
         this.parkingType = parkingType;
         this.vehicle = vehicle;
         this.vehiclePic = vehiclePic;
@@ -65,19 +66,19 @@ public class ParkingRegisterDTO {
         this.vehicle = vehicle;
     }
 
-    public byte[] getVehiclePic() {
+    public MultipartFile getVehiclePic() {
         return vehiclePic;
     }
 
-    public void setVehiclePic(byte[] vehiclePic) {
+    public void setVehiclePic(MultipartFile vehiclePic) {
         this.vehiclePic = vehiclePic;
     }
 
-    public byte[] getTicketPic() {
+    public MultipartFile getTicketPic() {
         return ticketPic;
     }
 
-    public void setTicketPic(byte[] ticketPic) {
+    public void setTicketPic(MultipartFile ticketPic) {
         this.ticketPic = ticketPic;
     }
 

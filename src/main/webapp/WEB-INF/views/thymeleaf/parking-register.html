@@ -8,8 +8,8 @@
 
             <h1 class="titleView fs-3">Registrar Parking</h1>
 
-            <form th:action="@{/mobile/parking/register}" action="#" method="post" th:object="${parkingRegister}"
-                  onsubmit="return validateForm()">
+            <form action="#" th:action="@{/mobile/parking/register}" method="post" th:object="${parkingRegister}"
+                  onsubmit="return validateForm()" enctype="multipart/form-data">
 
 
                 <div class="divContainer divContainerBorderBottom my-1">
@@ -50,7 +50,7 @@
 
                     <label for="vehiclePic" class="text-white text-bold mb-1">Foto del vehículo:</label>
 
-                    <input th:field="*{vehiclePic}" id="vehiclePic" type="file" accept="image/jpeg"
+                    <input th:field="*{vehiclePic}" id="vehiclePic" name="vehiclePic" type="file" accept="image/jpeg"
                            class="form-control my-1">
 
                 </div>

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -86,8 +87,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO dto = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -171,8 +172,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO dto = new ParkingRegisterDTO(
                 ParkingType.POINT_SALE,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -254,8 +255,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO req =  new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -277,8 +278,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO req =  new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -301,8 +302,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO req = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
