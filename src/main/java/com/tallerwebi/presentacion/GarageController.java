@@ -1,9 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.GarageService;
-import com.tallerwebi.model.Garage;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.springframework.stereotype.Controller;
@@ -59,7 +57,22 @@ public class GarageController {
         return new ModelAndView("vehicle-remove", model);
     }
 
-    //TODO: Por ahora lo cambio a GET porque sino no ejecuta el request desde el navegador, debería ser POST y el navegador tirar un request con fetch
+    @GetMapping(value = "/egressView")
+    public ModelAndView egressVehicleView(@RequestParam(name = "patent") String patent) {
+        try {
+            Vehicle vehicle = garageService.getVehicleByPatent(patent);
+            //Parking parking = garageService.getUserByPatent(patent).getParkings().get(0);
+
+            ModelMap model = new ModelMap();
+            model.put("vehicle", vehicle);
+            //model.put("parking", parking);
+
+            return new ModelAndView("garage-vehicle", model);
+        } catch (Exception e) {
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
+    }
+
     @GetMapping(value = "/egress")
     public ModelAndView egressVehicle(@RequestParam(name = "patent") String patent) {
         try {
