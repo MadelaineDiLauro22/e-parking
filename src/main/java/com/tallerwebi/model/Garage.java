@@ -30,7 +30,7 @@ public class Garage extends ParkingPlace {
     }
 
     public boolean addVehicle(String patent){
-        return patents.add(patent);
+        return patents.add(patent.toUpperCase());
     }
 
     public boolean removeVehicle(String patent){
