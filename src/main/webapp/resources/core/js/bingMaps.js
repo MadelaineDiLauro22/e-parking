@@ -115,11 +115,13 @@ function adjustPersonalPinMap(personalPin) {
 
 function createPinParkingPlaces() {
     const parkingPlaces = parkingPlacesData;
+    console.log(parkingPlaces);
 
     for (let i = 0; i < parkingPlaces.length; i++) {
         const lat = parkingPlaces[i].geolocation.lat;
         const ln = parkingPlaces[i].geolocation.ln;
         const title = parkingPlaces[i].name;
+        console.log("direccion:" +  parkingPlaces[i].address);
 
         let pin;
 
@@ -194,7 +196,6 @@ function createPin(location, title, description, type) {
 
 function setInfoboxOnPin(pin) {
     var infoboxOffset = new Microsoft.Maps.Point(0, -170);
-    var infobox;
 
     if (!pin.infobox) {
         var center = pin.getLocation();
@@ -224,6 +225,7 @@ function setInfoboxOnPin(pin) {
             visible: false,
             offset: infoboxOffset
         });
+        pin.infobox = infobox;
     }
 }
 

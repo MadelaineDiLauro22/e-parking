@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -59,7 +58,7 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingPlaceResponseDTO> parkingPlaceResponseDTOS = new ArrayList<>();
         for (ParkingPlace parkingPlace:parkingPlacesList) {
             ParkingPlaceResponseDTO parkingPlaceResponseDTO = new ParkingPlaceResponseDTO(parkingPlace.getClass().getSimpleName(), parkingPlace.getId(), parkingPlace.getName(),
-                    parkingPlace.getGeolocation(), parkingPlace.getFeePerHour(), parkingPlace.getFeeFraction(), parkingPlace.getFractionTime());
+                    parkingPlace.getGeolocation(), parkingPlace.getAddress(), parkingPlace.getFeePerHour(), parkingPlace.getFeeFraction(), parkingPlace.getFractionTime());
             if(parkingPlace instanceof Garage){
                 parkingPlaceResponseDTO.setUserId(((Garage) parkingPlace).getUser().getId());
                 parkingPlaceResponseDTO.setNumberOfCars(((Garage) parkingPlace).getNumberOfCars());
