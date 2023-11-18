@@ -78,7 +78,6 @@ public class GarageController {
     @GetMapping(value = "/egress")
     public ModelAndView egressVehicle(@RequestParam(name = "patent") String patent) {
         try {
-            //TODO: egressVehicle tira un error
             garageService.egressVehicle(patent, (Long) session.getAttribute("id"));
 
             ModelMap model = new ModelMap();

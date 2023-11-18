@@ -71,7 +71,7 @@
                     </a>
 
                     <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
-                fs-6 text-center btn-success text-white" type="submit" id="ingresar">Ingresar</button>
+                fs-6 text-center btn-success text-white" type="submit" id="ingresar" onclick="disableButton()">Ingresar</button>
 
                 </div>
             </form>
@@ -130,6 +130,6 @@
         function disableButton(){
             setTimeout(() => {
                 document.getElementById("ingresar").disabled = true;
-            }, 1000);
+            }, 100);
         }
     </script>
