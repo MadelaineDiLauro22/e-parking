@@ -63,11 +63,11 @@ public class GarageController {
     public ModelAndView egressVehicleView(@RequestParam(name = "patent") String patent) {
         try {
             Vehicle vehicle = garageService.getVehicleByPatent(patent);
-            //Parking parking = garageService.getUserByPatent(patent).getParkings().get(0);
+            Parking parking = garageService.getUserByPatent(patent).getParkings().get(0);
 
             ModelMap model = new ModelMap();
             model.put("vehicle", vehicle);
-            //model.put("parking", parking);
+            model.put("parking", parking);
 
             return new ModelAndView("garage-vehicle", model);
         } catch (Exception e) {
