@@ -1,56 +1,92 @@
 <div th:replace="fragments/header.html"></div>
 
 <main role="main" class="container-fluid m-f">
-    <form action="#" th:action="@{/web/admin/enter/send-otp}" method="POST" th:object="${vehicleIngressDTO}">
-        <div class="bg-primary w-50 mx-auto m-5 px-3 py-4 rounded-4">
-            <section class="w-85 mx-auto mb-3 px-2 divContainerBorderBottomBlack">
-                <div style="width: fit-content;" class="mx-auto">
-                    <label for="patent" class="text-white text-bold mb-1 d-inline">Ingresar patente:</label>
-                    <input id="patent" th:field="*{patent}" type="text" class="form-control d-inline my-1">
-                    <div class="d-flex justify-content-center">
+
+    <section class="container text-white bg-home mx-auto col-lg-4 px-2 py-4 rounded-4 box-shadow mb-4 my-4">
+
+        <article class="mx-auto">
+
+            <form action="#" th:action="@{/web/admin/enter/send-otp}" method="POST" th:object="${vehicleIngressDTO}">
+
+                <div class="px-5 mx-auto">
+
+                    <h2 class="fs-4 text-white text-bold text-center">Verificar Patente</h2>
+
+                    <label for="patent" class="text-gray text-bold mb-1 d-inline text-shadow-none">Ingresar patente:</label>
+
+                    <input id="patent" th:field="*{patent}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                    <div class="text-center mx-auto py-2">
+
                         <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
                         fs-6 text-center btn-primary text-white" type="button" onclick="checkIfUserExist()">Check
                         </button>
+
                     </div>
+
                 </div>
-            </section>
 
-            <section class="w-85 mx-auto mb-3 px-5 py-2 divContainerBorderBottomBlack">
-                <div style="width: fit-content;" class="mx-auto">
-                    <label for="brand" class="text-white text-bold mb-1 d-inline">Marca:</label>
-                    <input id="brand" th:field="*{brand}" type="text" class="form-control d-inline my-1">
+                <hr class="border-terciary border-3">
 
-                    <label for="model" class="text-white text-bold mb-1 d-inline">Modelo:</label>
-                    <input id="model" th:field="*{model}" type="text" class="form-control d-inline my-1">
+                <div class="px-5 py-3 mx-auto">
 
-                    <label for="color" class="text-white text-bold mb-1 d-inline">Color:</label>
-                    <input id="color" th:field="*{color}" type="text" class="form-control d-inline my-1">
+                    <h3 class="fs-5 text-white text-bold">Vehiculo</h3>
+
+                    <label for="brand" class=" text-gray text-bold mb-1 d-inline text-shadow-none">Marca:</label>
+
+                    <input id="brand" th:field="*{brand}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                    <label for="model" class="text-gray text-bold mb-1 d-inline text-shadow-none">Modelo:</label>
+
+                    <input id="model" th:field="*{model}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                    <label for="color" class="text-gray text-bold mb-1 d-inline text-shadow-none">Color:</label>
+
+                    <input id="color" th:field="*{color}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
                 </div>
-            </section>
 
-            <section class="w-85 mx-auto mb-3 px-5 py-2">
-                <div style="width: fit-content;" class="mx-auto">
-                    <label for="userName" class="text-white text-bold mb-1 d-inline">Nombre del Usuario:</label>
-                    <input id="userName" th:field="*{userName}" type="text" class="form-control d-inline my-1">
+                <hr class="border-terciary border-3">
 
-                    <label for="userEmail" class="text-white text-bold mb-1 d-inline">Email:</label>
-                    <input id="userEmail" th:field="*{userEmail}" type="email" class="form-control d-inline my-1">
+                <div class="px-5 py-3 mx-auto">
+
+                    <h3 class="fs-5 text-white text-bold">Usuario</h3>
+
+                    <label for="userName" class="text-gray text-bold mb-1 d-inline text-shadow-none">Nombre del Usuario:</label>
+
+                    <input id="userName" th:field="*{userName}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                    <label for="userEmail" class="text-gray text-bold mb-1 d-inline text-shadow-none">Email:</label>
+
+                    <input id="userEmail" th:field="*{userEmail}" type="email" class="form-control d-inline my-1 text-center rounded-4">
+
                 </div>
-            </section>
-        </div>
 
-        <section class="w-50 mx-auto d-flex justify-content-around mb-3">
-            <a th:href="@{/web/admin/}" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
-            fs-6 text-center btn-red text-white">Cancelar
-            </a>
-            <input class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
-            fs-6 text-center btn-green text-white" type="submit" id="ingresar" onclick="disableButton()" value="Ingresar"/>
-        </section>
-    </form>
+                <hr class="border-terciary border-3">
+
+                <div class="px-4 text-center mx-auto d-flex justify-content-around pt-3">
+
+                    <a th:href="@{/web/admin/}" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-4
+                fs-6 text-center btn-danger text-white">Cancelar
+                    </a>
+
+                    <input class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                fs-6 text-center btn-success text-white" type="submit" id="ingresar" onclick="disableButton()" value="Ingresar"/>
+
+                </div>
+            </form>
+        </article>
+    </section>
+
     <div th:replace="fragments/footer.html"></div>
     <script>
         function checkIfUserExist() {
             let patent = document.getElementById("patent").value;
+            let brand = document.getElementById("brand");
+            let model = document.getElementById("model");
+            let color = document.getElementById("color");
+            let userName = document.getElementById("userName");
+            let userEmail = document.getElementById("userEmail");
 
             fetch("http://localhost:8080/eparking/web/api/admin/check/" + patent, {
                 headers: {
@@ -62,13 +98,28 @@
                     return response.json();
                 })
                 .then((res) => {
-                    console.log(res);
-                    document.getElementById("patent").value = res.patent;
-                    document.getElementById("brand").value = res.brand;
-                    document.getElementById("model").value = res.model;
-                    document.getElementById("color").value = res.color;
-                    document.getElementById("userName").value = res.userName;
-                    document.getElementById("userEmail").value = res.userEmail;
+                    if(res && res.patent !== null){
+                        brand.value = res.brand;
+                        brand.setAttribute("disabled", "true");
+                        model.value = res.model;
+                        model.setAttribute("disabled", "true");
+                        color.value = res.color;
+                        color.setAttribute("disabled", "true");
+                        userName.value = res.userName;
+                        userName.setAttribute("disabled", "true");
+                        userEmail.value = res.userEmail;
+                    }
+                    else{
+                        brand.removeAttribute("disabled");
+                        brand.value = "";
+                        model.removeAttribute("disabled");
+                        model.value = "";
+                        color.removeAttribute("disabled");
+                        color.value = "";
+                        userName.removeAttribute("disabled");
+                        userName.value = "";
+                        userEmail.value = "";
+                    }
                 })
                 .catch((err) => {
                     console.log(err);

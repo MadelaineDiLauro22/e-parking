@@ -49,7 +49,7 @@ public class DatabaseInitializationConfig {
         user2.registerVehicle(vehicle2);
 
         Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
-        Garage garage = new Garage("Pepe", 30, geolocation, 1.5F, 1.0F, (long) 1.0);
+        Garage garage = new Garage("Pepe", 30, geolocation, "Florencio Varela 1903, B1754JEE San Justo, Buenos Aires Province, Argentina", 1.5F, 1.0F, (long) 1.0);
         garage.setUser(garageUser);
         garage.addVehicle(vehicle2.getPatent());
 

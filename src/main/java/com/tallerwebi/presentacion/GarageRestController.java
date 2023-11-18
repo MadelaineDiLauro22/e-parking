@@ -44,7 +44,6 @@ public class GarageRestController {
             return dto;
         } catch (RuntimeException e) {
             VehicleIngressDTO dto = new VehicleIngressDTO();
-            dto.setPatent(patent);
             return dto;
         }
     }

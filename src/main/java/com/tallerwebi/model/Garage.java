@@ -1,6 +1,5 @@
 package com.tallerwebi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
 import javax.persistence.*;
@@ -20,8 +19,8 @@ public class Garage extends ParkingPlace {
     private int numberOfCars;
 
 
-    public Garage(String name, int numberOfCars, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
-        super(name, geolocation, feePerHour, feeFraction, fractionTime);
+    public Garage(String name, int numberOfCars, Geolocation geolocation, String address, float feePerHour, float feeFraction, long fractionTime) {
+        super(name, geolocation, address, feePerHour, feeFraction, fractionTime);
         this.patents = new HashSet<>();
         this.numberOfCars = numberOfCars;
     }

@@ -123,7 +123,7 @@ public class GarageServiceImplTest {
         VehicleIngressDTO dto = new VehicleIngressDTO();
         MobileUser user = new MobileUser();
         Parking parking = new Parking(ParkingType.GARAGE, null, null, null, Date.from(Instant.now()));
-        Garage garage = new Garage("Mi Garage", 10, new Geolocation(0.0, 0.0), 5.0f, 0.25f, 15L);
+        Garage garage = new Garage("Mi Garage", 10, new Geolocation(0.0, 0.0),"", 5.0f, 0.25f, 15L);
         Vehicle vehicle = new Vehicle();
         List<Parking> parkingList = new ArrayList<>();
 

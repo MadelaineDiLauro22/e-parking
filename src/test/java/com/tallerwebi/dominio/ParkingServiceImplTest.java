@@ -248,7 +248,7 @@ class ParkingServiceImplTest {
     }
 
     private PointSale getPointSale(){
-        return new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
+        return new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),"",20,20,20L);
     }
 
     private ParkingRegisterDTO createRequestAlarm(Date alarm) {
@@ -320,7 +320,7 @@ class ParkingServiceImplTest {
         float feePerHour = 5.0f;
         float feeFraction = 1.25f;
         long fractionTime = 15;
-        PointSale pointSale = new PointSale(name, geolocation, feePerHour, feeFraction, fractionTime);
+        PointSale pointSale = new PointSale(name, geolocation,"", feePerHour, feeFraction, fractionTime);
 
 
         Mockito.when(mockUserRepository.findUserById(idUser))
