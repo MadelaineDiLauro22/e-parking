@@ -24,11 +24,10 @@ public class GarageRestController {
     @GetMapping("check/{patent}")
     public VehicleIngressDTO checkPatent(@PathVariable String patent) {
         try {
-            //TODO: arreglar Transacción con el vehiculo y el usuario
-            //MobileUser user = garageService.getUserByPatent(patent);
+            MobileUser user = garageService.getUserByPatent(patent);
             Vehicle vehicle = garageService.getVehicleByPatent(patent);
 
-            //if (user == null) throw new UserNotFoundException();
+            if (user == null) throw new UserNotFoundException();
             if (vehicle == null) throw new VehicleNotFoundException(patent);
 
             VehicleIngressDTO dto = new VehicleIngressDTO();
@@ -37,9 +36,9 @@ public class GarageRestController {
             dto.setBrand(vehicle.getBrand());
             dto.setColor(vehicle.getColor());
             dto.setModel(vehicle.getModel());
-            //dto.setUserName(user.getName());
-            //dto.setUserEmail(user.getEmail());
-            dto.setUserEmail("test@unlam.edu.ar");
+            dto.setUserName(user.getName());
+            dto.setUserEmail(user.getEmail());
+            //dto.setUserEmail("test@unlam.edu.ar");
 
             return dto;
         } catch (RuntimeException e) {

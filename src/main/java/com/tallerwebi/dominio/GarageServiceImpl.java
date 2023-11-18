@@ -9,6 +9,7 @@ import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
+import org.hibernate.Hibernate;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,7 +100,9 @@ public class GarageServiceImpl implements GarageService {
     @Override
     public MobileUser getUserByPatent(String patent) {
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(patent);
-        return vehicle.getUser();
+        MobileUser user = vehicle.getUser();
+        Hibernate.initialize(user);
+        return user;
     }
 
     @Override
