@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.GarageService;
+import com.tallerwebi.dominio.excepcion.VehicleExistInGarageException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
@@ -91,22 +93,23 @@ public class GarageController {
     @PostMapping(value = "/enter/send-otp")
     public ModelAndView sendOtp(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO) {
         try {
-            garageService.sendOtp(vehicleIngressDTO.getUserEmail(), (Long) session.getAttribute("id"));
-
             ModelMap model = new ModelMap();
-            model.put("vehiclesIngressDto", vehicleIngressDTO);
-            model.put("success", true);
+                if(garageService.vehicleExistsInGarage(vehicleIngressDTO.getPatent().toUpperCase(), (Long) session.getAttribute("id"))) throw new VehicleExistInGarageException();
+                garageService.sendOtp(vehicleIngressDTO.getUserEmail(), (Long) session.getAttribute("id"));
 
-            return new ModelAndView(
-                    String.format("redirect:/web/admin/enter/otp-validate?patent=%s&brand=%s&model=%s&color=%s&userName=%s&userEmail=%s",
-                            vehicleIngressDTO.getPatent(),
-                            vehicleIngressDTO.getBrand(),
-                            vehicleIngressDTO.getModel(),
-                            vehicleIngressDTO.getColor(),
-                            vehicleIngressDTO.getUserName(),
-                            vehicleIngressDTO.getUserEmail()
-                    ),
-                    model);
+                model.put("vehiclesIngressDto", vehicleIngressDTO);
+                model.put("success", true);
+
+                return new ModelAndView(
+                        String.format("redirect:/web/admin/enter/otp-validate?patent=%s&brand=%s&model=%s&color=%s&userName=%s&userEmail=%s",
+                                vehicleIngressDTO.getPatent(),
+                                vehicleIngressDTO.getBrand(),
+                                vehicleIngressDTO.getModel(),
+                                vehicleIngressDTO.getColor(),
+                                vehicleIngressDTO.getUserName(),
+                                vehicleIngressDTO.getUserEmail()
+                        ),
+                        model);
         } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }

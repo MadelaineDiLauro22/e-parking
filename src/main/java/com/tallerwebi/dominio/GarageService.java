@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.VehicleExistInGarageException;
 import com.tallerwebi.model.Garage;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.presentacion.dto.OTPDTO;
@@ -17,4 +18,5 @@ public interface GarageService {
     List<Vehicle> getRegisteredVehicles(Long garageAdminUserId);
     MobileUser getUserByPatent(String patent);
     Vehicle getVehicleByPatent(String patent);
+    boolean vehicleExistsInGarage(String patent, Long garageAdminUserId);
 }

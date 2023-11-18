@@ -111,6 +111,12 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    public boolean vehicleExistsInGarage(String patent, Long garageAdminUserId) {
+        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+        return garage.getPatents().contains(patent);
+    }
+
+    @Override
     public Garage getGarageByAdminUserId(Long garageAdminUserId) {
         return (Garage) parkingPlaceRepository.findGarageByUser(userRepository.findUserById(garageAdminUserId));
     }
