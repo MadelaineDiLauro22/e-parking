@@ -21,6 +21,9 @@ public class MobileUser extends User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Notification> notifications;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Report> reports;
+
     public MobileUser(String email, String password, UserRole rol, String name, String nickName) {
         super(email, password, rol);
         this.name = name;
@@ -28,6 +31,7 @@ public class MobileUser extends User {
         this.vehicles = new HashSet<>();
         this.parkings = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.reports = new ArrayList<>();
     }
 
     public MobileUser() {
@@ -80,5 +84,13 @@ public class MobileUser extends User {
 
     public void setParkings(List<Parking> parkings) {
         this.parkings = parkings;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void addReport(Report report) {
+        this.reports.add(report);
     }
 }
