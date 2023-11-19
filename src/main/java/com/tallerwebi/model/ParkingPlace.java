@@ -27,7 +27,7 @@ public abstract class ParkingPlace {
 
     private float feeFraction;
 
-    private long fractionTime;
+    private long fractionTime; //in minutes
 
     @OneToMany(mappedBy = "parking_place", fetch = FetchType.EAGER)
     private List<Ticket> tickets;

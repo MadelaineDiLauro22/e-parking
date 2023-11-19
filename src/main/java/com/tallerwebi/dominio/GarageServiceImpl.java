@@ -7,6 +7,7 @@ import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
+import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.hibernate.Hibernate;
@@ -43,13 +44,12 @@ public class GarageServiceImpl implements GarageService {
 
     @Override
     public void registerVehicle(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId) {
-        if(otpRepository.exists(vehicleIngressDTO.getUserEmail(),garageAdminUserId, otpDto.getOtpKey())){
+        if (otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())) {
             addToGarage(vehicleIngressDTO, garageAdminUserId);
             Parking parking = createNewParking(vehicleIngressDTO, garageAdminUserId);
             parkingRepository.save(parking);
-        }
-       else{
-           throw new OTPNotFoundException("No se encontro el OTP.");
+        } else {
+            throw new OTPNotFoundException("No se encontro el OTP.");
         }
     }
 
@@ -58,7 +58,7 @@ public class GarageServiceImpl implements GarageService {
         int min = 100000;
         int max = 999999;
         int randomNum = ThreadLocalRandom.current().nextInt(min, max);
-        OTP otp = new OTP(String.valueOf(randomNum),email, idGarage);
+        OTP otp = new OTP(String.valueOf(randomNum), email, idGarage);
         String messageWithStyles = "<html><body style='text-align: center; background: #FFFFFF;'><div style='background: #74ACDF; height: 33%;'></div><div style='background: #FFFFFF; height: 33%;'><h1 style='margin-top: 40px;'>Código: " + String.valueOf(randomNum) + "</h1></div><div style='background: #74ACDF; height: 33%;'></div></body></html>";
         otpRepository.save(otp);
         emailService.sendMimeMessage(email, "Clave de ingreso:", messageWithStyles);
@@ -121,6 +121,28 @@ public class GarageServiceImpl implements GarageService {
         return (Garage) parkingPlaceRepository.findGarageByUser(userRepository.findUserById(garageAdminUserId));
     }
 
+    @Override
+    public ParkingEgressDTO EstimateEgressVehicle(Parking parking, Long garageAdminUserId) {
+        Garage garage = this.getGarageByAdminUserId(garageAdminUserId);
+        long expendSeconds = Instant.now().getEpochSecond() - parking.getDateArrival().toInstant().getEpochSecond();
+        long expendHours = expendSeconds / 3600;
+        long fractionSecondsTime = garage.getFractionTime() * 60;
+        double expendPrice;
+
+        if (expendSeconds > fractionSecondsTime) {
+            if (expendHours < 1) expendHours = 1;
+            expendPrice = garage.getFeePerHour() * expendHours;
+        } else {
+            expendPrice = garage.getFeeFraction();
+        }
+
+        return new ParkingEgressDTO(
+                parking.getDateArrival(),
+                expendHours,
+                expendPrice
+        );
+    }
+
     private void addToGarage(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId) {
         Garage garage = getGarageByAdminUserId(garageAdminUserId);
         if (!garage.addVehicle(vehicleIngressDTO.getPatent())) {
@@ -129,12 +151,12 @@ public class GarageServiceImpl implements GarageService {
     }
 
     private void removeFromGarage(String vehiclePatent, Garage garage) {
-        if(!garage.removeVehicle(vehiclePatent)){
+        if (!garage.removeVehicle(vehiclePatent)) {
             throw new VehicleNotFoundException();
         }
     }
 
-    private Parking createNewParking(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserID){
+    private Parking createNewParking(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserID) {
         Garage garage = getGarageByAdminUserId(garageAdminUserID);
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehicleIngressDTO.getPatent());
         MobileUser user = vehicle.getUser();

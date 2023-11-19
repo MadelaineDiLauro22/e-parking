@@ -10,7 +10,8 @@
                 <h2 class="fs-4">Estacionamiento: <span class="text-gray text-bold text-shadow-none fs-4" th:text="${garage.name}"></span></h2>
                 <hr class="border-terciary border-3">
                 <h3 class="fs-6">Tarifa por hora:<span class="text-gray text-bold text-shadow-none fs-6" th:text="${'$ ' + garage.feePerHour + ' .'}"></span></h3>
-                <h3 class="fs-6">Tarifa por 1/2 hora:<span class="text-gray text-bold text-shadow-none fs-6" th:text="${'$ ' + garage.feeFraction  + ' .'}"></span></h3>
+                <h3 class="fs-6">Tarifa por fraccion:<span class="text-gray text-bold text-shadow-none fs-6" th:text="${'$ ' + garage.feeFraction  + ' .'}"></span></h3>
+                <h3 class="fs-6">Tiempo de fraccion :<span class="text-gray text-bold text-shadow-none fs-6" th:text="${garage.fractionTime  + ' minuto/s'}"></span></h3>
             </article>
 
             <article class="container text-white bg-home mx-auto col-lg-6 p-4 my-4 rounded-4 box-shadow">

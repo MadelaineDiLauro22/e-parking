@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.excepcion.VehicleExistInGarageException;
 import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
+import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -64,10 +65,11 @@ public class GarageController {
         try {
             Vehicle vehicle = garageService.getVehicleByPatent(patent);
             Parking parking = garageService.getUserByPatent(patent).getParkings().get(0);
+            ParkingEgressDTO dto = garageService.EstimateEgressVehicle(parking, (Long) session.getAttribute("id"));
 
             ModelMap model = new ModelMap();
             model.put("vehicle", vehicle);
-            model.put("parking", parking);
+            model.put("parking", dto);
 
             return new ModelAndView("garage-vehicle", model);
         } catch (Exception e) {
