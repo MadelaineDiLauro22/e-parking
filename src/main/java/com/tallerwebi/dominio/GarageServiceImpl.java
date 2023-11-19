@@ -58,8 +58,18 @@ public class GarageServiceImpl implements GarageService {
         int min = 100000;
         int max = 999999;
         int randomNum = ThreadLocalRandom.current().nextInt(min, max);
-        OTP otp = new OTP(String.valueOf(randomNum), email, idGarage);
-        String messageWithStyles = "<html><body style='text-align: center; background: #FFFFFF;'><div style='background: #74ACDF; height: 33%;'></div><div style='background: #FFFFFF; height: 33%;'><h1 style='margin-top: 40px;'>Código: " + String.valueOf(randomNum) + "</h1></div><div style='background: #74ACDF; height: 33%;'></div></body></html>";
+
+        OTP otp = new OTP(String.valueOf(randomNum),email, idGarage);
+        String messageWithStyles = "<div style=\"background-color: rgb(20, 20, 20); display: block;\">\n" +
+                "    <div style=\"text-align: center; justify-content: center;\">\n" +
+                "        <img src=\"https://i.imgur.com/P8FBUXF.png\" style=\"width: 200px; height: 230px\">\n" +
+                "    </div>\n" +
+                "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
+                "<h1 style=\"text-align: center; justify-content: center; color: antiquewhite;\">Código: "+String.valueOf(randomNum)+"</h1>\n" +
+                "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
+                "</div>";
+
+
         otpRepository.save(otp);
         emailService.sendMimeMessage(email, "Clave de ingreso:", messageWithStyles);
     }
