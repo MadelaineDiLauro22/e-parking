@@ -38,7 +38,6 @@
                                 <h4 class="fs-5 m-0 text-truncate px-2" th:text="${vehicle.getPatent() + ' - ' + vehicle.getModel()}"></h4>
                             </div>
                             <div class="d-flex justify-content-around align-items-center">
-                                <a th:href="@{/web/admin/view(patent=${vehicle.getPatent()})}"><i class="fa-solid fa-rectangle-list text-blue px-2 text-shadow-none"></i></a>
                                 <a th:href="@{/web/admin/egressView(patent=${vehicle.getPatent()})}"><i class="fa-solid fa-delete-left text-danger px-2"></i></a>
                             </div>
                         </div>

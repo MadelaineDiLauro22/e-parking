@@ -137,16 +137,6 @@ public class GarageController {
         return new ModelAndView("otp-validate", modelMap);
     }
 
-
-    @RequestMapping("/view")
-    public ModelAndView viewGarageVehicle(@RequestParam(name = "patent") String patent) {
-        ModelMap model = new ModelMap();
-        Vehicle vehicle = garageService.getVehicleByPatent(patent);
-
-        model.put("vehicle", vehicle);
-        return new ModelAndView("garage-vehicle", model);
-    }
-
     @PostMapping(value = "/enter/register")
     public ModelAndView validationRegisterVehicle(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO, @ModelAttribute("otp") OTPDTO otpDTO) {
         try {

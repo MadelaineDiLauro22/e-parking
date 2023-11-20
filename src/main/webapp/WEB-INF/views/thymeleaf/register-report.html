@@ -1,0 +1,66 @@
+<div th:replace="fragments/header.html"></div>
+
+<main role="main" class="container-fluid m-f">
+
+  <section>
+
+    <article class="container text-white bg-windows mx-auto col-lg-8 p-2 my-3 rounded-4">
+
+      <h1 class="titleView fs-3">Registrar Denuncia</h1>
+
+      <form action="#" th:action="@{/mobile/report/register}" method="post" th:object="${report}">
+
+        <label for="userEmail" class="d-none"></label>
+        <input th:field="*{userEmail}" th:value="${user.getEmail()}" class="d-none" id="userEmail">
+        <label for="garageId" class="d-none"></label>
+        <input th:field="*{garageId}" th:value="${garage.getId()}" class="d-none" id="garageId">
+
+        <div class="divContainer divContainerBorderBottom my-1">
+
+          <label for="reportType" class="text-white text-bold mb-1">Seleccionar Tipo:</label>
+
+          <select th:field="*{reportType}" id="reportType"
+                  class="form-select my-1">
+
+            <option value="PAYMENTE_PROBLEM" selected>Inconveniente de Pago</option>
+
+            <option value="VEHICLE_DAMAGE">Daño al Vehiculo</option>
+
+            <option value="PERSONAL_PROBLEM">Inconveniente con el Personal</option>
+
+            <option value="OTHER">Otro asunto</option>
+
+          </select>
+
+        </div>
+
+        <div class="divContainer divContainerBorderBottom my-1">
+
+          <div class="form-floating">
+
+            <textarea th:field="*{description}" class="form-control" placeholder="Describe tu problema aquí..." id="description" style="height: 100px"></textarea>
+
+            <label for="description">Descripción</label>
+
+          </div>
+
+        </div>
+
+        <div class="divContainer my-3">
+
+          <button type="submit" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                 fs-6 text-center btn-primary text-white text-bold">Registrar</button>
+
+        </div>
+
+        <div>
+
+          <p th:if="${error != null}" th:text="'Error ' + ${error}"></p>
+
+        </div>
+      </form>
+      <form id="dummyForm" style="display: none;"></form>
+    </article>
+
+
+  </section>

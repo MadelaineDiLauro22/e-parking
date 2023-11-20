@@ -100,23 +100,23 @@
                 .then((res) => {
                     if(res && res.patent !== null){
                         brand.value = res.brand;
-                        brand.setAttribute("disabled", "true");
+                        brand.setAttribute("readonly", "true");
                         model.value = res.model;
-                        model.setAttribute("disabled", "true");
+                        model.setAttribute("readonly", "true");
                         color.value = res.color;
-                        color.setAttribute("disabled", "true");
+                        color.setAttribute("readonly", "true");
                         userName.value = res.userName;
-                        userName.setAttribute("disabled", "true");
+                        userName.setAttribute("readonly", "true");
                         userEmail.value = res.userEmail;
                     }
                     else{
-                        brand.removeAttribute("disabled");
+                        brand.removeAttribute("readonly");
                         brand.value = "";
-                        model.removeAttribute("disabled");
+                        model.removeAttribute("readonly");
                         model.value = "";
-                        color.removeAttribute("disabled");
+                        color.removeAttribute("readonly");
                         color.value = "";
-                        userName.removeAttribute("disabled");
+                        userName.removeAttribute("readonly");
                         userName.value = "";
                         userEmail.value = "";
                     }
