@@ -5,6 +5,7 @@ import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
+import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.springframework.mail.MailException;
 
 import javax.mail.MessagingException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,7 +25,6 @@ import static org.mockito.Mockito.*;
 public class GarageServiceImplTest {
 
     private GarageService garageService;
-    private GarageServiceImpl garageServiceImpl;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -231,4 +233,67 @@ public class GarageServiceImplTest {
         verify(userRepository, times(1)).findUserById(adminUserId);
         verify(parkingPlaceRepository, times(1)).findGarageByUser(user);
     }
+
+    @Test
+    void whenEstimateExit_ifVehicleHasMinorTimeThanFraction_shouldPayTheFractionFee() {
+        Long adminUserId = 1L;
+        float feePerHour = 15;
+        float feePerFraction = 5;
+        long fractionTime = 15;
+        createGarageByTime(adminUserId, feePerHour, feePerFraction, fractionTime);
+        Parking parking = createParkingWithTime(1);
+
+        ParkingEgressDTO response = garageService.EstimateEgressVehicle(parking, adminUserId);
+
+        assertEquals(feePerFraction, response.getExpendPrice());
+    }
+
+    @Test
+    void whenEstimateExit_ifVehicleHasMayorTimeFraction_shouldPayCorrectFee() {
+        Long adminUserId = 1L;
+        float feePerHour = 15;
+        float feePerFraction = 5;
+        long fractionTime = 15;
+        createGarageByTime(adminUserId, feePerHour, feePerFraction, fractionTime);
+        Parking parking = createParkingWithTime(120);
+
+        ParkingEgressDTO response = garageService.EstimateEgressVehicle(parking, adminUserId);
+
+        assertEquals(2 * feePerHour, response.getExpendPrice());
+    }
+
+    @Test
+    void whenEstimateExit_ifLessThanHourButHighThanFraction_shouldPayOneHour() {
+        Long adminUserId = 1L;
+        float feePerHour = 15;
+        float feePerFraction = 5;
+        long fractionTime = 15;
+        createGarageByTime(adminUserId, feePerHour, feePerFraction, fractionTime);
+        Parking parking = createParkingWithTime(30);
+
+        ParkingEgressDTO response = garageService.EstimateEgressVehicle(parking, adminUserId);
+
+        assertEquals(feePerHour, response.getExpendPrice());
+    }
+
+    private void createGarageByTime(Long adminId, float feePerHour, float feePerFraction, long fractionTime) {
+        MobileUser user = new MobileUser();
+        Garage garage = new Garage("Name", 20, null, "some adress", feePerHour, feePerFraction, fractionTime);
+
+        when(userRepository.findUserById(adminId)).thenReturn(user);
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+    }
+
+    private Parking createParkingWithTime(long minutesToSubstract) {
+        Instant arrival = Instant.now().minus(minutesToSubstract, ChronoUnit.MINUTES);
+
+        return new Parking(
+                ParkingType.STREET,
+                null,
+                null,
+                null,
+                Date.from(arrival)
+        );
+    }
+
 }
