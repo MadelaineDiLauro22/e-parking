@@ -39,6 +39,7 @@ public class MobileUser extends User {
         this.vehicles = new HashSet<>();
         this.parkings = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.reports = new ArrayList<>();
     }
 
     public void registerVehicle(Vehicle vehicle) {
