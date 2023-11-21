@@ -1,14 +1,14 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.helpers.NotificationService;
+import com.tallerwebi.infraestructura.NotificationRepository;
 import com.tallerwebi.infraestructura.ReportRepository;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Report;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.infraestructura.UserRepository;
+import com.tallerwebi.model.*;
+import com.tallerwebi.presentacion.dto.EditReportDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,19 @@ public class ReportServiceImplTest {
     private ReportService reportService;
     @Mock
     private ReportRepository reportRepository;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private NotificationRepository notificationRepository;
+    @Captor
+    private ArgumentCaptor<Report> reportCaptor;
+    @Captor
+    private ArgumentCaptor<Notification> notificationCaptor;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        reportService = new ReportServiceImpl(reportRepository);
+        reportService = new ReportServiceImpl(reportRepository, notificationRepository, userRepository);
     }
 
     @Test
@@ -40,4 +48,25 @@ public class ReportServiceImplTest {
         assertEquals(reports,reportsList);
     }
 
+    @Test
+    public void shouldEditReportSuccesfully(){
+        Report report = new Report(ReportType.FRAUD,"fraude",new Garage(),new MobileUser());
+        MobileUser user = new MobileUser();
+
+        Mockito.when(reportRepository.getReportById(1L))
+                .thenReturn(report);
+        Mockito.when(userRepository.findUserById(1L))
+                        .thenReturn(user);
+
+        reportService.editReport(new EditReportDTO(true,ReportStatus.ACCEPTED,1L,1L));
+
+        Mockito.verify(notificationRepository).save(notificationCaptor.capture());
+        Mockito.verify(reportRepository).save(reportCaptor.capture());
+
+        Report edited = reportCaptor.getValue();
+        Notification notification = notificationCaptor.getValue();
+
+        assertEquals(ReportStatus.ACCEPTED, edited.getReportStatus());
+        assertEquals("Su denuncia fue revisada por un administrador",notification.getTitle());
+    }
 }

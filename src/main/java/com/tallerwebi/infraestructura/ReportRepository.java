@@ -8,7 +8,7 @@ import java.util.List;
 public interface ReportRepository {
 
     List<Report> getReportByUser(MobileUser mobileUser);
-
+    Report getReportById(Long id);
     List<Report> getAllReports();
 
     void save(Report report);
