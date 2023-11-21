@@ -6,6 +6,10 @@ import com.tallerwebi.infraestructura.ReportRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.EditReportDTO;
+import com.tallerwebi.infraestructura.ParkingPlaceRepository;
+import com.tallerwebi.infraestructura.ReportRepository;
+import com.tallerwebi.infraestructura.UserRepository;
+import com.tallerwebi.model.Report;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -27,6 +31,7 @@ public class ReportServiceImplTest {
     private ArgumentCaptor<Report> reportCaptor;
     @Captor
     private ArgumentCaptor<Notification> notificationCaptor;
+    private ParkingPlaceRepository parkingPlaceRepository;
 
     @BeforeEach
     public void setUp() {

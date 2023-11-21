@@ -1,20 +1,13 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
-import com.tallerwebi.infraestructura.NotificationRepository;
-import com.tallerwebi.infraestructura.ParkingRepository;
-import com.tallerwebi.infraestructura.UserRepository;
-import com.tallerwebi.infraestructura.VehicleRepository;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Notification;
-import com.tallerwebi.model.Parking;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.infraestructura.*;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,10 +22,14 @@ class ProfileServiceImplTest {
     private UserRepository mockUserRepository;
     @Mock
     private NotificationRepository notificationRepository;
+    @Mock
+    private ParkingPlaceRepository parkingPlaceRepository;
+    @Mock
+    private ReportRepository reportRepository;
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, notificationRepository);
+        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, notificationRepository, parkingPlaceRepository, reportRepository);
     }
 
     @Test
