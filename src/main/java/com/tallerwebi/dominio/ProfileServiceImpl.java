@@ -105,5 +105,4 @@ public class ProfileServiceImpl implements ProfileService{
         return reportRepository.getReportByUser(user);
     }
 
-
 }

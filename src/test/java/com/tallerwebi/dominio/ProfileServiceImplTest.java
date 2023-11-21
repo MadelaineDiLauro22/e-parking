@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
@@ -69,6 +70,48 @@ class ProfileServiceImplTest {
         assertEquals(notifications, notificationRepository.findAllByUser(user));
     }
 
+    @Test
+    void shouldRegisterNewReport() {
+        Long idAdmin = 1L;
+        String email = "jdoe@mail.com";
+
+        createAndPersistMobileUser(email);
+        createAndPersistGarage(idAdmin);
+
+        profileService.registerReport(idAdmin, email, "some description");
+
+        Mockito.verify(reportRepository).save(ArgumentMatchers.argThat(report ->
+                report.getReportType().equals(ReportType.FRAUD) &&
+                        report.isActive() &&
+                        report.getDescription().equals("some description") &&
+                        report.getReportStatus().equals(ReportStatus.IN_PROCESS)
+        ));
+    }
+
+    @Test
+    void whenRegisterReport_ifGarageNotExist_shouldThrowException() {
+        Long idAdmin = 1L;
+        String email = "jdoe@mail.com";
+        createAndPersistMobileUser(email);
+
+        Mockito.when(parkingPlaceRepository.findById(idAdmin))
+                .thenReturn(null);
+
+        assertThrows(GarageNotFoundException.class, () -> profileService.registerReport(idAdmin, email, "some desc"));
+    }
+
+    @Test
+    void shouldGetReportsByUser() {
+        Long id = 1L;
+        MobileUser user = createAndPersistMobileUser(id);
+        Mockito.when(reportRepository.getReportByUser(user))
+                .thenReturn(List.of());
+
+        List<Report> reports = profileService.getReportsByUser(id);
+
+        assertTrue(reports.isEmpty());
+    }
+
     private MobileUser sinceItSavesAMobileUserWithVehiclesAndParkings() {
         MobileUser user = new MobileUser();
         Vehicle vehicle = new Vehicle();
@@ -84,5 +127,23 @@ class ProfileServiceImplTest {
         user.addNotification(notification);
 
         return user;
+    }
+
+    private void createAndPersistMobileUser(String email) {
+        MobileUser user = new MobileUser();
+        Mockito.when(mockUserRepository.findUserByMail(email))
+                .thenReturn(user);
+    }
+
+    private MobileUser createAndPersistMobileUser(Long id) {
+        MobileUser user = new MobileUser();
+        Mockito.when(mockUserRepository.findUserById(id))
+                .thenReturn(user);
+        return user;
+    }
+
+    private void createAndPersistGarage(Long idAdmin) {
+        Mockito.when(parkingPlaceRepository.findById(idAdmin))
+                .thenReturn(new Garage());
     }
 }

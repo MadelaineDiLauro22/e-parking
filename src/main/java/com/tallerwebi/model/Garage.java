@@ -31,6 +31,7 @@ public class Garage extends ParkingPlace {
 
     public Garage() {
         this.patents = new HashSet<>();
+        this.reports = new ArrayList<>();
     }
 
     public boolean addVehicle(String patent){
