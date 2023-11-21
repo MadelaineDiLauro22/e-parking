@@ -1,9 +1,9 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.infraestructura.ParkingPlaceRepository;
 import com.tallerwebi.infraestructura.ReportRepository;
-import com.tallerwebi.model.MobileUser;
+import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.Report;
-import com.tallerwebi.model.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -19,6 +19,10 @@ public class ReportServiceImplTest {
     private ReportService reportService;
     @Mock
     private ReportRepository reportRepository;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private ParkingPlaceRepository parkingPlaceRepository;
 
     @BeforeEach
     public void setUp() {
