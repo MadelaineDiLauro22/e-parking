@@ -10,11 +10,13 @@ import com.tallerwebi.model.NotificationType;
 import com.tallerwebi.model.Report;
 import com.tallerwebi.presentacion.dto.EditReportDTO;
 import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
@@ -41,5 +43,15 @@ public class ReportServiceImpl implements ReportService {
 
         reportRepository.save(report);
         notificationRepository.save(new Notification("Su denuncia fue revisada por un administrador","Vea las novedades acerca del estado de su denuncia", Date.from(Instant.now()),user));
+    }
+
+    @Override
+    public void registerReport(Report report) {
+        reportRepository.save(report);
+    }
+
+    @Override
+    public List<Report> getUserReport(MobileUser user) {
+        return reportRepository.getReportByUser(user);
     }
 }
