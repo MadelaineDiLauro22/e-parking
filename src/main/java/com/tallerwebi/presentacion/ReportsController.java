@@ -18,19 +18,18 @@ import java.util.List;
 public class ReportsController {
     private final ReportService reportService;
 
-
     public ReportsController(ReportService reportService) {
         this.reportService = reportService;
     }
 
     @GetMapping
-    public ModelAndView getReportView(@RequestParam(name = "mail") String mail, @RequestParam(name = "idGarage") String idGarage) {
+    public ModelAndView getReportView(@RequestParam(name = "mail") String mail, @RequestParam(name = "idGarage") int idGarage) {
         try {
             ModelMap model = new ModelMap();
             model.put("mail", mail);
             model.put("idGarage", idGarage);
 
-            return new ModelAndView("report-register", model);
+            return new ModelAndView("register-report", model);
         } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
@@ -42,14 +41,14 @@ public class ReportsController {
             reportService.registerReport(report);
             ModelMap model = new ModelMap();
             model.put("succeed", true);
-            return new ModelAndView("report-register", model);
+            return new ModelAndView("register-report", model);
 
         }catch (Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
-    @GetMapping
+    @GetMapping(value = "/user-reports")
     public ModelAndView getReportsByUser(@RequestParam(name = "user") MobileUser user){
         try{
             List<Report> userReports = reportService.getUserReport(user);
