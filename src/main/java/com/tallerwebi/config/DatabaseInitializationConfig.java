@@ -80,7 +80,7 @@ public class DatabaseInitializationConfig {
         parkingPlaceRepository.save(garage);
         parkingRepository.save(parking);
 
-        Report report = new Report(ReportType.FRAUD, "Fraude", garage, user);
+        Report report = new Report(ReportType.FRAUD, "El garage etc etc lorem ipsum lorem ipsum", garage, user);
 
         reportRepository.save(report);
     }

@@ -48,7 +48,7 @@ public class ReportServiceImpl implements ReportService {
         MobileUser user = userRepository.findUserById(editReportDTO.getUserId());
 
         report.setReportStatus(editReportDTO.getReportStatus());
-        report.setActive(editReportDTO.getIsActive());
+        if(editReportDTO.getReportStatus() == ReportStatus.ACCEPTED || editReportDTO.getReportStatus() == ReportStatus.REJECTED) report.setActive(false);
 
         reportRepository.save(report);
         notificationRepository.save(new Notification("Su denuncia fue revisada por un administrador","Vea las novedades acerca del estado de su denuncia", Date.from(Instant.now()),user));
