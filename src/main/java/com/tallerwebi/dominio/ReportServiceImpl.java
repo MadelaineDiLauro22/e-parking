@@ -65,4 +65,9 @@ public class ReportServiceImpl implements ReportService {
         MobileUser user = userRepository.findUserById(userId);
         return reportRepository.getReportByUser(user);
     }
+
+    @Override
+    public Report findReportById(Long id) {
+        return reportRepository.getReportById(id);
+    }
 }

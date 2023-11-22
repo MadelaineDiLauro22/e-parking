@@ -5,7 +5,6 @@ import com.tallerwebi.model.ReportStatus;
 public class EditReportDTO {
     private Long id;
     private boolean isActive;
-
     private ReportStatus reportStatus;
     private Long userId;
 
@@ -14,6 +13,9 @@ public class EditReportDTO {
         this.reportStatus = reportStatus;
         this.id = id;
         this.userId = userId;
+    }
+
+    public EditReportDTO() {
     }
 
     public boolean getIsActive() {
@@ -30,5 +32,21 @@ public class EditReportDTO {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void setReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

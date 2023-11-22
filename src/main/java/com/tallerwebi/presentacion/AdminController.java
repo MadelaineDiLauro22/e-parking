@@ -4,12 +4,10 @@ import com.tallerwebi.dominio.ReportService;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Report;
 import com.tallerwebi.presentacion.dto.EditReportDTO;
+import com.tallerwebi.presentacion.dto.ReportDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -36,13 +34,28 @@ public class AdminController {
         }
     }
 
+    @PostMapping(value = "view-report")
+    public ModelAndView viewReport(@RequestParam(name = "id") Long reportId){
+        try{
+            ModelMap model = new ModelMap();
+            Report report = reportService.findReportById(reportId);
+            model.put("report", report);
+            model.put("editReport", new EditReportDTO());
+            model.put("succeed", true);
+
+            return new ModelAndView("admin-edit-report", model);
+        }catch(Exception e){
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
+    }
+
     @PostMapping(value = "edit-report")
-    public ModelAndView editReport(@RequestParam(name = "report") EditReportDTO reportDTO){
+    public ModelAndView editReport(@ModelAttribute("editReport") EditReportDTO reportDTO){
         try{
             reportService.editReport(reportDTO);
             ModelMap model = new ModelMap();
             model.put("succeed", true);
-            return new ModelAndView("admin-edit-report");
+            return new ModelAndView("admin-edit-report", model);
         }catch(Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }

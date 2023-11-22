@@ -68,9 +68,9 @@
 
                                         </li>
 
-                                        <li class="nav-item" th:if="${rol == 'USER'}">
+                                        <li class="nav-item" th:if="${rol == 'USER' || rol == 'ADMIN'}">
 
-                                            <a class="nav-link text-white text-bold" th:href="@{/mobile/reports/user-reports}">Denuncias</a>
+                                            <a class="nav-link text-white text-bold" th:href="@{${rol == 'ADMIN' ? '/web/admin/reports' : '/mobile/reports/user-reports'}}">Denuncias</a>
 
                                         </li>
 

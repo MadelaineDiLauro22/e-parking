@@ -14,4 +14,5 @@ public interface ReportService {
      void registerReport(ReportDTO reportDTO);
 
      List<Report> getUserReport(Long userId);
+     Report findReportById(Long id);
 }

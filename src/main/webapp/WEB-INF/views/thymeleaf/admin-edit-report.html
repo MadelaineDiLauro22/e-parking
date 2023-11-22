@@ -1,0 +1,84 @@
+<div th:replace="fragments/header.html"></div>
+
+<main role="main" class="container-fluid m-f">
+
+  <section>
+
+    <article class="container text-white bg-windows mx-auto col-lg-8 p-2 my-3 rounded-4">
+
+      <h1 class="titleView fs-3">Modificar Denuncia</h1>
+
+      <div class="divContainer divContainerBorderBottom my-1">
+
+        <div class="d-flex justify-content-between">
+
+          <div class="d-flex">
+
+            <h4>Numero de Denuncia: </h4>
+
+            <p class="" th:text="${report.getId()}">
+
+          </div>
+
+          <div class="d-flex">
+
+            <h4>Fecha: </h4>
+
+            <p class="" th:text="${report.getCreatedAt()}">
+
+          </div>
+
+        </div>
+
+        <div class="d-flex">
+          <h4>Nombre del Garage: </h4>
+
+          <p class="" th:text="${report.getParkingPlace().getName()}">
+        </div>
+
+
+        <h4>Descripción de la denuncia</h4>
+
+        <p class="" th:text="${report.getDescription()}">
+
+      </div>
+
+      <form action="#" th:action="@{/mobile/admin/edit-report}" method="post" th:object="${editReport}">
+
+        <div class="divContainer divContainerBorderBottom my-1">
+
+          <label for="reportType" class="text-white text-bold mb-1">Seleccionar Tipo:</label>
+
+          <select th:field="*{reportStatus}" id="reportType"
+                  class="form-select my-1">
+
+            <option value="ACCEPTED">Aceptado</option>
+
+            <option value="REJECTED">Denegado</option>
+
+          </select>
+
+        </div>
+
+        <div class="divContainer my-3">
+
+          <button type="submit" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                 fs-6 text-center btn-primary text-white text-bold">Actualizar</button>
+
+        </div>
+
+        <div>
+
+          <p th:if="${error != null}" th:text="'Error ' + ${error}"></p>
+
+        </div>
+      </form>
+      <form id="dummyForm" style="display: none;"></form>
+    </article>
+
+
+  </section>
+
+</main>
+
+<div th:replace="fragments/footer.html"></div>
