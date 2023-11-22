@@ -101,25 +101,28 @@ public class GarageServiceImplTest {
 
     @Test
     public void testSendOtpSuccess() throws MessagingException {
-        String email = "abc@mail.com";
+        String mail = "abc@mail.com";
         Long idGarage = 1L;
 
-        garageService.sendOtp(email, idGarage);
+        garageService.sendOtp(mail, idGarage);
 
         Mockito.verify(otpRepository).save(otpArgumentCaptor.capture());
 
         OTP otp = otpArgumentCaptor.getValue();
+
+        String link = String.format("http://localhost:8080/eparking/mobile/reports?mail=%s&idGarage=%d", mail, idGarage);
 
         String messageWithStyles = "<div style=\"background-color: rgb(20, 20, 20); display: block;\">\n" +
                 "    <div style=\"text-align: center; justify-content: center;\">\n" +
                 "        <img src=\"https://i.imgur.com/P8FBUXF.png\" style=\"width: 200px; height: 230px\">\n" +
                 "    </div>\n" +
                 "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
-                "<h1 style=\"text-align: center; justify-content: center; color: antiquewhite;\">Código: "+otp.getOtpKey()+"</h1>\n" +
+                "<h1 style=\"text-align: center; justify-content: center; color: antiquewhite;\">Código: " + otp.getOtpKey() + "</h1>\n" +
                 "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Estan queriendo ingresar tu vehiculo, si no sos vos, hace la denuncia: <a href=\"" + link + "\">AQUI</a></p>\n" +
                 "</div>";
 
-        verify(emailService).sendMimeMessage(email, "Clave de ingreso:", messageWithStyles);
+        verify(emailService).sendMimeMessage(mail, "Clave de ingreso:", messageWithStyles);
     }
 
     @Test
