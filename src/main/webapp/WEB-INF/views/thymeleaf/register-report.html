@@ -8,12 +8,12 @@
 
       <h1 class="titleView fs-3">Registrar Denuncia</h1>
 
-      <form action="#" th:action="@{/mobile/report/register}" method="post" th:object="${report}">
+      <form action="#" th:action="@{/mobile/reports/register}" method="post" th:object="${reportRegister}">
 
         <label for="userEmail" class="d-none"></label>
-        <input th:field="*{userEmail}" th:value="${user.getEmail()}" class="d-none" id="userEmail">
+        <input th:field="*{userEmail}" th:value="${mail}" class="d-none" id="userEmail">
         <label for="garageId" class="d-none"></label>
-        <input th:field="*{garageId}" th:value="${garage.getId()}" class="d-none" id="garageId">
+        <input th:field="*{garageId}" th:value="${idGarage}" class="d-none" id="garageId">
 
         <div class="divContainer divContainerBorderBottom my-1">
 

@@ -1,13 +1,13 @@
 <div th:replace="fragments/header.html"></div>
 
 <main role="main" class="container-fluid m-f">
-    <section class="container text-white bg-home mx-auto col-lg-4 p-4 my-2 rounded-4 box-shadow">
+    <section class="container text-white bg-home mx-auto col-lg-5 py-4 my-2 rounded-4 box-shadow">
         <article>
             <h2 class="fs-4 py-2 text-center">Vehiculo: <span class="text-gray text-bold text-shadow-none fs-4" th:text="${vehicle.getModel()}"></span></h2>
             <hr class="border-terciary border-3">
             <!--<p class="">Cliente: <span th:text="${mobileUser.nickName}"></span></p>-->
             <!--<p class="">Usuario: <span th:text="${mobileUser.name}"></span></p>-->
-            <div class="px-4 col-lg-8 mx-auto">
+            <div class="px-4 col-lg-9 mx-auto">
                 <div class="d-flex justify-content-between">
                     <p class="fs-5">Patente: </p><span class="text-gray text-bold text-shadow-none fs-5" th:text="${vehicle.getPatent()}"></span>
                 </div>
@@ -25,7 +25,7 @@
 
             <hr class="border-terciary border-3">
 
-            <div class="px-4 col-lg-8 mx-auto">
+            <div class="px-4 col-lg-9 mx-auto">
                 <div class="d-flex justify-content-between">
                     <p class="fs-5">Hora de llegada: </p><span class="text-gray text-bold text-shadow-none fs-5" th:text="${parking.getDateArrival()}"></span>
                 </div>

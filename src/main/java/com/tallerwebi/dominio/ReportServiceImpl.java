@@ -1,15 +1,14 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.helpers.NotificationService;
+import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
+import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.infraestructura.NotificationRepository;
+import com.tallerwebi.infraestructura.ParkingPlaceRepository;
 import com.tallerwebi.infraestructura.ReportRepository;
 import com.tallerwebi.infraestructura.UserRepository;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Notification;
-import com.tallerwebi.model.NotificationType;
-import com.tallerwebi.model.Report;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.EditReportDTO;
-import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
+import com.tallerwebi.presentacion.dto.ReportDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,11 +21,13 @@ public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final ParkingPlaceRepository parkingPlaceRepository;
 
-    public ReportServiceImpl(ReportRepository reportRepository, NotificationRepository notificationRepository,UserRepository userRepository) {
+    public ReportServiceImpl(ReportRepository reportRepository, NotificationRepository notificationRepository, UserRepository userRepository, ParkingPlaceRepository parkingPlaceRepository) {
         this.reportRepository = reportRepository;
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
+        this.parkingPlaceRepository = parkingPlaceRepository;
     }
     @Override
     public List<Report> getAllReports() {
@@ -46,12 +47,22 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void registerReport(Report report) {
+    public void registerReport(ReportDTO reportDTO) {
+        Garage garage = (Garage) parkingPlaceRepository.findById(reportDTO.getGarageId());
+        if(garage == null) throw new GarageNotFoundException();
+        MobileUser user = userRepository.findUserByMail(reportDTO.getUserEmail());
+        if(user == null) throw new UserNotFoundException();
+
+        Report report = new Report(reportDTO.getReportType(), reportDTO.getDescription(), garage, user);
+        report.setActive(true);
+        report.setReportStatus(ReportStatus.IN_PROCESS);
+
         reportRepository.save(report);
     }
 
     @Override
-    public List<Report> getUserReport(MobileUser user) {
+    public List<Report> getUserReport(Long userId) {
+        MobileUser user = userRepository.findUserById(userId);
         return reportRepository.getReportByUser(user);
     }
 }

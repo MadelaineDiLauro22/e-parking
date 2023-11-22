@@ -1,25 +1,25 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ReportService;
-import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Report;
+import com.tallerwebi.presentacion.dto.ReportDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
 @RequestMapping("mobile/reports")
 public class ReportsController {
     private final ReportService reportService;
+    private final HttpSession session;
 
-    public ReportsController(ReportService reportService) {
+    public ReportsController(ReportService reportService, HttpSession session) {
         this.reportService = reportService;
+        this.session = session;
     }
 
     @GetMapping
@@ -28,6 +28,7 @@ public class ReportsController {
             ModelMap model = new ModelMap();
             model.put("mail", mail);
             model.put("idGarage", idGarage);
+            model.put("reportRegister", new ReportDTO());
 
             return new ModelAndView("register-report", model);
         } catch (Exception e) {
@@ -36,22 +37,21 @@ public class ReportsController {
     }
 
     @PostMapping(value = "/register")
-    public ModelAndView registerReport(@RequestParam(name = "report") Report report){
+    public ModelAndView registerReport(@ModelAttribute("reportRegister") ReportDTO report){
         try{
             reportService.registerReport(report);
             ModelMap model = new ModelMap();
             model.put("succeed", true);
             return new ModelAndView("register-report", model);
-
         }catch (Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
     @GetMapping(value = "/user-reports")
-    public ModelAndView getReportsByUser(@RequestParam(name = "user") MobileUser user){
+    public ModelAndView getReportsByUser(){
         try{
-            List<Report> userReports = reportService.getUserReport(user);
+            List<Report> userReports = reportService.getUserReport((Long) session.getAttribute("id"));
             ModelMap model = new ModelMap();
             model.put("reports", userReports);
 

@@ -36,7 +36,7 @@ public class ReportServiceImplTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        reportService = new ReportServiceImpl(reportRepository, notificationRepository, userRepository);
+        reportService = new ReportServiceImpl(reportRepository, notificationRepository, userRepository, parkingPlaceRepository);
     }
 
     @Test
