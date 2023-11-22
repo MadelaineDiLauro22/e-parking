@@ -27,14 +27,14 @@ public class AdminController {
             List<Report> reports = reportService.getAllReports();
             ModelMap model = new ModelMap();
             model.put("reports", reports);
-            return new ModelAndView("admin-report-list");
+            return new ModelAndView("admin-report-list", model);
 
         }catch (Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
     }
 
-    @PostMapping(value = "view-report")
+    @GetMapping(value = "view-report")
     public ModelAndView viewReport(@RequestParam(name = "id") Long reportId){
         try{
             ModelMap model = new ModelMap();
@@ -55,7 +55,7 @@ public class AdminController {
             reportService.editReport(reportDTO);
             ModelMap model = new ModelMap();
             model.put("succeed", true);
-            return new ModelAndView("admin-edit-report", model);
+            return new ModelAndView("redirect:/mobile/admin/reports", model);
         }catch(Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }

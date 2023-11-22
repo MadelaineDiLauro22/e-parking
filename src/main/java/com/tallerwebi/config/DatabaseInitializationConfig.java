@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tallerwebi.infraestructura.ParkingPlaceRepository;
 import com.tallerwebi.infraestructura.ParkingRepository;
+import com.tallerwebi.infraestructura.ReportRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.*;
 import org.springframework.context.annotation.Bean;
@@ -29,27 +30,31 @@ public class DatabaseInitializationConfig {
     public static final String MODELO = "FOX";
     public static final String COLOR = "Rojo";
     private static final String MAIL_ADMIN = "admin@unlam.edu.ar";
+    private static final String MAIL_GARAGE = "garage@unlam.edu.ar";
     private final UserRepository userRepository;
     private final ParkingPlaceRepository parkingPlaceRepository;
     private final ParkingRepository parkingRepository;
+    private final ReportRepository reportRepository;
 
-    public DatabaseInitializationConfig(UserRepository userRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository) {
+    public DatabaseInitializationConfig(UserRepository userRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, ReportRepository reportRepository) {
         this.userRepository = userRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
         this.parkingRepository = parkingRepository;
+        this.reportRepository = reportRepository;
     }
 
     @Bean
     @Transactional
     public void dataSourceInitializer() throws IOException {
         MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.USER, NOMBRE, NICK_NAME);
-        MobileUser user2 = new MobileUser("test2@unlam.edu.ar", PASSWORD, UserRole.USER, "SegundoTest", "SegundoTestUser");
-        MobileUser garageUser = new MobileUser(MAIL_ADMIN, PASSWORD, UserRole.ADMIN_GARAGE, NOMBRE, NICK_NAME);
+        MobileUser admin = new MobileUser(MAIL_ADMIN, PASSWORD, UserRole.ADMIN, NOMBRE, NICK_NAME);
+        MobileUser garageUser = new MobileUser(MAIL_GARAGE, PASSWORD, UserRole.ADMIN_GARAGE, NOMBRE, NICK_NAME);
+
         Vehicle vehicle = new Vehicle(PATENTE, MARCA, MODELO, COLOR);
         Vehicle vehicle2 = new Vehicle("123", "Fiat", "Fitito", "Rojo");
 
         vehicle.setUser(user);
-        vehicle2.setUser(user2);
+        vehicle2.setUser(admin);
 
         Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
         Garage garage = new Garage("Pepe", 30, geolocation, "Florencio Varela 1903, B1754JEE San Justo, Buenos Aires Province, Argentina", 1.5F, 1.0F, (long) 1.0);
@@ -57,22 +62,27 @@ public class DatabaseInitializationConfig {
         garage.addVehicle(vehicle2.getPatent());
 
         Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), Date.from(Instant.now()));
-        parking.setMobileUser(user2);
+        parking.setMobileUser(admin);
         parking.setVehicle(vehicle2);
         List <Parking> parkingList = new ArrayList<>();
         parkingList.add(parking);
-        user2.setParkings(parkingList);
+        admin.setParkings(parkingList);
+
+        user.registerVehicle(vehicle);
+        admin.registerVehicle(vehicle2);
 
         userRepository.save(user);
-        userRepository.save(user2);
-        user.registerVehicle(vehicle);
-        user2.registerVehicle(vehicle2);
+        userRepository.save(admin);
 
         createAndSaveParkingsPlaces();
 
         userRepository.save(garageUser);
         parkingPlaceRepository.save(garage);
         parkingRepository.save(parking);
+
+        Report report = new Report(ReportType.FRAUD, "Fraude", garage, user);
+
+        reportRepository.save(report);
     }
 
     private void createAndSaveParkingsPlaces() throws IOException {

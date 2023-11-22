@@ -18,11 +18,13 @@
 
               <i class="fa-solid fa-rectangle-list text-white fs-5"></i>
 
-              <p class="m-0 text-truncate px-3" th:text="${report.getParkingPlace().name + ' - ' + report.reportType}"></p>
+              <p class="m-0 text-truncate px-3" th:text="${report.getParkingPlace().getName() + ' - ' + report.reportType}"></p>
 
             </div>
 
-            <a th:href="@{/mobile/admin/view-report?id=${report.getId()}}"><i class="fa-solid fa-eye text-blue"></i></a>
+            <a th:href="@{/mobile/admin/view-report(id=${report.getId()})}">
+              <i class="fa-solid fa-eye text-blue"></i>
+            </a>
 
           </div>
 

@@ -9,12 +9,15 @@ import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.EditReportDTO;
 import com.tallerwebi.presentacion.dto.ReportDTO;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
+@Transactional
 @Service
 public class ReportServiceImpl implements ReportService {
 
@@ -31,7 +34,12 @@ public class ReportServiceImpl implements ReportService {
     }
     @Override
     public List<Report> getAllReports() {
-        return reportRepository.getAllReports();
+        List<Report> list = reportRepository.getAllReports();
+        for (Report report:list) {
+            Hibernate.initialize(report.getParkingPlace());
+            Hibernate.initialize(report.getUser());
+        }
+        return list;
     }
 
     @Override
@@ -68,6 +76,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public Report findReportById(Long id) {
-        return reportRepository.getReportById(id);
+        Report report = reportRepository.getReportById(id);
+        Hibernate.initialize(report.getUser());
+        Hibernate.initialize(report.getParkingPlace());
+        return report;
     }
 }
