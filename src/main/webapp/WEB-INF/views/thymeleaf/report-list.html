@@ -20,17 +20,13 @@
 
               <p class="m-0 text-truncate px-3" th:text="${report.getParkingPlace().name + ' - ' + report.reportType}"></p>
 
+              <p class="m-0 text-truncate px-3" th:text="${report.getDescription()}"></p>
+
             </div>
 
-            <a href="#"><i class="fa-solid fa-eye text-blue"></i></a>
+            <p th:class="${report.getReportStatus() == 'ACCEPTED'} ? 'm-0 text-success' : 'm-0 text-danger'" th:text="${report.getReportStatus()}"></p>
 
           </div>
-
-        </div>
-
-        <div class="text-end">
-
-          <a class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-3 fs-6 text-center btn-primary" th:href="@{/mobile/report/view}"><i class="fa-solid fa-plus fs-6"></i></a>
 
         </div>
 
