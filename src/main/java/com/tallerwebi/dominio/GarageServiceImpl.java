@@ -1,8 +1,6 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.excepcion.OTPNotFoundException;
-import com.tallerwebi.dominio.excepcion.VehicleAlreadyParkException;
-import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
@@ -44,8 +42,12 @@ public class GarageServiceImpl implements GarageService {
 
     @Override
     public void registerVehicle(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId) {
-        if (otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())) {
-            addToGarage(vehicleIngressDTO, garageAdminUserId);
+        MobileUser user = userRepository.findUserById(garageAdminUserId);
+        if (user == null) throw new UserNotFoundException();
+        Garage garage = (Garage) parkingPlaceRepository.findGarageByUser(user);
+        if(garage == null) throw new GarageNotFoundException();
+        if (otpRepository.exists(vehicleIngressDTO.getUserEmail(), garage.getId(), otpDto.getOtpKey())) {
+            addToGarage(vehicleIngressDTO, garage);
             Parking parking = createNewParking(vehicleIngressDTO, garageAdminUserId);
             parkingRepository.save(parking);
         } else {
@@ -157,8 +159,7 @@ public class GarageServiceImpl implements GarageService {
         );
     }
 
-    private void addToGarage(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId) {
-        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+    private void addToGarage(VehicleIngressDTO vehicleIngressDTO, Garage garage) {
         if (!garage.addVehicle(vehicleIngressDTO.getPatent())) {
             throw new VehicleAlreadyParkException();
         }
