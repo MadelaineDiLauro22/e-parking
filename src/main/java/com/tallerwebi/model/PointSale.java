@@ -11,8 +11,8 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name = "parking_place_id")
 public class PointSale extends ParkingPlace {
 
-    public PointSale(String name, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
-        super(name, geolocation, feePerHour, feeFraction, fractionTime);
+    public PointSale(String name, Geolocation geolocation, String address, float feePerHour, float feeFraction, long fractionTime) {
+        super(name, geolocation, address, feePerHour, feeFraction, fractionTime);
     }
 
     public PointSale() {

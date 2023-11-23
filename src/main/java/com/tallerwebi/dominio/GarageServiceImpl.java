@@ -1,18 +1,19 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.excepcion.OTPNotFoundException;
-import com.tallerwebi.dominio.excepcion.VehicleAlreadyParkException;
-import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
+import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
+import org.hibernate.Hibernate;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,25 +42,43 @@ public class GarageServiceImpl implements GarageService {
 
     @Override
     public void registerVehicle(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId) {
-        if(otpRepository.exists(vehicleIngressDTO.getUserEmail(),garageAdminUserId, otpDto.getOtpKey())){
-            addToGarage(vehicleIngressDTO, garageAdminUserId);
+        MobileUser user = userRepository.findUserById(garageAdminUserId);
+        if (user == null) throw new UserNotFoundException();
+        Garage garage = (Garage) parkingPlaceRepository.findGarageByUser(user);
+        if(garage == null) throw new GarageNotFoundException();
+        if (otpRepository.exists(vehicleIngressDTO.getUserEmail(), garage.getId(), otpDto.getOtpKey())) {
+            addToGarage(vehicleIngressDTO, garage);
             Parking parking = createNewParking(vehicleIngressDTO, garageAdminUserId);
             parkingRepository.save(parking);
-        }
-       else{
-           throw new OTPNotFoundException("No se encontro el OTP.");
+        } else {
+            throw new OTPNotFoundException("No se encontro el OTP.");
         }
     }
 
     @Override
-    public void sendOtp(String email, Long idGarage) throws MailException {
+    public void sendOtp(String mail, Long idGarage) throws MailException, MessagingException {
         int min = 100000;
         int max = 999999;
         int randomNum = ThreadLocalRandom.current().nextInt(min, max);
-        OTP otp = new OTP(String.valueOf(randomNum),email, idGarage);
+
+        OTP otp = new OTP(String.valueOf(randomNum), mail, idGarage);
+
+        String link = String.format("http://localhost:8080/eparking/mobile/reports?mail=%s&idGarage=%d", mail, idGarage);
+
+        String messageWithStyles = "<div style=\"background-color: rgb(20, 20, 20); display: block;\">\n" +
+                "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
+                "    <div style=\"text-align: center; justify-content: center;\">\n" +
+                "        <img src=\"https://i.imgur.com/P8FBUXF.png\" style=\"width: 200px; height: 230px\">\n" +
+                "    </div>\n" +
+                "<h1 style=\"text-align: center; justify-content: center; color: antiquewhite;\">Código: " + String.valueOf(randomNum) + "</h1>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Estan queriendo ingresar tu vehiculo, si no sos vos, hace la denuncia: <a href=\"" + link + "\" style=\"color: #D13639;\">AQUI</a></p>\n" +
+                "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
+                "</div>";
+
         otpRepository.save(otp);
-        emailService.sendSimpleMessage(email, "Clave de ingreso:", String.valueOf(randomNum));
+        emailService.sendMimeMessage(mail, "Clave de ingreso:", messageWithStyles);
     }
+
 
     @Override
     public void egressVehicle(String vehiclePatent, Long garageAdminUserId) {
@@ -97,7 +116,9 @@ public class GarageServiceImpl implements GarageService {
     @Override
     public MobileUser getUserByPatent(String patent) {
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(patent);
-        return vehicle.getUser();
+        MobileUser user = vehicle.getUser();
+        Hibernate.initialize(user);
+        return user;
     }
 
     @Override
@@ -106,24 +127,51 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    public boolean vehicleExistsInGarage(String patent, Long garageAdminUserId) {
+        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+        return garage.getPatents().contains(patent);
+    }
+
+    @Override
     public Garage getGarageByAdminUserId(Long garageAdminUserId) {
         return (Garage) parkingPlaceRepository.findGarageByUser(userRepository.findUserById(garageAdminUserId));
     }
 
-    private void addToGarage(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId) {
-        Garage garage = getGarageByAdminUserId(garageAdminUserId);
+    @Override
+    public ParkingEgressDTO EstimateEgressVehicle(Parking parking, Long garageAdminUserId) {
+        Garage garage = this.getGarageByAdminUserId(garageAdminUserId);
+        long expendSeconds = Instant.now().getEpochSecond() - parking.getDateArrival().toInstant().getEpochSecond();
+        long expendHours = expendSeconds / 3600;
+        long fractionSecondsTime = garage.getFractionTime() * 60;
+        double expendPrice;
+
+        if (expendSeconds > fractionSecondsTime) {
+            if (expendHours < 1) expendHours = 1;
+            expendPrice = garage.getFeePerHour() * expendHours;
+        } else {
+            expendPrice = garage.getFeeFraction();
+        }
+
+        return new ParkingEgressDTO(
+                parking.getDateArrival(),
+                expendHours,
+                expendPrice
+        );
+    }
+
+    private void addToGarage(VehicleIngressDTO vehicleIngressDTO, Garage garage) {
         if (!garage.addVehicle(vehicleIngressDTO.getPatent())) {
             throw new VehicleAlreadyParkException();
         }
     }
 
     private void removeFromGarage(String vehiclePatent, Garage garage) {
-        if(!garage.removeVehicle(vehiclePatent)){
+        if (!garage.removeVehicle(vehiclePatent)) {
             throw new VehicleNotFoundException();
         }
     }
 
-    private Parking createNewParking(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserID){
+    private Parking createNewParking(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserID) {
         Garage garage = getGarageByAdminUserId(garageAdminUserID);
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehicleIngressDTO.getPatent());
         MobileUser user = vehicle.getUser();

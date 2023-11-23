@@ -8,12 +8,11 @@ import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.Vehicle;
 import com.tallerwebi.presentacion.dto.ParkingPlaceResponseDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -47,9 +46,14 @@ public class ParkingController {
         }
     }
 
-    @PostMapping(value = "/register")
-    public ModelAndView registerParking(@ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO) {
+    @PostMapping(value = "/register/add", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ModelAndView registerParking(
+            @ModelAttribute("parkingRegister") ParkingRegisterDTO parkingRegisterDTO,
+            @RequestPart(required = false) MultipartFile vehiclePic,
+            @RequestPart(required = false) MultipartFile ticketPic) {
         try {
+            parkingRegisterDTO.setVehiclePic(vehiclePic);
+            parkingRegisterDTO.setTicketPic(ticketPic);
             parkingService.registerParking(parkingRegisterDTO, (Long)session.getAttribute("id"));
             ModelMap model = new ModelMap();
             model.put("success", true);

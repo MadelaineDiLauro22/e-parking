@@ -1,20 +1,15 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
 import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
-import com.tallerwebi.infraestructura.NotificationRepository;
-import com.tallerwebi.infraestructura.UserRepository;
-import com.tallerwebi.infraestructura.VehicleRepository;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Notification;
-import com.tallerwebi.model.Parking;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.infraestructura.*;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ProfileServiceImpl implements ProfileService{
@@ -22,11 +17,15 @@ public class ProfileServiceImpl implements ProfileService{
     private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
+    private final ParkingPlaceRepository parkingPlaceRepository;
+    private final ReportRepository reportRepository;
 
-    public ProfileServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, NotificationRepository notificationRepository) {
+    public ProfileServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, NotificationRepository notificationRepository, ParkingPlaceRepository parkingPlaceRepository, ReportRepository reportRepository) {
         this.vehicleRepository = vehicleRepository;
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
+        this.parkingPlaceRepository = parkingPlaceRepository;
+        this.reportRepository = reportRepository;
     }
 
     @Override
@@ -79,4 +78,31 @@ public class ProfileServiceImpl implements ProfileService{
         if(parkingFound == null) throw new ParkingNotFoundException();
         return parkingFound;
     }
+
+    @Override
+    public void registerReport(Long adminId, String userEmail, String description) {
+        MobileUser user = userRepository.findUserByMail(userEmail);
+        Garage garage = (Garage) parkingPlaceRepository.findById(adminId);
+
+        if (user == null) throw new UserNotFoundException();
+        if (garage == null) throw new GarageNotFoundException();
+
+        Report report = new Report(ReportType.FRAUD, description, garage, user);
+        user.addReport(report);
+        garage.addReport(report);
+
+        parkingPlaceRepository.save(garage);
+        userRepository.save(user);
+        reportRepository.save(report);
+    }
+
+    @Override
+    public List<Report> getReportsByUser(Long userId) {
+        MobileUser user = userRepository.findUserById(userId);
+
+        if (user == null) throw new UserNotFoundException();
+
+        return reportRepository.getReportByUser(user);
+    }
+
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -64,7 +65,8 @@ class ParkingControllerTest {
         Mockito.when(mockHttpSession.getAttribute("id"))
                 .thenReturn(getUserId());
 
-        ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
+        ModelAndView response = parkingController.registerParking(parkingRegisterDTO, new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]));
         Mockito.verify(mockParkingService).registerParking(parkingRegisterDTO, getUserId());
 
         assertEquals("redirect:/mobile/home", response.getViewName());
@@ -81,7 +83,8 @@ class ParkingControllerTest {
         Mockito.doThrow(new UserNotFoundException())
                 .when(mockParkingService).registerParking(parkingRegisterDTO, userId);
 
-        ModelAndView response = parkingController.registerParking(parkingRegisterDTO);
+        ModelAndView response = parkingController.registerParking(parkingRegisterDTO, new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]));
 
         assertEquals("redirect:/error?errorMessage=Usuario inexistente", response.getViewName());
     }
@@ -120,7 +123,7 @@ class ParkingControllerTest {
 
     private ParkingRegisterDTO getParkingRegisterDTO(){
         ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO();
-        PointSale pointSale = new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
+        PointSale pointSale = new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),"",20,20,20L);
         parkingRegisterDTO.setParkingPlaceId(1L);
 
         return parkingRegisterDTO;

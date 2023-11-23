@@ -67,7 +67,7 @@ public class GarageControllerTest {
     }
 
     private Garage getGarage(){
-        return new Garage("Garage",10,new Geolocation(21879.21312,2187313.3),10,14,2L);
+        return new Garage("Garage",10,new Geolocation(21879.21312,2187313.3),"",10,14,2L);
     }
 
     private VehicleIngressDTO getVehicleIngressDTO(){

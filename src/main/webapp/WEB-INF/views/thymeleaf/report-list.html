@@ -1,0 +1,41 @@
+<div th:replace="fragments/header.html"></div>
+
+<main role="main" class="container-fluid m-f">
+
+  <section>
+
+    <article class="container text-white bg-windows mx-auto col-lg-6 px-2 py-4 my-3 rounded-4">
+
+      <h2 class="titleView fs-3 pb-4">Mis Denuncias</h2>
+
+      <div class="py-2">
+
+        <div th:each="report : ${reports}" class="px-2">
+
+          <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
+
+            <div class="d-flex align-items-center justify-content-between text-truncate">
+
+              <i class="fa-solid fa-rectangle-list text-white fs-5"></i>
+
+              <p class="m-0 text-truncate px-3" th:text="${report.getParkingPlace().name + ' - ' + report.reportType}"></p>
+
+              <p class="m-0 text-truncate px-3" th:text="${report.getDescription()}"></p>
+
+            </div>
+
+            <p th:class="${report.getReportStatus() == 'ACCEPTED'} ? 'm-0 text-success' : 'm-0 text-danger'" th:text="${report.getReportStatus()}"></p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </section>
+
+</main>
+
+<div th:replace="fragments/footer.html"></div>

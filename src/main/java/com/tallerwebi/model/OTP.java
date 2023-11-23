@@ -1,6 +1,8 @@
 package com.tallerwebi.model;
 
 import javax.persistence.*;
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity
 @Table(name = "OTP")
@@ -13,11 +15,13 @@ public class OTP {
     private String otpKey;
     private String userEmail;
     private Long idGarage;
+    private Date expirationDate;
 
     public OTP(String otpKey, String userEmail, Long idGarage) {
         this.otpKey = otpKey;
         this.userEmail = userEmail;
         this.idGarage = idGarage;
+        this.expirationDate = calculateExpiration();
     }
 
     public OTP() {
@@ -37,5 +41,18 @@ public class OTP {
 
     public Long getIdGarage() {
         return idGarage;
+    }
+
+    private Date calculateExpiration(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 5);
+
+        Date date = calendar.getTime();
+
+        return date;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 }

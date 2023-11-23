@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -86,8 +87,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO dto = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -171,8 +172,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO dto = new ParkingRegisterDTO(
                 ParkingType.POINT_SALE,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -247,15 +248,15 @@ class ParkingServiceImplTest {
     }
 
     private PointSale getPointSale(){
-        return new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),20,20,20L);
+        return new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),"",20,20,20L);
     }
 
     private ParkingRegisterDTO createRequestAlarm(Date alarm) {
         ParkingRegisterDTO req =  new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -277,8 +278,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO req =  new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -301,8 +302,8 @@ class ParkingServiceImplTest {
         ParkingRegisterDTO req = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
-                null,
-                null,
+                new MockMultipartFile("vehicle_pic", new byte[0]),
+                new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
                 1L
@@ -319,7 +320,7 @@ class ParkingServiceImplTest {
         float feePerHour = 5.0f;
         float feeFraction = 1.25f;
         long fractionTime = 15;
-        PointSale pointSale = new PointSale(name, geolocation, feePerHour, feeFraction, fractionTime);
+        PointSale pointSale = new PointSale(name, geolocation,"", feePerHour, feeFraction, fractionTime);
 
 
         Mockito.when(mockUserRepository.findUserById(idUser))

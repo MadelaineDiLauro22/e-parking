@@ -5,13 +5,17 @@ import com.tallerwebi.helpers.EmailService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
+import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.mail.MailException;
 
+import javax.mail.MessagingException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,7 +25,6 @@ import static org.mockito.Mockito.*;
 public class GarageServiceImplTest {
 
     private GarageService garageService;
-    private GarageServiceImpl garageServiceImpl;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -65,12 +68,12 @@ public class GarageServiceImplTest {
         Garage garage = new Garage();
         OTPDTO otp = new OTPDTO("123");
 
-        Mockito.when(otpRepository.exists(dto.getUserEmail(), idUser, otp.getOtpKey())).thenReturn(true);
         Mockito.when(userRepository.findUserById(idUser))
                 .thenReturn(user);
         Mockito.when(vehicleRepository.findVehicleByPatent("ABC123"))
                 .thenReturn(vehicle);
         Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+        Mockito.when(otpRepository.exists(dto.getUserEmail(), garage.getId(), otp.getOtpKey())).thenReturn(true);
 
         garageService.registerVehicle(dto, otp, idUser);
         Mockito.verify(parkingRepository).save(parkingArgumentCaptor.capture());
@@ -87,7 +90,11 @@ public class GarageServiceImplTest {
         VehicleIngressDTO vehicleIngressDTO = new VehicleIngressDTO();
         OTPDTO otpDto = new OTPDTO();
         Long garageAdminUserId = 1L;
+        MobileUser user = new MobileUser();
+        Garage garage = new Garage();
 
+        when(userRepository.findUserById(1L)).thenReturn(user);
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
         when(otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())).thenReturn(false);
 
         assertThrows(OTPNotFoundException.class, () -> {
@@ -95,18 +102,31 @@ public class GarageServiceImplTest {
         });
     }
 
+
     @Test
-    public void testSendOtpSuccess() {
-        String email = "abc@mail.com";
+    public void testSendOtpSuccess() throws MessagingException {
+        String mail = "abc@mail.com";
         Long idGarage = 1L;
 
-        garageService.sendOtp(email, idGarage);
+        garageService.sendOtp(mail, idGarage);
 
         Mockito.verify(otpRepository).save(otpArgumentCaptor.capture());
 
         OTP otp = otpArgumentCaptor.getValue();
 
-        verify(emailService).sendSimpleMessage(email, "Clave de ingreso:", otp.getOtpKey());
+        String link = String.format("http://localhost:8080/eparking/mobile/reports?mail=%s&idGarage=%d", mail, idGarage);
+
+        String messageWithStyles = "<div style=\"background-color: rgb(20, 20, 20); display: block;\">\n" +
+                "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
+                "    <div style=\"text-align: center; justify-content: center;\">\n" +
+                "        <img src=\"https://i.imgur.com/P8FBUXF.png\" style=\"width: 200px; height: 230px\">\n" +
+                "    </div>\n" +
+                "<h1 style=\"text-align: center; justify-content: center; color: antiquewhite;\">Código: " + otp.getOtpKey() + "</h1>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Estan queriendo ingresar tu vehiculo, si no sos vos, hace la denuncia: <a href=\"" + link + "\" style=\"color: #D13639;\">AQUI</a></p>\n" +
+                "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
+                "</div>";
+
+        verify(emailService).sendMimeMessage(mail, "Clave de ingreso:", messageWithStyles);
     }
 
     @Test
@@ -120,7 +140,7 @@ public class GarageServiceImplTest {
         VehicleIngressDTO dto = new VehicleIngressDTO();
         MobileUser user = new MobileUser();
         Parking parking = new Parking(ParkingType.GARAGE, null, null, null, Date.from(Instant.now()));
-        Garage garage = new Garage("Mi Garage", 10, new Geolocation(0.0, 0.0), 5.0f, 0.25f, 15L);
+        Garage garage = new Garage("Mi Garage", 10, new Geolocation(0.0, 0.0),"", 5.0f, 0.25f, 15L);
         Vehicle vehicle = new Vehicle();
         List<Parking> parkingList = new ArrayList<>();
 
@@ -220,4 +240,67 @@ public class GarageServiceImplTest {
         verify(userRepository, times(1)).findUserById(adminUserId);
         verify(parkingPlaceRepository, times(1)).findGarageByUser(user);
     }
+
+    @Test
+    void whenEstimateExit_ifVehicleHasMinorTimeThanFraction_shouldPayTheFractionFee() {
+        Long adminUserId = 1L;
+        float feePerHour = 15;
+        float feePerFraction = 5;
+        long fractionTime = 15;
+        createGarageByTime(adminUserId, feePerHour, feePerFraction, fractionTime);
+        Parking parking = createParkingWithTime(1);
+
+        ParkingEgressDTO response = garageService.EstimateEgressVehicle(parking, adminUserId);
+
+        assertEquals(feePerFraction, response.getExpendPrice());
+    }
+
+    @Test
+    void whenEstimateExit_ifVehicleHasMayorTimeFraction_shouldPayCorrectFee() {
+        Long adminUserId = 1L;
+        float feePerHour = 15;
+        float feePerFraction = 5;
+        long fractionTime = 15;
+        createGarageByTime(adminUserId, feePerHour, feePerFraction, fractionTime);
+        Parking parking = createParkingWithTime(120);
+
+        ParkingEgressDTO response = garageService.EstimateEgressVehicle(parking, adminUserId);
+
+        assertEquals(2 * feePerHour, response.getExpendPrice());
+    }
+
+    @Test
+    void whenEstimateExit_ifLessThanHourButHighThanFraction_shouldPayOneHour() {
+        Long adminUserId = 1L;
+        float feePerHour = 15;
+        float feePerFraction = 5;
+        long fractionTime = 15;
+        createGarageByTime(adminUserId, feePerHour, feePerFraction, fractionTime);
+        Parking parking = createParkingWithTime(30);
+
+        ParkingEgressDTO response = garageService.EstimateEgressVehicle(parking, adminUserId);
+
+        assertEquals(feePerHour, response.getExpendPrice());
+    }
+
+    private void createGarageByTime(Long adminId, float feePerHour, float feePerFraction, long fractionTime) {
+        MobileUser user = new MobileUser();
+        Garage garage = new Garage("Name", 20, null, "some adress", feePerHour, feePerFraction, fractionTime);
+
+        when(userRepository.findUserById(adminId)).thenReturn(user);
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+    }
+
+    private Parking createParkingWithTime(long minutesToSubstract) {
+        Instant arrival = Instant.now().minus(minutesToSubstract, ChronoUnit.MINUTES);
+
+        return new Parking(
+                ParkingType.STREET,
+                null,
+                null,
+                null,
+                Date.from(arrival)
+        );
+    }
+
 }

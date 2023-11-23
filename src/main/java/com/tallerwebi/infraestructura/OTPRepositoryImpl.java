@@ -8,6 +8,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.Date;
+
 @Transactional
 @Repository
 public class OTPRepositoryImpl implements OTPRepository{
@@ -34,6 +37,6 @@ public class OTPRepositoryImpl implements OTPRepository{
                 .add(Restrictions.eq("otpKey", otpKey))
                 .uniqueResult();
 
-        return otp != null;
+        return otp != null && otp.getExpirationDate().after(Date.from(Instant.now()));
     }
 }

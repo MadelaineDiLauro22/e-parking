@@ -13,13 +13,13 @@
 
     <body class="d-flex min-vh-100">
 
-    <div th:class="${rol == 'USER'} ? 'bg-home cover-container w-100 d-flex mx-auto flex-column' : (${rol == 'ADMIN_GARAGE'} ? 'bg-windows cover-container w-100 d-flex mx-auto flex-column' : 'bg-login cover-container w-100 d-flex mx-auto flex-column')">
+    <div th:class="${rol == 'USER' || rol == 'ADMIN'} ? 'bg-home cover-container w-100 d-flex mx-auto flex-column' : (${rol == 'ADMIN_GARAGE'} ? 'bg-windows cover-container w-100 d-flex mx-auto flex-column' : 'bg-login cover-container w-100 d-flex mx-auto flex-column')">
 
                 <header class="mb-auto">
 
                     <div th:if="${id != null}">
 
-                        <nav th:class="${rol == 'USER'} ? 'navbar navbar-expand-lg menu-desktop' : 'navbar navbar-expand-lg menu-desktop-garage'">
+                        <nav th:class="${rol == 'USER' || rol == 'ADMIN'} ? 'navbar navbar-expand-lg menu-desktop' : 'navbar navbar-expand-lg menu-desktop-garage'">
 
                             <div class="container">
 
@@ -37,7 +37,7 @@
 
                                     <a th:href="@{/mobile/profile/notifications}" class="position-relative px-2 pb-1">
 
-                                        <i th:class="${rol == 'USER'} ? 'fa-solid fa-bell text-primary fs-3' : 'fa-solid fa-bell text-white fs-3'"></i>
+                                        <i th:class="${rol == 'USER' || rol == 'ADMIN'} ? 'fa-solid fa-bell text-primary fs-3' : 'fa-solid fa-bell text-white fs-3'"></i>
 
                                         <span id="count-notif" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
 
@@ -62,15 +62,15 @@
 
                                         </li>
 
-                                        <li class="nav-item">
+                                        <li class="nav-item" th:if="${rol == 'USER' || rol == 'ADMIN'}">
 
                                             <a class="nav-link text-white text-bold" th:href="@{/mobile/profile}">Perfil</a>
 
                                         </li>
 
-                                        <li class="nav-item" th:if="${rol == 'USER'}">
+                                        <li class="nav-item" th:if="${rol == 'USER' || rol == 'ADMIN'}">
 
-                                            <a class="nav-link text-white text-bold" th:href="@{/#}">Denuncias</a>
+                                            <a class="nav-link text-white text-bold" th:href="@{${rol == 'ADMIN' ? '/mobile/admin/reports' : '/mobile/reports/user-reports'}}">Denuncias</a>
 
                                         </li>
 
@@ -84,19 +84,19 @@
 
                                                 <ul th:class="${rol == 'USER'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
 
-                                                    <li th:if="${rol == 'USER'}">
+                                                    <li th:if="${rol == 'USER' || rol == 'ADMIN'}">
 
                                                         <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
 
                                                     </li>
 
-                                                    <li th:if="${rol == 'USER'}">
+                                                    <li th:if="${rol == 'USER' || rol == 'ADMIN'}">
 
                                                         <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
 
                                                     </li>
 
-                                                    <div class="dropdown-divider" th:if="${rol == 'USER'}"></div>
+                                                    <div class="dropdown-divider" th:if="${rol == 'USER' || rol == 'ADMIN'}"></div>
 
                                                     <li>
 

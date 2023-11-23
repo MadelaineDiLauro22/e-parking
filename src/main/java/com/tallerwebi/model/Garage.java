@@ -1,10 +1,11 @@
 package com.tallerwebi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,20 +19,23 @@ public class Garage extends ParkingPlace {
     @ElementCollection
     private Set<String> patents;
     private int numberOfCars;
+    @OneToMany(mappedBy = "garage", fetch = FetchType.LAZY)
+    private List<Report> reports;
 
-
-    public Garage(String name, int numberOfCars, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
-        super(name, geolocation, feePerHour, feeFraction, fractionTime);
+    public Garage(String name, int numberOfCars, Geolocation geolocation, String address, float feePerHour, float feeFraction, long fractionTime) {
+        super(name, geolocation, address, feePerHour, feeFraction, fractionTime);
         this.patents = new HashSet<>();
         this.numberOfCars = numberOfCars;
+        this.reports = new ArrayList<>();
     }
 
     public Garage() {
         this.patents = new HashSet<>();
+        this.reports = new ArrayList<>();
     }
 
     public boolean addVehicle(String patent){
-        return patents.add(patent);
+        return patents.add(patent.toUpperCase());
     }
 
     public boolean removeVehicle(String patent){
@@ -61,5 +65,14 @@ public class Garage extends ParkingPlace {
 
     public void setNumberOfCars(int numberOfCars) {
         this.numberOfCars = numberOfCars;
+    }
+
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void addReport(Report report) {
+        this.reports.add(report);
     }
 }

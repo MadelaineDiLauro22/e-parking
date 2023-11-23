@@ -1,17 +1,16 @@
 package com.tallerwebi.config;
 
-import com.tallerwebi.helpers.EmailService;
-import com.tallerwebi.helpers.websocket.SocketHandler;
 import com.tallerwebi.helpers.SessionInterceptor;
+import com.tallerwebi.helpers.websocket.SocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -104,7 +103,10 @@ public class SpringWebConfig implements WebMvcConfigurer, WebSocketConfigurer {
         registry.addInterceptor(new SessionInterceptor())
                 .addPathPatterns("/mobile/**")
                 .addPathPatterns("/web/**")
-                .excludePathPatterns("/web/api/**");
+                .addPathPatterns("/error/**")
+                .excludePathPatterns("/web/api/**")
+                .excludePathPatterns("/mobile/reports")
+                .excludePathPatterns("/mobile/reports/register");
     }
 
     @Override

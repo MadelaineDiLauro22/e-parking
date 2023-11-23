@@ -9,6 +9,7 @@ public class ParkingPlaceResponseDTO {
     private Long id;
     private String name;
     private Geolocation geolocation;
+    private String address;
     private float feePerHour;
     private float feeFraction;
     private long fractionTime;
@@ -16,11 +17,12 @@ public class ParkingPlaceResponseDTO {
     private int numberOfCars;
     private Long userId;
 
-    public ParkingPlaceResponseDTO(String type, Long id, String name, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
+    public ParkingPlaceResponseDTO(String type, Long id, String name, Geolocation geolocation, String address, float feePerHour, float feeFraction, long fractionTime) {
         this.type = type;
         this.id = id;
         this.name = name;
         this.geolocation = geolocation;
+        this.address = address;
         this.feePerHour = feePerHour;
         this.feeFraction = feeFraction;
         this.fractionTime = fractionTime;
@@ -104,5 +106,9 @@ public class ParkingPlaceResponseDTO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

@@ -1,10 +1,11 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.GarageService;
-import com.tallerwebi.model.Garage;
-import com.tallerwebi.model.MobileUser;
-import com.tallerwebi.model.Vehicle;
+import com.tallerwebi.dominio.excepcion.VehicleExistInGarageException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
+import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
+import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -59,11 +60,26 @@ public class GarageController {
         return new ModelAndView("vehicle-remove", model);
     }
 
-    //TODO: Por ahora lo cambio a GET porque sino no ejecuta el request desde el navegador, debería ser POST y el navegador tirar un request con fetch
+    @GetMapping(value = "/egressView")
+    public ModelAndView egressVehicleView(@RequestParam(name = "patent") String patent) {
+        try {
+            Vehicle vehicle = garageService.getVehicleByPatent(patent);
+            Parking parking = garageService.getUserByPatent(patent).getParkings().get(0);
+            ParkingEgressDTO dto = garageService.EstimateEgressVehicle(parking, (Long) session.getAttribute("id"));
+
+            ModelMap model = new ModelMap();
+            model.put("vehicle", vehicle);
+            model.put("parking", dto);
+
+            return new ModelAndView("garage-vehicle", model);
+        } catch (Exception e) {
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
+    }
+
     @GetMapping(value = "/egress")
     public ModelAndView egressVehicle(@RequestParam(name = "patent") String patent) {
         try {
-            //TODO: egressVehicle tira un error
             garageService.egressVehicle(patent, (Long) session.getAttribute("id"));
 
             ModelMap model = new ModelMap();
@@ -78,22 +94,24 @@ public class GarageController {
     @PostMapping(value = "/enter/send-otp")
     public ModelAndView sendOtp(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO) {
         try {
-            garageService.sendOtp(vehicleIngressDTO.getUserEmail(), (Long) session.getAttribute("id"));
-
             ModelMap model = new ModelMap();
-            model.put("vehiclesIngressDto", vehicleIngressDTO);
-            model.put("success", true);
+                if(garageService.vehicleExistsInGarage(vehicleIngressDTO.getPatent().toUpperCase(), (Long) session.getAttribute("id"))) throw new VehicleExistInGarageException();
+                Garage garage = garageService.getGarageByAdminUserId((Long) session.getAttribute("id"));
+                garageService.sendOtp(vehicleIngressDTO.getUserEmail(), garage.getId());
 
-            return new ModelAndView(
-                    String.format("redirect:/web/admin/enter/otp-validate?patent=%s&brand=%s&model=%s&color=%s&userName=%s&userEmail=%s",
-                            vehicleIngressDTO.getPatent(),
-                            vehicleIngressDTO.getBrand(),
-                            vehicleIngressDTO.getModel(),
-                            vehicleIngressDTO.getColor(),
-                            vehicleIngressDTO.getUserName(),
-                            vehicleIngressDTO.getUserEmail()
-                    ),
-                    model);
+                model.put("vehiclesIngressDto", vehicleIngressDTO);
+                model.put("success", true);
+
+                return new ModelAndView(
+                        String.format("redirect:/web/admin/enter/otp-validate?patent=%s&brand=%s&model=%s&color=%s&userName=%s&userEmail=%s",
+                                vehicleIngressDTO.getPatent(),
+                                vehicleIngressDTO.getBrand(),
+                                vehicleIngressDTO.getModel(),
+                                vehicleIngressDTO.getColor(),
+                                vehicleIngressDTO.getUserName(),
+                                vehicleIngressDTO.getUserEmail()
+                        ),
+                        model);
         } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
@@ -118,16 +136,6 @@ public class GarageController {
                 userEmail));
 
         return new ModelAndView("otp-validate", modelMap);
-    }
-
-
-    @RequestMapping("/view")
-    public ModelAndView viewGarageVehicle(@RequestParam(name = "patent") String patent) {
-        ModelMap model = new ModelMap();
-        Vehicle vehicle = garageService.getVehicleByPatent(patent);
-
-        model.put("vehicle", vehicle);
-        return new ModelAndView("garage-vehicle", model);
     }
 
     @PostMapping(value = "/enter/register")

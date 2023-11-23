@@ -13,10 +13,10 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -58,7 +58,7 @@ public class ParkingServiceImpl implements ParkingService {
         List<ParkingPlaceResponseDTO> parkingPlaceResponseDTOS = new ArrayList<>();
         for (ParkingPlace parkingPlace:parkingPlacesList) {
             ParkingPlaceResponseDTO parkingPlaceResponseDTO = new ParkingPlaceResponseDTO(parkingPlace.getClass().getSimpleName(), parkingPlace.getId(), parkingPlace.getName(),
-                    parkingPlace.getGeolocation(), parkingPlace.getFeePerHour(), parkingPlace.getFeeFraction(), parkingPlace.getFractionTime());
+                    parkingPlace.getGeolocation(), parkingPlace.getAddress(), parkingPlace.getFeePerHour(), parkingPlace.getFeeFraction(), parkingPlace.getFractionTime());
             if(parkingPlace instanceof Garage){
                 parkingPlaceResponseDTO.setUserId(((Garage) parkingPlace).getUser().getId());
                 parkingPlaceResponseDTO.setNumberOfCars(((Garage) parkingPlace).getNumberOfCars());
@@ -113,17 +113,21 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     private Parking createNewParking(ParkingRegisterDTO parkingRegisterDTO, MobileUser user, Vehicle vehicle) {
-        Parking parking = new Parking(
-                parkingRegisterDTO.getParkingType(),
-                parkingRegisterDTO.getVehiclePic(),
-                parkingRegisterDTO.getTicketPic(),
-                new Geolocation(parkingRegisterDTO.getLat(), parkingRegisterDTO.getLn()),
-                parkingRegisterDTO.getParkingDate()
-        );
+        try {
+            Parking parking = new Parking(
+                    parkingRegisterDTO.getParkingType(),
+                    parkingRegisterDTO.getVehiclePic().isEmpty() ? new byte[0] : parkingRegisterDTO.getVehiclePic().getBytes(),
+                    parkingRegisterDTO.getTicketPic().isEmpty() ? new byte[0] : parkingRegisterDTO.getTicketPic().getBytes(),
+                    new Geolocation(parkingRegisterDTO.getLat(), parkingRegisterDTO.getLn()),
+                    parkingRegisterDTO.getParkingDate()
+            );
 
-        parking.setMobileUser(user);
-        parking.setVehicle(vehicle);
-        return parking;
+            parking.setMobileUser(user);
+            parking.setVehicle(vehicle);
+            return parking;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void createPointSaleTicket(Parking parking, ParkingRegisterDTO parkingRegisterDTO) {

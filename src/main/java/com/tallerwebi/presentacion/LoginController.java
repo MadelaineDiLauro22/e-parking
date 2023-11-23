@@ -46,6 +46,9 @@ public class LoginController {
             if(usuarioBuscado.getRol() == UserRole.USER){
                 return new ModelAndView("redirect:/mobile/home");
             }
+            if(usuarioBuscado.getRol() == UserRole.ADMIN){
+                return new ModelAndView("redirect:/mobile/admin/reports");
+            }
             else{
                 return new ModelAndView("redirect:/web/admin");
             }

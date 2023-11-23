@@ -21,18 +21,21 @@ public abstract class ParkingPlace {
     @Embedded
     private Geolocation geolocation;
 
+    private String address;
+
     private float feePerHour;
 
     private float feeFraction;
 
-    private long fractionTime;
+    private long fractionTime; //in minutes
 
     @OneToMany(mappedBy = "parking_place", fetch = FetchType.EAGER)
     private List<Ticket> tickets;
 
-    public ParkingPlace(String name, Geolocation geolocation, float feePerHour, float feeFraction, long fractionTime) {
+    public ParkingPlace(String name, Geolocation geolocation, String address, float feePerHour, float feeFraction, long fractionTime) {
         this.name = name;
         this.geolocation = geolocation;
+        this.address = address;
         this.feePerHour = feePerHour;
         this.feeFraction = feeFraction;
         this.fractionTime = fractionTime;
@@ -71,5 +74,9 @@ public abstract class ParkingPlace {
 
     public Long getId() {
         return id;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }
