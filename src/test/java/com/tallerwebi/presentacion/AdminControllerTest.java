@@ -4,6 +4,8 @@ import com.tallerwebi.dominio.GarageServiceImpl;
 import com.tallerwebi.dominio.ReportService;
 import com.tallerwebi.model.Notification;
 import com.tallerwebi.model.Report;
+import com.tallerwebi.presentacion.dto.EditReportDTO;
+import com.tallerwebi.presentacion.dto.ReportDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -42,6 +44,12 @@ public class AdminControllerTest {
         assertEquals(reports, resultReports);
     }
 
+    @Test
+    public void whenAReportWasModifyThenReturnReportViewWithSucceed(){
+        ModelAndView page = adminController.editReport(new EditReportDTO());
+        assertEquals("redirect:/mobile/admin/reports", page.getViewName());
 
-
+        boolean result = (boolean) page.getModel().get("succeed");
+        assertEquals(true, result);
+    }
 }
