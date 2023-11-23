@@ -68,12 +68,12 @@ public class GarageServiceImplTest {
         Garage garage = new Garage();
         OTPDTO otp = new OTPDTO("123");
 
-        Mockito.when(otpRepository.exists(dto.getUserEmail(), idUser, otp.getOtpKey())).thenReturn(true);
         Mockito.when(userRepository.findUserById(idUser))
                 .thenReturn(user);
         Mockito.when(vehicleRepository.findVehicleByPatent("ABC123"))
                 .thenReturn(vehicle);
         Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+        Mockito.when(otpRepository.exists(dto.getUserEmail(), garage.getId(), otp.getOtpKey())).thenReturn(true);
 
         garageService.registerVehicle(dto, otp, idUser);
         Mockito.verify(parkingRepository).save(parkingArgumentCaptor.capture());
@@ -90,7 +90,11 @@ public class GarageServiceImplTest {
         VehicleIngressDTO vehicleIngressDTO = new VehicleIngressDTO();
         OTPDTO otpDto = new OTPDTO();
         Long garageAdminUserId = 1L;
+        MobileUser user = new MobileUser();
+        Garage garage = new Garage();
 
+        when(userRepository.findUserById(1L)).thenReturn(user);
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
         when(otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())).thenReturn(false);
 
         assertThrows(OTPNotFoundException.class, () -> {

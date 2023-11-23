@@ -37,11 +37,6 @@ public class OTPRepositoryImpl implements OTPRepository{
                 .add(Restrictions.eq("otpKey", otpKey))
                 .uniqueResult();
 
-        if(otp != null && otp.getExpirationDate().after(Date.from(Instant.now()))) {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return otp != null && otp.getExpirationDate().after(Date.from(Instant.now()));
     }
 }
