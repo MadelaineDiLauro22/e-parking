@@ -41,7 +41,7 @@ public class AdminController {
             Report report = reportService.findReportById(reportId);
             model.put("report", report);
             model.put("editReport", new EditReportDTO(report.isActive(), report.getReportStatus(), reportId, report.getUser().getId()));
-            model.put("succeed", true);
+            model.put("success", true);
 
             return new ModelAndView("admin-edit-report", model);
         }catch(Exception e){
@@ -54,7 +54,7 @@ public class AdminController {
         try{
             reportService.editReport(reportDTO);
             ModelMap model = new ModelMap();
-            model.put("succeed", true);
+            model.put("success", true);
             return new ModelAndView("redirect:/mobile/admin/reports", model);
         }catch(Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());

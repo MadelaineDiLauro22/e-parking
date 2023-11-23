@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AdminControllerTest {
     private AdminController adminController;
@@ -45,11 +46,12 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void whenAReportWasModifyThenReturnReportViewWithSucceed(){
-        ModelAndView page = adminController.editReport(new EditReportDTO());
-        assertEquals("redirect:/mobile/admin/reports", page.getViewName());
+    public void ShouldModifyReport_ThenReturnReportViewWithSucceed(){
+        EditReportDTO editReportDTO = new EditReportDTO();
+        ModelAndView page = adminController.editReport(editReportDTO);
+        Mockito.verify(reportService).editReport(editReportDTO);
 
-        boolean result = (boolean) page.getModel().get("succeed");
-        assertEquals(true, result);
+        assertEquals("redirect:/mobile/admin/reports", page.getViewName());
+        assertTrue((boolean) page.getModel().get("success"));
     }
 }

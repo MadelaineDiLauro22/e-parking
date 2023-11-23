@@ -42,7 +42,7 @@ public class ReportsController {
         try{
             reportService.registerReport(report);
             ModelMap model = new ModelMap();
-            model.put("succeed", true);
+            model.put("success", true);
             return new ModelAndView("redirect:/mobile/home", model);
         }catch (Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
