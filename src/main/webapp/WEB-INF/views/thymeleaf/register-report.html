@@ -10,6 +10,9 @@
 
       <form action="#" th:action="@{/mobile/reports/register}" method="post" th:object="${reportRegister}">
 
+        <input th:field="*{userEmail}" th:value="${reportRegister.getUserEmail()}" class="d-none">
+        <input th:field="*{garageId}" th:value="${reportRegister.getGarageId()}" class="d-none">
+
         <div class="divContainer divContainerBorderBottom my-1">
 
           <label for="reportType" class="text-white text-bold mb-1">Seleccionar Tipo:</label>

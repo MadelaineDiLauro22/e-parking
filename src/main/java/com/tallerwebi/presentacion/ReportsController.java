@@ -23,12 +23,12 @@ public class ReportsController {
     }
 
     @GetMapping
-    public ModelAndView getReportView(@RequestParam(name = "mail") String mail, @RequestParam(name = "idGarage") int idGarage) {
+    public ModelAndView getReportView(@RequestParam(name = "mail") String mail, @RequestParam(name = "idGarage") long idGarage) {
         try {
             ModelMap model = new ModelMap();
             model.put("mail", mail);
             model.put("idGarage", idGarage);
-            model.put("reportRegister", new ReportDTO());
+            model.put("reportRegister", new ReportDTO(mail, idGarage));
 
             return new ModelAndView("register-report", model);
         } catch (Exception e) {
