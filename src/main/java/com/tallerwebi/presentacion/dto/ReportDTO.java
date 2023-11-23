@@ -19,6 +19,11 @@ public class ReportDTO {
         this.garageId = garageId;
     }
 
+    public ReportDTO(String userEmail, Long garageId) {
+        this.userEmail = userEmail;
+        this.garageId = garageId;
+    }
+
     public ReportDTO() {
     }
 
