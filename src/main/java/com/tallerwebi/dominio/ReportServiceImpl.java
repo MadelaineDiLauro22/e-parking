@@ -71,7 +71,13 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Report> getUserReport(Long userId) {
         MobileUser user = userRepository.findUserById(userId);
-        return reportRepository.getReportByUser(user);
+        List<Report> list = reportRepository.getReportByUser(user);
+
+        for (Report report:list) {
+            Hibernate.initialize(report.getParkingPlace());
+            Hibernate.initialize(report.getUser());
+        }
+        return list;
     }
 
     @Override

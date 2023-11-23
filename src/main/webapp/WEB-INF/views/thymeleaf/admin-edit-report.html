@@ -14,39 +14,37 @@
 
           <div class="d-flex align-items-center">
 
-            <h4 class="fs-5">Numero de Denuncia: </h4>
+            <h4 class="fs-5 m-0">Numero de Denuncia: </h4>
 
-            <p class="fs-5" th:text="${report.getId()}">
+            <p class="fs-5 m-0" th:text="${report.getId()}">
 
           </div>
 
           <div class="d-flex align-items-center">
 
-            <h4 class="fs-5">Fecha: </h4>
+            <h4 class="fs-5 m-0">Fecha: </h4>
 
-            <p class="fs-5" th:text="${report.getCreatedAt()}">
+            <p class="fs-5 m-0" th:text="${report.getCreatedAt()}">
 
           </div>
 
         </div>
 
         <div class="d-flex align-items-center">
-          <h4 class="fs-5">Nombre del Garage: </h4>
 
-          <p class="fs-5" th:text="${report.getParkingPlace().getName()}">
+          <h4 class="fs-5 m-0">Nombre del Garage: </h4>
+
+          <p class="fs-5 m-0" th:text="${report.getParkingPlace().getName()}">
         </div>
 
 
-        <h4 class="fs-5">Descripción de la denuncia</h4>
+        <h4 class="fs-5 m-0 mt-3">Descripción de la denuncia</h4>
 
-        <p class="fs-5" th:text="${report.getDescription()}">
+        <p class="fs-5 m-0" th:text="${report.getDescription()}">
 
       </div>
 
       <form action="#" th:action="@{/mobile/admin/edit-report}" method="post" th:object="${editReport}">
-
-        <input th:field="*{id}" th:value="${report.getId()}" class="d-none">
-        <input th:field="*{userId}" th:value="${report.getUser().getId()}" class="d-none">
 
         <div class="divContainer divContainerBorderBottom my-1">
 
