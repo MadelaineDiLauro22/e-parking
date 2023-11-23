@@ -21,7 +21,7 @@ import java.util.List;
 @Configuration
 public class DatabaseInitializationConfig {
 
-    public static final String MAIL = "test@unlam.edu.ar";
+    public static final String MAIL = "uri_sch99@hotmail.com";
     public static final String PASSWORD = "test";
     public static final String NOMBRE = "Admin";
     public static final String NICK_NAME = "admin";
