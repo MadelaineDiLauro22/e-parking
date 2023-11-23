@@ -96,7 +96,8 @@ public class GarageController {
         try {
             ModelMap model = new ModelMap();
                 if(garageService.vehicleExistsInGarage(vehicleIngressDTO.getPatent().toUpperCase(), (Long) session.getAttribute("id"))) throw new VehicleExistInGarageException();
-                garageService.sendOtp(vehicleIngressDTO.getUserEmail(), (Long) session.getAttribute("id"));
+                Garage garage = garageService.getGarageByAdminUserId((Long) session.getAttribute("id"));
+                garageService.sendOtp(vehicleIngressDTO.getUserEmail(), garage.getId());
 
                 model.put("vehiclesIngressDto", vehicleIngressDTO);
                 model.put("success", true);

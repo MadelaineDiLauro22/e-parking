@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ProfileService;
 import com.tallerwebi.dominio.ReportService;
 import com.tallerwebi.model.Report;
 import com.tallerwebi.presentacion.dto.ReportDTO;
@@ -42,7 +43,7 @@ public class ReportsController {
             reportService.registerReport(report);
             ModelMap model = new ModelMap();
             model.put("succeed", true);
-            return new ModelAndView("register-report", model);
+            return new ModelAndView("redirect:/mobile/home", model);
         }catch (Exception e){
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
