@@ -40,7 +40,7 @@ public class AdminController {
             ModelMap model = new ModelMap();
             Report report = reportService.findReportById(reportId);
             model.put("report", report);
-            model.put("editReport", new EditReportDTO());
+            model.put("editReport", new EditReportDTO(report.isActive(), report.getReportStatus(), reportId, report.getUser().getId()));
             model.put("succeed", true);
 
             return new ModelAndView("admin-edit-report", model);
