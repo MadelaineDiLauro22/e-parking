@@ -104,7 +104,8 @@ public class SpringWebConfig implements WebMvcConfigurer, WebSocketConfigurer {
                 .addPathPatterns("/mobile/**")
                 .addPathPatterns("/web/**")
                 .addPathPatterns("/error/**")
-                .excludePathPatterns("/web/api/**");
+                .excludePathPatterns("/web/api/**")
+                .excludePathPatterns("/mobile/reports/**");
     }
 
     @Override
