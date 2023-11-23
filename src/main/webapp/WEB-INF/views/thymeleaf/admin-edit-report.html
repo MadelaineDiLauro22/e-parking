@@ -4,47 +4,51 @@
 
   <section class="mb-3">
 
-    <article class="container text-white bg-windows mx-auto col-lg-8 p-2 my-3 rounded-4">
+    <article class="container text-white bg-windows mx-auto col-lg-6 p-2 my-3 rounded-4">
 
       <h1 class="titleView fs-3">Modificar Denuncia</h1>
 
       <div class="divContainer divContainerBorderBottom my-1">
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between flex-wrap">
 
           <div class="d-flex align-items-center">
 
-            <h4 class="fs-5 m-0">Numero de Denuncia: </h4>
+            <h4 class="fs-6 m-0 text-bold">Nro. Denuncia: </h4>
 
-            <p class="fs-5 m-0" th:text="${report.getId()}">
+            <p class="px-2 fs-6 m-0" th:text="${report.getId()}">
 
           </div>
 
           <div class="d-flex align-items-center">
 
-            <h4 class="fs-5 m-0">Fecha: </h4>
+            <h4 class="fs-6 m-0 text-bold">Fecha: </h4>
 
-            <p class="fs-5 m-0" th:text="${report.getCreatedAt()}">
+            <p class="px-2 fs-6 m-0 text-truncate" th:text="${report.getCreatedAt()}">
 
           </div>
 
         </div>
 
-        <div class="d-flex align-items-center">
+        <div class="mt-1 d-flex align-items-center">
 
-          <h4 class="fs-5 m-0">Nombre del Garage: </h4>
+          <h4 class="fs-6 m-0 text-bold">Garage: </h4>
 
-          <p class="fs-5 m-0" th:text="${report.getParkingPlace().getName()}">
+          <p class="px-2 fs-6 m-0" th:text="${report.getParkingPlace().getName()}">
         </div>
 
 
-        <h4 class="fs-5 m-0 mt-3">Descripción de la denuncia</h4>
+        <h4 class="fs-6 m-0 mt-3 text-bold">Descripción de la denuncia</h4>
 
-        <p class="fs-5 m-0" th:text="${report.getDescription()}">
+        <p class="px-2 fs-6 m-0" th:text="${report.getDescription()}">
 
       </div>
 
-      <form action="#" th:action="@{/mobile/admin/edit-report}" method="post" th:object="${editReport}">
+      <form action="#" th:action="@{/mobile/admin/edit-report}" method="post" th:object="${editReport}" class="mt-2">
+
+        <input th:field="*{id}" th:value="${report.getId()}" class="d-none">
+
+        <input th:field="*{userId}" th:value="${report.getUser().getId()}" class="d-none">
 
         <div class="divContainer divContainerBorderBottom my-1">
 
