@@ -7,6 +7,7 @@ import com.tallerwebi.infraestructura.ParkingRepository;
 import com.tallerwebi.infraestructura.ReportRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,8 @@ import java.util.List;
 @Configuration
 public class DatabaseInitializationConfig {
 
-    public static final String MAIL = "uri_sch99@hotmail.com";
+    @Value("${basic.user.mail}")
+    public String mail;
     public static final String PASSWORD = "test";
     public static final String NOMBRE = "Admin";
     public static final String NICK_NAME = "admin";
@@ -46,7 +48,7 @@ public class DatabaseInitializationConfig {
     @Bean
     @Transactional
     public void dataSourceInitializer() throws IOException {
-        MobileUser user = new MobileUser(MAIL, PASSWORD, UserRole.USER, NOMBRE, NICK_NAME);
+        MobileUser user = new MobileUser(mail, PASSWORD, UserRole.USER, NOMBRE, NICK_NAME);
         MobileUser admin = new MobileUser(MAIL_ADMIN, PASSWORD, UserRole.ADMIN, NOMBRE, NICK_NAME);
         MobileUser garageUser = new MobileUser(MAIL_GARAGE, PASSWORD, UserRole.ADMIN_GARAGE, NOMBRE, NICK_NAME);
 
@@ -64,7 +66,7 @@ public class DatabaseInitializationConfig {
         Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), Date.from(Instant.now()));
         parking.setMobileUser(admin);
         parking.setVehicle(vehicle2);
-        List <Parking> parkingList = new ArrayList<>();
+        List<Parking> parkingList = new ArrayList<>();
         parkingList.add(parking);
         admin.setParkings(parkingList);
 
@@ -80,17 +82,18 @@ public class DatabaseInitializationConfig {
         parkingPlaceRepository.save(garage);
         parkingRepository.save(parking);
 
-        Report report = new Report(ReportType.FRAUD, "El garage etc etc lorem ipsum lorem ipsum", garage, user);
+        Report report = new Report(ReportType.FRAUD, "Example Report", garage, user);
 
         reportRepository.save(report);
     }
 
     private void createAndSaveParkingsPlaces() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<PointSale> pointsSale = objectMapper.readValue(new File("src/main/resources/PointSaleList.json"), new TypeReference<List<PointSale>>() {});
+        List<PointSale> pointsSale = objectMapper.readValue(new File("src/main/resources/PointSaleList.json"), new TypeReference<List<PointSale>>() {
+        });
 
         for (PointSale pointSale : pointsSale) {
-        parkingPlaceRepository.save(pointSale);
+            parkingPlaceRepository.save(pointSale);
         }
     }
 
