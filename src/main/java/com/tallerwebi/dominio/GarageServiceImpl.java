@@ -9,6 +9,7 @@ import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
 import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
 import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,9 @@ public class GarageServiceImpl implements GarageService {
     private final ParkingRepository parkingRepository;
     private final EmailService emailService;
     private final OTPRepository otpRepository;
+
+    @Value("${otp.expiration.time}")
+    private int otpExpirationTime;
 
     public GarageServiceImpl(UserRepository userRepository, VehicleRepository vehicleRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, EmailService emailService, OTPRepository otpRepository) {
         this.userRepository = userRepository;
@@ -61,7 +65,7 @@ public class GarageServiceImpl implements GarageService {
         int max = 999999;
         int randomNum = ThreadLocalRandom.current().nextInt(min, max);
 
-        OTP otp = new OTP(String.valueOf(randomNum), mail, idGarage);
+        OTP otp = new OTP(String.valueOf(randomNum), mail, idGarage, otpExpirationTime);
 
         String link = String.format("http://localhost:8080/eparking/mobile/reports?mail=%s&idGarage=%d", mail, idGarage);
 
