@@ -1,5 +1,7 @@
 package com.tallerwebi.model;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +18,10 @@ public class OTP {
     private String userEmail;
     private Long idGarage;
     private Date expirationDate;
+
+    @Transient
+    @Value("${otp.expiration.time}")
+    private int expirationTime;
 
     public OTP(String otpKey, String userEmail, Long idGarage) {
         this.otpKey = otpKey;
@@ -45,7 +51,7 @@ public class OTP {
 
     private Date calculateExpiration(){
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
+        calendar.add(Calendar.MINUTE, expirationTime);
 
         Date date = calendar.getTime();
 

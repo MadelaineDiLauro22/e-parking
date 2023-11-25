@@ -53,13 +53,13 @@ public class DatabaseInitializationConfig {
         MobileUser garageUser = new MobileUser(MAIL_GARAGE, PASSWORD, UserRole.ADMIN_GARAGE, NOMBRE, NICK_NAME);
 
         Vehicle vehicle = new Vehicle(PATENTE, MARCA, MODELO, COLOR);
-        Vehicle vehicle2 = new Vehicle("123", "Fiat", "Fitito", "Rojo");
+        Vehicle vehicle2 = new Vehicle("CBD123", "Fiat", "Fitito", "Rojo");
 
         vehicle.setUser(user);
         vehicle2.setUser(admin);
 
         Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
-        Garage garage = new Garage("Pepe", 30, geolocation, "Florencio Varela 1903, B1754JEE San Justo, Buenos Aires Province, Argentina", 1.5F, 1.0F, (long) 1.0);
+        Garage garage = new Garage("Lo de Pepe", 30, geolocation, "Florencio Varela 1903, B1754JEE San Justo, Buenos Aires Province, Argentina", 1.5F, 1.0F, (long) 1.0);
         garage.setUser(garageUser);
         garage.addVehicle(vehicle2.getPatent());
 
