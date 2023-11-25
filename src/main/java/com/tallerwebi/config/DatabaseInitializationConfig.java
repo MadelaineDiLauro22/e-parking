@@ -38,6 +38,13 @@ public class DatabaseInitializationConfig {
     private final ParkingRepository parkingRepository;
     private final ReportRepository reportRepository;
 
+    @Value("${garage.time.fraction}")
+    private long garageFractionTime;
+    @Value("${garage.price.fraction}")
+    private float garagePriceFraction;
+    @Value("${garage.price.hour}")
+    private float garagePriceHour;
+
     public DatabaseInitializationConfig(UserRepository userRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, ReportRepository reportRepository) {
         this.userRepository = userRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
@@ -59,7 +66,7 @@ public class DatabaseInitializationConfig {
         vehicle2.setUser(admin);
 
         Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
-        Garage garage = new Garage("Lo de Pepe", 30, geolocation, "Florencio Varela 1903, B1754JEE San Justo, Buenos Aires Province, Argentina", 1.5F, 1.0F, (long) 1.0);
+        Garage garage = new Garage("Lo de Pepe", 30, geolocation, "Florencio Varela 1903, B1754JEE San Justo, Buenos Aires Province, Argentina", garagePriceHour, garagePriceFraction, garageFractionTime);
         garage.setUser(garageUser);
         garage.addVehicle(vehicle2.getPatent());
 
