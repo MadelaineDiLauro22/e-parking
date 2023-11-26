@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -41,8 +44,14 @@ public class ParkingController {
             model.put("parkingPlaces", parkingPlaceList);
 
             return new ModelAndView("parking-register", model);
-        } catch (UserNotFoundException | VehicleNotFoundException e) {
-            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        } catch (Exception e) {
+            try {
+                String encodedErrorMessage = URLEncoder.encode(e.getMessage(), "UTF-8");
+                return new ModelAndView("redirect:/error?errorMessage=" + encodedErrorMessage);
+            } catch (UnsupportedEncodingException ex) {
+                ex.printStackTrace();
+                return new ModelAndView("redirect:/error");
+            }
         }
     }
 

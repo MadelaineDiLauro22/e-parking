@@ -16,7 +16,7 @@
 
                 <div class="py-2">
 
-                    <div th:each="vechicle : ${vehicles}">
+                    <div th:each="vehicle : ${vehicles}">
 
                         <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
 
@@ -24,11 +24,11 @@
 
                                 <i class="fa-solid fa-car-side text-white fs-5"></i>
 
-                                <p class="m-0 text-truncate px-3" th:text="${vechicle.model + ' - ' + vechicle.patent}"></p>
+                                <p class="m-0 text-truncate px-3" th:text="${vehicle.getModel() + ' - ' + vehicle.getPatent()}"></p>
 
                             </div>
 
-                            <a href="#"><i class="fa-solid fa-gear text-blue"></i></a>
+                            <a th:href="@{/mobile/profile/vehicle/remove(patent=${vehicle.getPatent()})}"><i class="fa-solid fa-circle-xmark text-danger"></i></a>
 
                         </div>
 

@@ -115,6 +115,7 @@ class ProfileServiceImplTest {
     private MobileUser sinceItSavesAMobileUserWithVehiclesAndParkings() {
         MobileUser user = new MobileUser();
         Vehicle vehicle = new Vehicle();
+        vehicle.setIsActive(true);
         Parking parking = new Parking();
         user.registerParking(parking);
         user.registerVehicle(vehicle);

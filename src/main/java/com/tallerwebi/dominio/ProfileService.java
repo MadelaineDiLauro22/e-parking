@@ -18,5 +18,5 @@ public interface ProfileService {
     Parking getParkingById(Long userId, Long parkingId);
     void registerReport(Long adminId, String userEmail, String description);
     List<Report> getReportsByUser(Long userId);
-
+    void removeVehicle(String patent);
 }

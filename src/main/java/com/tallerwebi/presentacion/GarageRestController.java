@@ -28,7 +28,7 @@ public class GarageRestController {
             Vehicle vehicle = garageService.getVehicleByPatent(patent);
 
             if (user == null) throw new UserNotFoundException();
-            if (vehicle == null) throw new VehicleNotFoundException(patent);
+            if (vehicle == null || !vehicle.isIsActive()) throw new VehicleNotFoundException(patent);
 
             VehicleIngressDTO dto = new VehicleIngressDTO();
 

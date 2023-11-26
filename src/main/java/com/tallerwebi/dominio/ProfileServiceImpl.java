@@ -3,6 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
 import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
@@ -10,7 +11,9 @@ import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProfileServiceImpl implements ProfileService{
@@ -35,12 +38,18 @@ public class ProfileServiceImpl implements ProfileService{
 
         if (user == null) throw new UserNotFoundException();
 
+        Set<Vehicle> listVehicle = new HashSet<>();
+
+        for (Vehicle vehicle:user.getVehicles()) {
+            if(vehicle.isIsActive()) listVehicle.add(vehicle);
+        }
+
         List<Parking> listParking = user.getParkings();
 
         Collections.sort(listParking);
         Collections.reverse(listParking);
 
-        return new ProfileResponseDTO(user.getVehicles(), user.getParkings());
+        return new ProfileResponseDTO(listVehicle, listParking);
     }
 
     @Override
@@ -109,6 +118,14 @@ public class ProfileServiceImpl implements ProfileService{
         if (user == null) throw new UserNotFoundException();
 
         return reportRepository.getReportByUser(user);
+    }
+
+    @Override
+    public void removeVehicle(String patent) {
+        Vehicle vehicle = vehicleRepository.findVehicleByPatent(patent);
+        if (vehicle == null) throw new VehicleNotFoundException();
+
+        vehicleRepository.disableVehicleByPatent(patent);
     }
 
 }

@@ -25,7 +25,7 @@ public class VehicleRepositoryImpl implements VehicleRepository{
         Session session = sessionFactory.getCurrentSession();
 
         return (List<Vehicle>) session.createCriteria(Vehicle.class)
-                .add(Restrictions.eq("user", user)).list();
+                .add(Restrictions.eq("user", user)).add(Restrictions.eq("isActive", true)).list();
     }
 
     @Override
@@ -55,6 +55,17 @@ public class VehicleRepositoryImpl implements VehicleRepository{
 
         if (vehicle != null) {
             session.delete(vehicle);
+        }
+    }
+
+    @Override
+    public void disableVehicleByPatent(String patent) {
+        Session session = sessionFactory.getCurrentSession();
+        Vehicle vehicle = findVehicleByPatent(patent);
+
+        if(vehicle != null){
+            vehicle.setIsActive(false);
+            save(vehicle);
         }
     }
 }

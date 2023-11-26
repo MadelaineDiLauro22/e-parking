@@ -133,7 +133,7 @@ public class ProfileControllerTest {
         ModelAndView page = profileController.registerVehicle(vehicleRegisterDTO);
         Mockito.verify(mockProfileService).registerVehicle(vehicleRegisterDTO, getUserId());
 
-        assertEquals("redirect:/profile", page.getViewName());
+        assertEquals("redirect:/mobile/profile", page.getViewName());
         assertTrue((boolean) page.getModel().get("success"));
     }
 

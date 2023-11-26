@@ -72,7 +72,20 @@ public class ProfileController {
             profileService.registerVehicle(vehicleRegisterDTO, (Long)httpSession.getAttribute("id"));
             ModelMap model = new ModelMap();
             model.put("success", true);
-            return new ModelAndView("redirect:/profile", model);
+            return new ModelAndView("redirect:/mobile/profile", model);
+        }catch (Exception e)
+        {
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
+    }
+
+    @GetMapping("vehicle/remove")
+    public ModelAndView removeVehicle(@RequestParam(name = "patent") String patent){
+        try{
+            profileService.removeVehicle(patent);
+            ModelMap model = new ModelMap();
+            model.put("success", true);
+            return new ModelAndView("redirect:/mobile/profile", model);
         }catch (Exception e)
         {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
