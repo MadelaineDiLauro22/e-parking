@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.GarageServiceImpl;
-import com.tallerwebi.dominio.ParkingServiceImpl;
 import com.tallerwebi.model.Garage;
 import com.tallerwebi.model.Geolocation;
 import com.tallerwebi.presentacion.dto.OTPDTO;
@@ -57,7 +56,7 @@ public class GarageControllerTest {
                 .thenReturn(getUserId());
 
         ModelAndView response = garageController.validationRegisterVehicle(vehicleIngressDTO, otpdto);
-        Mockito.verify(garageService).registerVehicle(vehicleIngressDTO, otpdto, getUserId());
+        Mockito.verify(garageService).registerExistingVehicleInSystem(vehicleIngressDTO, otpdto, getUserId());
 
         assertEquals("redirect:/web/admin/", response.getViewName());
         assertTrue((boolean) response.getModel().get("success"));

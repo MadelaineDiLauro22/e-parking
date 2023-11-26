@@ -15,9 +15,7 @@ import org.springframework.mail.MailException;
 import javax.mail.MessagingException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -75,7 +73,7 @@ public class GarageServiceImplTest {
         Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
         Mockito.when(otpRepository.exists(dto.getUserEmail(), garage.getId(), otp.getOtpKey())).thenReturn(true);
 
-        garageService.registerVehicle(dto, otp, idUser);
+        garageService.registerExistingVehicleInSystem(dto, otp, idUser);
         Mockito.verify(parkingRepository).save(parkingArgumentCaptor.capture());
 
         Parking registered = parkingArgumentCaptor.getValue();
@@ -98,7 +96,7 @@ public class GarageServiceImplTest {
         when(otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())).thenReturn(false);
 
         assertThrows(OTPNotFoundException.class, () -> {
-            garageService.registerVehicle(vehicleIngressDTO, otpDto, garageAdminUserId);
+            garageService.registerExistingVehicleInSystem(vehicleIngressDTO, otpDto, garageAdminUserId);
         });
     }
 

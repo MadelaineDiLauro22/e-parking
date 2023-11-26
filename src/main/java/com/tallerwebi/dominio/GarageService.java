@@ -1,6 +1,5 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.excepcion.VehicleExistInGarageException;
 import com.tallerwebi.model.Garage;
 import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Parking;
@@ -14,7 +13,8 @@ import java.util.List;
 
 public interface GarageService {
     Garage getGarageByAdminUserId(Long garageAdminUserId);
-    void registerVehicle(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId);
+    void registerExistingVehicleInSystem(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId);
+    void registerNotExistingVehicleInSystem(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId);
     void sendOtp(String email, Long id) throws MessagingException;
     void egressVehicle(String vehiclePatent, Long garageAdminUserId);
     ParkingEgressDTO EstimateEgressVehicle(Parking parking, Long garageAdminUserId);
@@ -22,4 +22,5 @@ public interface GarageService {
     MobileUser getUserByPatent(String patent);
     Vehicle getVehicleByPatent(String patent);
     boolean vehicleExistsInGarage(String patent, Long garageAdminUserId);
+    boolean vehicleExistsInSystem(String patent);
 }

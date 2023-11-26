@@ -47,4 +47,14 @@ public class VehicleRepositoryImpl implements VehicleRepository{
         return (List<Vehicle>) session.createCriteria(Vehicle.class)
                 .add(Restrictions.in("patent", patents)).list();
     }
+
+    @Override
+    public void deleteByPatent(String patent) {
+        Session session = sessionFactory.getCurrentSession();
+        Vehicle vehicle = findVehicleByPatent(patent);
+
+        if (vehicle != null) {
+            session.delete(vehicle);
+        }
+    }
 }

@@ -11,5 +11,6 @@ public interface VehicleRepository {
     Vehicle findVehicleByPatent(String vehicle);
     void save(Vehicle vehicle);
     List<Vehicle> findVehiclesByPatents(List<String> patents);
+    void deleteByPatent(String patent);
 
 }

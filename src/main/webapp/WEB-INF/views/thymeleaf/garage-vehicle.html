@@ -25,7 +25,7 @@
 
             <hr class="border-terciary border-3">
 
-            <div class="px-4 col-lg-9 mx-auto">
+            <div class="px-4 col-lg-9 mx-auto" th:if="${parking != null}">
                 <div class="d-flex justify-content-between">
                     <p class="fs-5">Hora de llegada: </p><span class="text-gray text-bold text-shadow-none fs-5" th:text="${parking.getDateArrival()}"></span>
                 </div>

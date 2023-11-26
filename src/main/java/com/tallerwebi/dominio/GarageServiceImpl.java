@@ -45,7 +45,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
-    public void registerVehicle(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId) {
+    public void registerExistingVehicleInSystem(VehicleIngressDTO vehicleIngressDTO, OTPDTO otpDto, Long garageAdminUserId) {
         MobileUser user = userRepository.findUserById(garageAdminUserId);
         if (user == null) throw new UserNotFoundException();
         Garage garage = (Garage) parkingPlaceRepository.findGarageByUser(user);
@@ -57,6 +57,21 @@ public class GarageServiceImpl implements GarageService {
         } else {
             throw new OTPNotFoundException("No se encontro el OTP.");
         }
+    }
+
+    @Override
+    public void registerNotExistingVehicleInSystem(VehicleIngressDTO vehicleIngressDTO, Long garageAdminUserId) {
+        MobileUser user = userRepository.findUserById(garageAdminUserId);
+        if (user == null) throw new UserNotFoundException();
+        Garage garage = (Garage) parkingPlaceRepository.findGarageByUser(user);
+        if(garage == null) throw new GarageNotFoundException();
+        addToGarage(vehicleIngressDTO, garage);
+        createNewVehicle(vehicleIngressDTO);
+    }
+
+    private void createNewVehicle(VehicleIngressDTO vehicleIngressDTO) {
+        Vehicle vehicle = new Vehicle(vehicleIngressDTO.getPatent(), vehicleIngressDTO.getBrand(), vehicleIngressDTO.getModel(), vehicleIngressDTO.getColor());
+        vehicleRepository.save(vehicle);
     }
 
     @Override
@@ -88,23 +103,29 @@ public class GarageServiceImpl implements GarageService {
     public void egressVehicle(String vehiclePatent, Long garageAdminUserId) {
         Garage garage = getGarageByAdminUserId(garageAdminUserId);
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehiclePatent);
-        MobileUser user = vehicle.getUser();
 
-        ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO(ParkingType.GARAGE, vehiclePatent, null, null, garage.getGeolocation().getLat(), garage.getGeolocation().getLn(), garage.getId());
+        if(vehicle.getUser() != null){
+            MobileUser user = vehicle.getUser();
 
-        List<Parking> parkingList = user.getParkings();
+            ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO(ParkingType.GARAGE, vehiclePatent, null, null, garage.getGeolocation().getLat(), garage.getGeolocation().getLn(), garage.getId());
 
-        Parking latestParking = parkingList.get(0);
+            List<Parking> parkingList = user.getParkings();
 
-        for (Parking parking : parkingList) {
-            if (parking.getDateArrival().after(latestParking.getDateArrival())) {
-                latestParking = parking;
+            Parking latestParking = parkingList.get(0);
+
+            for (Parking parking : parkingList) {
+                if (parking.getDateArrival().after(latestParking.getDateArrival())) {
+                    latestParking = parking;
+                }
             }
+
+            latestParking.setDateExit(Date.from(Instant.now()));
+            garage.generateTicket(parkingRegisterDTO);
+            parkingRepository.save(latestParking);
+        } else{
+            vehicleRepository.deleteByPatent(vehiclePatent);
         }
 
-        latestParking.setDateExit(Date.from(Instant.now()));
-        garage.generateTicket(parkingRegisterDTO);
-        parkingRepository.save(latestParking);
         removeFromGarage(vehiclePatent, garage);
     }
 
@@ -134,6 +155,11 @@ public class GarageServiceImpl implements GarageService {
     public boolean vehicleExistsInGarage(String patent, Long garageAdminUserId) {
         Garage garage = getGarageByAdminUserId(garageAdminUserId);
         return garage.getPatents().contains(patent);
+    }
+
+    @Override
+    public boolean vehicleExistsInSystem(String patent) {
+        return vehicleRepository.findVehicleByPatent(patent) != null;
     }
 
     @Override
