@@ -13,10 +13,10 @@ const hoursTotalElement = document.getElementById("hoursTotal");
 const resultHoursElement = document.getElementById("resultHours");
 const feePerHourAmountElement = document.getElementById("feePerHourAmmount");
 
-var now = new Date(Date.now() - (3 * 60 * 60 * 1000));
-var formattedNow = now.toISOString().slice(0, 16);
+//var now = new Date(Date.now() - (3 * 60 * 60 * 1000));
+//var formattedNow = now.toISOString().slice(0, 16);
 
-parkingDateInput.value = formattedNow;
+//parkingDateInput.value = formattedNow;
 
 function renderForms() {
     let divGarage = document.getElementById("typeGarage");

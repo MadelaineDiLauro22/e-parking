@@ -21,8 +21,9 @@ public class ParkingRegisterDTO {
     private MultipartFile ticketPic;
     private Double lat;
     private Double ln;
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    //@Temporal(TemporalType.DATE)
+    //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date parkingDate;
     private int ammountHs;
     private int ammountHrsAlarm;
@@ -37,14 +38,14 @@ public class ParkingRegisterDTO {
     public ParkingRegisterDTO() {
     }
 
-    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, MultipartFile vehiclePic, MultipartFile ticketPic, Double lat, Double ln, Long parkingPlaceId) {
+    public ParkingRegisterDTO(ParkingType parkingType, String vehicle, MultipartFile vehiclePic, MultipartFile ticketPic, Double lat, Double ln, Long parkingPlaceId, Date parkingDate) {
         this.parkingType = parkingType;
         this.vehicle = vehicle;
         this.vehiclePic = vehiclePic;
         this.ticketPic = ticketPic;
         this.lat = lat;
         this.ln = ln;
-        this.parkingDate = Date.from(Instant.now());
+        this.parkingDate = parkingDate;
         this.parkingPlaceId = parkingPlaceId;
 
 

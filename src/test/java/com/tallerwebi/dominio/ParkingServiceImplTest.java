@@ -92,7 +92,8 @@ class ParkingServiceImplTest {
                 new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
-                1L
+                1L,
+                Date.from(Instant.now())
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();
@@ -178,7 +179,8 @@ class ParkingServiceImplTest {
                 new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
-                1L
+                1L,
+                Date.from(Instant.now())
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();
@@ -270,7 +272,8 @@ class ParkingServiceImplTest {
                 new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
-                1L
+                1L,
+                Date.from(Instant.now())
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();
@@ -294,7 +297,8 @@ class ParkingServiceImplTest {
                 new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
-                1L
+                1L,
+                Date.from(Instant.now())
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();
@@ -319,7 +323,8 @@ class ParkingServiceImplTest {
                 new MockMultipartFile("ticket_pic", new byte[0]),
                 (double) 0,
                 (double) 0,
-                1L
+                1L,
+                Date.from(Instant.now())
         );
         Long idUser = 1L;
         MobileUser user = new MobileUser();

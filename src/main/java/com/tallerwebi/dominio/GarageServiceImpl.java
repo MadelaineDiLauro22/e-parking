@@ -107,7 +107,7 @@ public class GarageServiceImpl implements GarageService {
         if(vehicle.getUser() != null){
             MobileUser user = vehicle.getUser();
 
-            ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO(ParkingType.GARAGE, vehiclePatent, null, null, garage.getGeolocation().getLat(), garage.getGeolocation().getLn(), garage.getId());
+            ParkingRegisterDTO parkingRegisterDTO = new ParkingRegisterDTO(ParkingType.GARAGE, vehiclePatent, null, null, garage.getGeolocation().getLat(), garage.getGeolocation().getLn(), garage.getId(), Date.from(Instant.now()));
 
             List<Parking> parkingList = user.getParkings();
 
