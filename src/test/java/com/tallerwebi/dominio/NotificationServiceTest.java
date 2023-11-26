@@ -37,8 +37,10 @@ class NotificationServiceTest {
         MockitoAnnotations.openMocks(this);
         notificationService = new NotificationService(mockNotificationRepository, mockUserRepository, new Mapper());
 
-        notificationService.setWebSocketSession(WS_SESSION);
-        notificationService.setUserId(USER_ID);
+        //notificationService.setWebSocketSession(WS_SESSION);
+        //notificationService.setUserId(USER_ID);
+        when(WS_SESSION.isOpen()).thenReturn(true);
+        notificationService.setWebsocketSession(USER_ID, WS_SESSION);
     }
 
     @Test
@@ -46,7 +48,7 @@ class NotificationServiceTest {
         MobileUser user = createAndPersistUser();
         createAndAddNotifications(user);
 
-        notificationService.sendMessage();
+        notificationService.sendMessage(USER_ID);
         verify(WS_SESSION).sendMessage(any());
     }
 
@@ -100,7 +102,7 @@ class NotificationServiceTest {
     }
 
     private NotificationRequestDTO createNotificationRequest(String title, String message) {
-        return new NotificationRequestDTO(title, message, NotificationType.MESSAGE);
+        return new NotificationRequestDTO(title, message, NotificationType.MESSAGE, USER_ID);
     }
 
 }

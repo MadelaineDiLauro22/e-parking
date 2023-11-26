@@ -27,17 +27,18 @@ public class NotificationService extends NotificationSocketHandler {
     private final Mapper mapper;
 
     public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository, Mapper mapper) {
+        super();
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
     @Override
-    public void sendMessage()  {
+    public void sendMessage(Long userId)  {
         try {
-            if(super.getWebSocketSession() == null) throw new NotificationServiceException("Websocket session not connected");
-            NotificationDTO notifications = getNotifications();
-            super.getWebSocketSession().sendMessage(new TextMessage(mapper.getMapper().writeValueAsBytes(notifications)));
+            if(!isConnected(userId)) throw new NotificationServiceException("Websocket session not connected");
+            NotificationDTO notifications = getNotifications(userId);
+            super.getWebsocketSession(userId).sendMessage(new TextMessage(mapper.getMapper().writeValueAsBytes(notifications)));
         } catch (IOException e) {
             throw new CantSendMessageException(e.getMessage());
         }
@@ -46,7 +47,7 @@ public class NotificationService extends NotificationSocketHandler {
     @Transactional
     public void registerNotification(NotificationRequestDTO request) {
         try {
-            MobileUser user = userRepository.findUserById(super.getUserId());
+            MobileUser user = userRepository.findUserById(request.getUserId());
 
             if(user == null) throw new UserNotFoundException();
 
@@ -63,12 +64,12 @@ public class NotificationService extends NotificationSocketHandler {
     @Transactional
     public void registerAndSendNotification(NotificationRequestDTO request) {
         registerNotification(request);
-        if (super.getWebSocketSession().isOpen()) sendMessage();
+        if (isConnected(request.getUserId())) sendMessage(request.getUserId());
     }
 
-    private NotificationDTO getNotifications() {
+    private NotificationDTO getNotifications(Long userId) {
         try {
-            MobileUser user = userRepository.findUserById(super.getUserId());
+            MobileUser user = userRepository.findUserById(userId);
             List<Notification> notifications = notificationRepository.findAllByUserAndNotRead(user);
 
             int size = notifications.size();
