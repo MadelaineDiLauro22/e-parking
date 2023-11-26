@@ -68,6 +68,7 @@
                             <div class="d-flex justify-content-around">
                                 <a th:href="@{/mobile/profile/parking(id=${parking.getId()})}"><i class="fa-solid fa-rectangle-list text-blue me-2"></i></a>
                                 <a href="#"><i class="fa-solid fa-circle-xmark text-danger"></i></a>
+                                <a th:if="${parking.parkingType.toString() == 'GARAGE'}" th:href="@{/mobile/reports/(mail=${mail},idGarage=${parking.getTicket.getParking_place().getId()})}"><i class="fa-solid fa-rectangle-list text-blue me-2"></i></a>
                             </div>
 
 

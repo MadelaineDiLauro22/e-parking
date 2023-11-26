@@ -8,6 +8,7 @@ import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -45,6 +46,13 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         List<Parking> listParking = user.getParkings();
+
+        for (Parking parking: listParking) {
+            if (parking.getTicket() != null){
+                Hibernate.initialize(parking.getTicket());
+                Hibernate.initialize(parking.getTicket().getParking_place());
+            }
+        }
 
         Collections.sort(listParking);
         Collections.reverse(listParking);

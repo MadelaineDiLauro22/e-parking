@@ -42,6 +42,7 @@ public class LoginController {
             request.getSession().setAttribute("rol", usuarioBuscado.getRol().toString());
             request.getSession().setAttribute("id", usuarioBuscado.getId());
             request.getSession().setAttribute("nickName", usuarioBuscado.getNickName());
+            request.getSession().setAttribute("mail", usuarioBuscado.getEmail());
 
             if(usuarioBuscado.getRol() == UserRole.USER){
                 return new ModelAndView("redirect:/mobile/home");

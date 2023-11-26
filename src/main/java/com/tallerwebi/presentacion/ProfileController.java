@@ -38,6 +38,7 @@ public class ProfileController {
             ModelMap model = new ModelMap();
             model.put("vehicles", vehiclesAndParkings.getVehicles());
             model.put("parkings", vehiclesAndParkings.getParkings());
+            model.put("mail", httpSession.getAttribute("mail"));
             return new ModelAndView("profile", model);
         }
         catch (UserNotFoundException e){
