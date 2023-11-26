@@ -5,6 +5,8 @@ import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
+import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
+import org.dom4j.rule.Mode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,8 +29,6 @@ public class ProfileControllerTest {
     private ProfileService mockProfileService;
     @Mock
     private ProfileController profileController;
-    @Mock
-    private ProfileService profileService;
     @Mock
     private HttpSession mockHttpSession;
 
@@ -117,6 +117,28 @@ public class ProfileControllerTest {
         ModelAndView response = profileController.getParkingDetail(anyLong());
 
         assertEquals("redirect:/error?errorMessage=null", response.getViewName());
+    }
+
+    @Test
+    void shouldGetRegisterVehicleView(){
+        ModelAndView page = profileController.getRegisterVehicleView();
+        assertEquals("vehicle-register", page.getViewName());
+    }
+
+    @Test
+    void shouldRegisterVehicle_ThenReturnToProfileViewWithSuccess(){
+        VehicleRegisterDTO vehicleRegisterDTO = new VehicleRegisterDTO("ABC123", "BMW", "2023", "Red");
+        Mockito.when(mockHttpSession.getAttribute("id")).thenReturn(getUserId());
+
+        ModelAndView page = profileController.registerVehicle(vehicleRegisterDTO);
+        Mockito.verify(mockProfileService).registerVehicle(vehicleRegisterDTO, getUserId());
+
+        assertEquals("redirect:/profile", page.getViewName());
+        assertTrue((boolean) page.getModel().get("success"));
+    }
+
+    private Long getUserId(){
+        return 1L;
     }
 }
 

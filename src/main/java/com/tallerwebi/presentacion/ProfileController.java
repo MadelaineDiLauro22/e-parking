@@ -59,14 +59,24 @@ public class ProfileController {
 
     @GetMapping("vehicle")
     public ModelAndView getRegisterVehicleView() {
-        //TODO: implement method
-        return null;
+        try{
+            return new ModelAndView("vehicle-register");
+        } catch (Exception e){
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
     }
 
     @PostMapping("vehicle/register")
-    public ModelAndView registerVehicle(@ModelAttribute("vehicleRegister") VehicleRegisterDTO request) {
-        //TODO: implement method
-        return null;
+    public ModelAndView registerVehicle(@ModelAttribute("vehicleRegister") VehicleRegisterDTO vehicleRegisterDTO) {
+        try{
+            profileService.registerVehicle(vehicleRegisterDTO, (Long)httpSession.getAttribute("id"));
+            ModelMap model = new ModelMap();
+            model.put("success", true);
+            return new ModelAndView("redirect:/profile", model);
+        }catch (Exception e)
+        {
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
     }
 
     @GetMapping("/parking")
