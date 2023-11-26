@@ -17,8 +17,14 @@
                             <div class="my-2"><strong>Foto del Vehículo:</strong></div>
                             <img th:src="${vehiclePicture}" class="img-thumbnail" alt="Foto del Vehículo" style="width: 20rem; height: auto;">
 
-                            <p class="my-2"><strong>Foto del Ticket:</strong></p>
-                            <img th:src="${ticketPicture}" class="img-thumbnail" alt="Foto del Ticket" style="width: 20rem; height: auto;">
+                            <div th:if="${ticketPicture != null}">
+                                <p class="my-2"><strong>Foto del Ticket:</strong></p>
+                                <img th:src="${ticketPicture}" class="img-thumbnail" alt="Foto del Ticket" style="width: 20rem; height: auto;">
+                            </div>
+                            <div th:unless="${ticketPicture}">
+                                <p class="my-2"><strong>Foto del Ticket:</strong></p>
+                                <p class="mt-1"> - No hay ticket disponible - </p>
+                            </div>
                         </div>
 
                     </div>
@@ -34,8 +40,6 @@
                     <p class="my-2"><strong>Tipo de Parking:</strong> <span th:text="${parking.getParkingType()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
 
                     <p id="direction" class="my-2"><strong>Dirección:</strong> <span id="geolocation" th:text="${parking.getGeolocation()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
-
-                    <div id="myMap" class="mapRegister"></div>
 
                 </div>
 

@@ -89,7 +89,7 @@ public class ProfileController {
             String vehiclePicture = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(parking.getVehiclePicture());
             model.put("vehiclePicture", vehiclePicture);
 
-            String ticketPicture = "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture());
+            String ticketPicture =  parking.getTicketPicture().length > 0 ? "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture()) : null;
             model.put("ticketPicture", ticketPicture);
 
             return new ModelAndView("parking_detail-view", model);
