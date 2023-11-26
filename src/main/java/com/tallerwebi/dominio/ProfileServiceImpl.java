@@ -9,6 +9,7 @@ import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -33,6 +34,11 @@ public class ProfileServiceImpl implements ProfileService{
         MobileUser user = (MobileUser) userRepository.findUserById(userId);
 
         if (user == null) throw new UserNotFoundException();
+
+        List<Parking> listParking = user.getParkings();
+
+        Collections.sort(listParking);
+        Collections.reverse(listParking);
 
         return new ProfileResponseDTO(user.getVehicles(), user.getParkings());
     }
