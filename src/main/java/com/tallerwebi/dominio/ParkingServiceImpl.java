@@ -93,13 +93,13 @@ public class ParkingServiceImpl implements ParkingService {
             try {
                 switch (parkingRegisterDTO.getAlarmType()){
                     case NORMAL:
-                        createAlarm(parkingRegisterDTO.getAlarmDate());
+                        createAlarm(parkingRegisterDTO.getAlarmDate(), idUser);
                         break;
                     case AMOUNT_HS:
-                        createAlarmWithAmountHrs(parkingRegisterDTO.getAmmountHrsAlarm());
+                        createAlarmWithAmountHrs(parkingRegisterDTO.getAmmountHrsAlarm(), idUser);
                         break;
                     case AMOUNT_DESIRED:
-                        createAlarmWithAmountDesired(parkingRegisterDTO.getAmountDesired(), parkingRegisterDTO.getParkingPlaceId());
+                        createAlarmWithAmountDesired(parkingRegisterDTO.getAmountDesired(), parkingRegisterDTO.getParkingPlaceId(), idUser);
                         break;
                     default:
                         break;
@@ -136,18 +136,18 @@ public class ParkingServiceImpl implements ParkingService {
         parking.setTicket(ticket);
     }
 
-    private void createAlarm(Date dateTime) throws InterruptedException, AlarmNotNullException {
+    private void createAlarm(Date dateTime, Long userId) throws InterruptedException, AlarmNotNullException {
         if (dateTime == null) throw new AlarmNotNullException();
-        alarm.createAlarm(ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")));
+        alarm.createAlarm(ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")), userId);
     }
-    private void createAlarmWithAmountHrs(int amountHrsAlarm) throws InterruptedException, AlarmNotNullException {
+    private void createAlarmWithAmountHrs(int amountHrsAlarm, Long userId) throws InterruptedException, AlarmNotNullException {
         if (amountHrsAlarm == 0) throw new AlarmNotNullException();
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDateTime newDateTime = dateTime.plusHours(amountHrsAlarm);
         ZonedDateTime zonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
-        alarm.createAlarm(zonedDateTime);
+        alarm.createAlarm(zonedDateTime, userId);
          }
-    private void createAlarmWithAmountDesired(float amountDesired, Long parkingPlaceId) throws InterruptedException, AlarmNotNullException {
+    private void createAlarmWithAmountDesired(float amountDesired, Long parkingPlaceId, Long userId) throws InterruptedException, AlarmNotNullException {
         if (parkingPlaceId == null) throw new ParkingNotFoundException();
         if (amountDesired == 0) throw new AlarmNotNullException();
         PointSale pointSale = (PointSale) parkingPlaceRepository.findById(parkingPlaceId);
@@ -157,6 +157,6 @@ public class ParkingServiceImpl implements ParkingService {
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDateTime newDateTime = dateTime.plusHours(addedHours);
         ZonedDateTime zonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
-        alarm.createAlarm(zonedDateTime);
+        alarm.createAlarm(zonedDateTime, userId);
     }
 }

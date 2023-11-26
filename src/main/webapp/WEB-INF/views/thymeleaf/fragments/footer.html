@@ -117,7 +117,7 @@
             const userId = [[${id}]];
 
             if(userId != null){
-                const client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
+                var client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
 
                 client.onopen = () => {
                     client.send(userId);
@@ -147,6 +147,7 @@
 
                 client.onclose = () => {
                     console.log("Sesión cerrada");
+                    client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
                 }
             }
         </script>

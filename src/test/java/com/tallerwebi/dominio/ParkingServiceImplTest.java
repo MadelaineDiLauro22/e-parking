@@ -25,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -54,7 +55,7 @@ class ParkingServiceImplTest {
     }
 
     @Test
-    void shouldGetVehicleList(){
+    void shouldGetVehicleList() {
         Long userId = 1L;
         List<Vehicle> cars = new ArrayList<>();
         MobileUser user = new MobileUser();
@@ -68,17 +69,17 @@ class ParkingServiceImplTest {
 
         List<Vehicle> vehicles = parkingService.getUserCarsList(userId);
 
-        assertEquals(cars,vehicles);
+        assertEquals(cars, vehicles);
     }
 
     @Test
-    void whenTryToGetUserCarList_IfUserNotExist_ShouldThrowException(){
+    void whenTryToGetUserCarList_IfUserNotExist_ShouldThrowException() {
         Long userId = 1L;
 
         Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(null);
 
-        assertThrows(UserNotFoundException.class,() -> parkingService.getUserCarsList(userId));
+        assertThrows(UserNotFoundException.class, () -> parkingService.getUserCarsList(userId));
     }
 
     @Test
@@ -111,7 +112,7 @@ class ParkingServiceImplTest {
         assertEquals(ParkingType.STREET, registered.getParkingType());
         assertEquals(vehicle, registered.getVehicle());
         assertEquals(user, registered.getMobileUser());
-        assertEquals(dto.getParkingDate(),registered.getDateArrival());
+        assertEquals(dto.getParkingDate(), registered.getDateArrival());
     }
 
     @Test
@@ -155,8 +156,9 @@ class ParkingServiceImplTest {
         assertThrows(VehicleNotFoundException.class,
                 () -> parkingService.getUserCarsList(userId));
     }
+
     @Test
-    void shouldParkingPlaceList(){
+    void shouldParkingPlaceList() {
         List<ParkingPlace> parkingPlaces = new ArrayList<>();
         List<ParkingPlaceResponseDTO> parkingPlacesDTO = new ArrayList<>();
 
@@ -199,7 +201,7 @@ class ParkingServiceImplTest {
         assertEquals(ParkingType.POINT_SALE, registered.getParkingType());
         assertEquals(vehicle, registered.getVehicle());
         assertEquals(user, registered.getMobileUser());
-        assertEquals(dto.getParkingDate(),registered.getDateArrival());
+        assertEquals(dto.getParkingDate(), registered.getDateArrival());
         assertNotNull(registered.getTicket());
     }
 
@@ -207,11 +209,13 @@ class ParkingServiceImplTest {
     void shouldRegisterAnAlarm() throws InterruptedException {
         Date alarm = Date.from(Instant.now());
         ParkingRegisterDTO parkingRegisterDTO = createRequestAlarm(alarm);
+        long idUser = 1L;
 
-        parkingService.registerParking(parkingRegisterDTO, 1L);
+        parkingService.registerParking(parkingRegisterDTO, idUser);
 
-        Mockito.verify(mockAlarm).createAlarm(ZonedDateTime.ofInstant(alarm.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")));
+        Mockito.verify(mockAlarm).createAlarm(ZonedDateTime.ofInstant(alarm.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")), idUser);
     }
+
     @Test
     void shouldRegisterAnAlarmWithAmountHrsType() throws InterruptedException {
         int hours = 2;
@@ -219,12 +223,15 @@ class ParkingServiceImplTest {
         LocalDateTime newDateTime = dateTime.plusHours(hours);
         ZonedDateTime expectedZonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
         ParkingRegisterDTO parkingRegisterDTO = createRequestAlarmAmountHrs(hours);
+        long idUser = 1L;
 
-        parkingService.registerParking(parkingRegisterDTO, 1L);
+        parkingService.registerParking(parkingRegisterDTO, idUser);
 
-        Mockito.verify(mockAlarm).createAlarm(argThat(zonedDateTime -> Math.abs(ChronoUnit.MILLIS.between(zonedDateTime, expectedZonedDateTime)) < 1000
-        ));
+        Mockito.verify(mockAlarm).createAlarm(argThat(zonedDateTime ->
+                Math.abs(ChronoUnit.MILLIS.between(zonedDateTime, expectedZonedDateTime)) < 1000
+        ), anyLong());
     }
+
     @Test
     void shouldRegisterAnAlarmWithAmountDesired() throws InterruptedException {
         float amount = 1000.0F;
@@ -234,10 +241,14 @@ class ParkingServiceImplTest {
         LocalDateTime newDateTime = dateTime.plusHours(addedHours);
         ParkingRegisterDTO parkingRegisterDTO = createRequestAlarmAmountDesired(amount);
         ZonedDateTime expectedZonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
-        parkingService.registerParking(parkingRegisterDTO, 1L);
+        long idUser = 1L;
+
+        parkingService.registerParking(parkingRegisterDTO, idUser);
 
         Mockito.verify(mockAlarm).createAlarm(argThat
-                (zonedDateTime -> Math.abs(ChronoUnit.MILLIS.between(zonedDateTime, expectedZonedDateTime)) < 1000));
+                (zonedDateTime -> Math.abs(ChronoUnit.MILLIS.between(zonedDateTime, expectedZonedDateTime)) < 1000),
+                anyLong()
+        );
     }
 
     @Test
@@ -247,12 +258,12 @@ class ParkingServiceImplTest {
         assertThrows(ParkingRegisterException.class, () -> parkingService.registerParking(parkingRegisterDTO, 1L));
     }
 
-    private PointSale getPointSale(){
-        return new PointSale("point 1",new Geolocation(-23112.32,-3242432.3),"",20,20,20L);
+    private PointSale getPointSale() {
+        return new PointSale("point 1", new Geolocation(-23112.32, -3242432.3), "", 20, 20, 20L);
     }
 
     private ParkingRegisterDTO createRequestAlarm(Date alarm) {
-        ParkingRegisterDTO req =  new ParkingRegisterDTO(
+        ParkingRegisterDTO req = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
                 new MockMultipartFile("vehicle_pic", new byte[0]),
@@ -274,8 +285,9 @@ class ParkingServiceImplTest {
 
         return req;
     }
+
     private ParkingRegisterDTO createRequestAlarmAmountHrs(int hours) {
-        ParkingRegisterDTO req =  new ParkingRegisterDTO(
+        ParkingRegisterDTO req = new ParkingRegisterDTO(
                 ParkingType.STREET,
                 "ABC123",
                 new MockMultipartFile("vehicle_pic", new byte[0]),
@@ -298,6 +310,7 @@ class ParkingServiceImplTest {
 
         return req;
     }
+
     private ParkingRegisterDTO createRequestAlarmAmountDesired(float amount) {
         ParkingRegisterDTO req = new ParkingRegisterDTO(
                 ParkingType.STREET,
@@ -320,7 +333,7 @@ class ParkingServiceImplTest {
         float feePerHour = 5.0f;
         float feeFraction = 1.25f;
         long fractionTime = 15;
-        PointSale pointSale = new PointSale(name, geolocation,"", feePerHour, feeFraction, fractionTime);
+        PointSale pointSale = new PointSale(name, geolocation, "", feePerHour, feeFraction, fractionTime);
 
 
         Mockito.when(mockUserRepository.findUserById(idUser))
