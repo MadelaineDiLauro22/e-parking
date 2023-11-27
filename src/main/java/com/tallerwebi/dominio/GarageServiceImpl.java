@@ -2,12 +2,10 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.helpers.EmailService;
+import com.tallerwebi.helpers.NotificationService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
-import com.tallerwebi.presentacion.dto.OTPDTO;
-import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
-import com.tallerwebi.presentacion.dto.ParkingRegisterDTO;
-import com.tallerwebi.presentacion.dto.VehicleIngressDTO;
+import com.tallerwebi.presentacion.dto.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -31,17 +29,19 @@ public class GarageServiceImpl implements GarageService {
     private final ParkingRepository parkingRepository;
     private final EmailService emailService;
     private final OTPRepository otpRepository;
+    private final NotificationService notificationService;
 
     @Value("${otp.expiration.time}")
     private int otpExpirationTime;
 
-    public GarageServiceImpl(UserRepository userRepository, VehicleRepository vehicleRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, EmailService emailService, OTPRepository otpRepository) {
+    public GarageServiceImpl(UserRepository userRepository, VehicleRepository vehicleRepository, ParkingPlaceRepository parkingPlaceRepository, ParkingRepository parkingRepository, EmailService emailService, OTPRepository otpRepository, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
         this.parkingRepository = parkingRepository;
         this.emailService = emailService;
         this.otpRepository = otpRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -54,6 +54,12 @@ public class GarageServiceImpl implements GarageService {
             addToGarage(vehicleIngressDTO, garage);
             Parking parking = createNewParking(vehicleIngressDTO, garageAdminUserId);
             parkingRepository.save(parking);
+            notificationService.registerAndSendNotification(new NotificationRequestDTO(
+                    "Gracias por usar el servicio de eParking",
+                    String.format("Bienvenido a %s, que tenga una excelente estadía!", garage.getName()),
+                    NotificationType.MESSAGE,
+                    parking.getMobileUser().getId()
+            ));
         } else {
             throw new OTPNotFoundException("No se encontro el OTP.");
         }
@@ -122,6 +128,12 @@ public class GarageServiceImpl implements GarageService {
             latestParking.setDateExit(Date.from(Instant.now()));
             garage.generateTicket(parkingRegisterDTO);
             parkingRepository.save(latestParking);
+            notificationService.registerAndSendNotification(new NotificationRequestDTO(
+                    "Gracias por usar el servicio de eParking",
+                    String.format("Saliendo de %s, gracias por venir!", garage.getName()),
+                    NotificationType.MESSAGE,
+                    user.getId()
+            ));
         } else{
             vehicleRepository.deleteByPatent(vehiclePatent);
         }

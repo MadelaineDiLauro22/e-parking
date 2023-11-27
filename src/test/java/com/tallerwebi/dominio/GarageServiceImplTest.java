@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.OTPNotFoundException;
 import com.tallerwebi.helpers.EmailService;
+import com.tallerwebi.helpers.NotificationService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
@@ -40,20 +41,21 @@ public class GarageServiceImplTest {
     private ArgumentCaptor<Parking> parkingArgumentCaptor;
     @Captor
     ArgumentCaptor<Vehicle> vehicleArgumentCaptor;
-
     @Captor
     private ArgumentCaptor<OTP> otpArgumentCaptor;
+    @Mock
+    private NotificationService notificationService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository);
+        garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository, notificationService);
     }
 
     @Test
     public void testConstructorInitialization() {
         MockitoAnnotations.openMocks(this);
-        GarageService garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository);
+        GarageService garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository, notificationService);
         assertNotNull(garageService);
     }
 
