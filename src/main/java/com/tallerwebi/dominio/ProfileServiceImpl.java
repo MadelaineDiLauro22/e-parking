@@ -10,11 +10,13 @@ import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfileServiceImpl implements ProfileService{
@@ -76,14 +78,16 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
+    @Transactional
     public List<Notification> getAllNotificationsByMobileUser(Long idUser) {
         MobileUser user = (MobileUser) userRepository.findUserById(idUser);
 
         if (user == null) throw new UserNotFoundException();
 
-        List<Notification> notifications = notificationRepository.findAllByUser(user);
+        //List<Notification> notifications = notificationRepository.findAllByUser(user);
+        Hibernate.initialize(user.getNotifications());
 
-        return notifications;
+        return user.getNotifications();
     }
 
     @Override

@@ -57,10 +57,10 @@ class NotificationServiceTest {
         String title = "Hi!";
         String message = "This is a notification";
         NotificationRequestDTO request = createNotificationRequest(title, message);
-        MobileUser user = createAndPersistUser();
+        createAndPersistUser();
 
         notificationService.registerNotification(request);
-        Notification notification = verifyRepositoriesAndExtractNotification(user);
+        Notification notification = verifyRepositoriesAndExtractNotification();
 
         assertEquals(title, notification.getTitle());
         assertEquals(message, notification.getMessage());
@@ -78,8 +78,7 @@ class NotificationServiceTest {
         assertThrows(NotificationServiceException.class, () -> notificationService.registerNotification(request));
     }
 
-    private Notification verifyRepositoriesAndExtractNotification(MobileUser user) {
-        verify(mockUserRepository).save(user);
+    private Notification verifyRepositoriesAndExtractNotification() {
         verify(mockNotificationRepository).save(notificationCaptor.capture());
 
         return notificationCaptor.getValue();

@@ -10,6 +10,7 @@ import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Notification;
 import com.tallerwebi.presentacion.dto.NotificationDTO;
 import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
@@ -18,8 +19,10 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NotificationService extends NotificationSocketHandler {
 
     private final NotificationRepository notificationRepository;
@@ -44,7 +47,6 @@ public class NotificationService extends NotificationSocketHandler {
         }
     }
 
-    @Transactional
     public void registerNotification(NotificationRequestDTO request) {
         try {
             MobileUser user = userRepository.findUserById(request.getUserId());
@@ -54,14 +56,13 @@ public class NotificationService extends NotificationSocketHandler {
             Notification notification = new Notification(request.getTitle(), request.getMessage(), Date.from(Instant.now()), user);
             user.addNotification(notification);
 
-            userRepository.save(user);
+            //userRepository.save(user);
             notificationRepository.save(notification);
         } catch (Exception e) {
             throw new NotificationServiceException("Can't register notification. Exception: " + e.getMessage());
         }
     }
 
-    @Transactional
     public void registerAndSendNotification(NotificationRequestDTO request) {
         registerNotification(request);
         if (isConnected(request.getUserId())) sendMessage(request.getUserId());
@@ -70,7 +71,10 @@ public class NotificationService extends NotificationSocketHandler {
     private NotificationDTO getNotifications(Long userId) {
         try {
             MobileUser user = userRepository.findUserById(userId);
-            List<Notification> notifications = notificationRepository.findAllByUserAndNotRead(user);
+            //List<Notification> notifications = notificationRepository.findAllByUserAndNotRead(user);
+            Hibernate.initialize(user.getNotifications());
+            List<Notification> notifications = user.getNotifications()
+                    .stream().filter(notification -> !notification.isRead()).collect(Collectors.toList());
 
             int size = notifications.size();
 
