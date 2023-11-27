@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
@@ -146,5 +147,29 @@ class ProfileServiceImplTest {
     private void createAndPersistGarage(Long idAdmin) {
         Mockito.when(parkingPlaceRepository.findById(idAdmin))
                 .thenReturn(new Garage());
+    }
+
+    @Test
+    void shouldRemoveExistingVehicle() {
+        String existingPatent = "ExistingPatent";
+        Vehicle existingVehicle = new Vehicle();
+        existingVehicle.setPatent(existingPatent);
+
+        Mockito.when(mockVehicleRepository.findVehicleByPatent(existingPatent))
+                .thenReturn(existingVehicle);
+
+        profileService.removeVehicle(existingPatent);
+
+        Mockito.verify(mockVehicleRepository).disableVehicleByPatent(existingPatent);
+    }
+
+    @Test
+    void whenTryToRemoveNonExistingVehicle_ShouldThrowVehicleNotFoundException() {
+        String nonExistingPatent = "NonExistingPatent";
+
+        Mockito.when(mockVehicleRepository.findVehicleByPatent(nonExistingPatent))
+                .thenReturn(null);
+
+        assertThrows(VehicleNotFoundException.class, () -> profileService.removeVehicle(nonExistingPatent));
     }
 }

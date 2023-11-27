@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProfileService;
 import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
@@ -20,7 +21,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class ProfileControllerTest {
@@ -131,7 +132,7 @@ public class ProfileControllerTest {
         Mockito.when(mockHttpSession.getAttribute("id")).thenReturn(getUserId());
 
         ModelAndView page = profileController.registerVehicle(vehicleRegisterDTO);
-        Mockito.verify(mockProfileService).registerVehicle(vehicleRegisterDTO, getUserId());
+        verify(mockProfileService).registerVehicle(vehicleRegisterDTO, getUserId());
 
         assertEquals("redirect:/mobile/profile", page.getViewName());
         assertTrue((boolean) page.getModel().get("success"));
@@ -140,5 +141,27 @@ public class ProfileControllerTest {
     private Long getUserId(){
         return 1L;
     }
-}
 
+    @Test
+    void testRemoveExistingVehicle() {
+        String existingPatent = "ExistingPatent";
+        doNothing().when(mockProfileService).removeVehicle(existingPatent);
+
+        ModelAndView modelAndView = profileController.removeVehicle(existingPatent);
+
+        verify(mockProfileService).removeVehicle(existingPatent);
+        assertEquals("redirect:/mobile/profile", modelAndView.getViewName());
+        assertTrue((boolean) modelAndView.getModel().get("success"));
+    }
+
+    @Test
+    void testRemoveNonExistingVehicle() {
+        String nonExistingPatent = "NonExistingPatent";
+        doThrow(new VehicleNotFoundException()).when(mockProfileService).removeVehicle(nonExistingPatent);
+
+        ModelAndView modelAndView = profileController.removeVehicle(nonExistingPatent);
+
+        verify(mockProfileService).removeVehicle(nonExistingPatent);
+        assertEquals("redirect:/error?errorMessage=Vehículo inexistente", modelAndView.getViewName());
+    }
+}
