@@ -52,20 +52,6 @@
 
                                 <ul th:class="${rol == 'USER' || rol == 'ADMIN'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
 
-                                    <li th:if="${rol == 'USER' || rol == 'ADMIN'}">
-
-                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
-
-                                    </li>
-
-                                    <li th:if="${rol == 'USER' || rol == 'ADMIN'}">
-
-                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
-
-                                    </li>
-
-                                    <div class="dropdown-divider" th:if="${rol == 'USER' || rol == 'ADMIN'}"></div>
-
                                     <li>
 
                                         <a class="dropdown-item text-white text-bold" th:href="@{/logout}">Cerrar sesion</a>
