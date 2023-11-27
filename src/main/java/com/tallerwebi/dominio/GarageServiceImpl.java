@@ -126,7 +126,9 @@ public class GarageServiceImpl implements GarageService {
             }
 
             latestParking.setDateExit(Date.from(Instant.now()));
-            garage.generateTicket(parkingRegisterDTO);
+            Ticket ticket = garage.generateTicket(parkingRegisterDTO);
+            latestParking.setTicket(ticket);
+
             parkingRepository.save(latestParking);
             notificationService.registerAndSendNotification(new NotificationRequestDTO(
                     "Gracias por usar el servicio de eParking",
@@ -217,10 +219,12 @@ public class GarageServiceImpl implements GarageService {
         Garage garage = getGarageByAdminUserId(garageAdminUserID);
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(vehicleIngressDTO.getPatent());
         MobileUser user = vehicle.getUser();
-        Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), Date.from(Instant.now()));
+        Date date = Date.from(Instant.now());
+        Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), date);
         parking.setMobileUser(user);
         parking.setVehicle(vehicle);
 
+        parking.setName(garage.getName());
         return parking;
     }
 }

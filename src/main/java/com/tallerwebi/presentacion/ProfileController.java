@@ -102,11 +102,15 @@ public class ProfileController {
             Parking parking = profileService.getParkingById((Long) httpSession.getAttribute("id"), parkingId);
             model.put("parking", parking);
 
+            if(parking.getVehiclePicture()!=null){
             String vehiclePicture = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(parking.getVehiclePicture());
             model.put("vehiclePicture", vehiclePicture);
+            }
 
-            String ticketPicture =  parking.getTicketPicture().length > 0 ? "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture()) : null;
-            model.put("ticketPicture", ticketPicture);
+            if(parking.getVehiclePicture()!=null) {
+                String ticketPicture = parking.getTicketPicture().length > 0 ? "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture()) : null;
+                model.put("ticketPicture", ticketPicture);
+            }
 
             return new ModelAndView("parking_detail-view", model);
         } catch (UserNotFoundException | ParkingNotFoundException e){

@@ -13,10 +13,10 @@ const hoursTotalElement = document.getElementById("hoursTotal");
 const resultHoursElement = document.getElementById("resultHours");
 const feePerHourAmountElement = document.getElementById("feePerHourAmmount");
 
-//var now = new Date(Date.now() - (3 * 60 * 60 * 1000));
-//var formattedNow = now.toISOString().slice(0, 16);
+var now = new Date(Date.now() - (3 * 60 * 60 * 1000));
+var formattedNow = now.toISOString().slice(0, 16);
 
-//parkingDateInput.value = formattedNow;
+parkingDateInput.value = formattedNow;
 
 function renderForms() {
     let divGarage = document.getElementById("typeGarage");
@@ -103,7 +103,7 @@ function validateForm() {
     if (parking.value === "POINT_SALE" && pointSale === "") {
         alert("Por favor, selecciona un punto de pago antes de registrar el estacionamiento medido.");
         return false;
-    } else if (checkRegisterAlarm && dateAlarm == "") {
+    } else if (checkRegisterAlarm && dateAlarm == "" && document.getElementById("parkingType").value === 'STREET') {
         alert("Por favor, selecciona hora y fecha para la alarma.");
         return false;
     }

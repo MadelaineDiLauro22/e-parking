@@ -58,6 +58,8 @@
 
                                 <i class="fa-solid fa-location-dot text-blue fs-5"></i>
 
+                                <p th:class="${parking.parkingType.toString() == 'STREET'} ? 'text-white px-3 m-0' : (${parking.parkingType.toString() == 'GARAGE'} ? 'text-violet px-3 m-0':'text-success px-3 m-0')" th:text="${parking.getParkingType()}"></p>
+
                                 <p class="vehicle-parking d-none" th:text="${parking.getVehicle().toString()}"></p>
 
                                 <p class="geolocation d-none " th:text="${parking.getGeolocation()}"></p>
@@ -66,9 +68,12 @@
 
                             </div>
                             <div class="d-flex justify-content-around">
-                                <a th:href="@{/mobile/profile/parking(id=${parking.getId()})}"><i class="fa-solid fa-rectangle-list text-blue me-2"></i></a>
+                                <a th:href="@{/mobile/profile/parking(id=${parking.getId()})}"><i class="fa-solid fa-rectangle-list text-primary me-2"></i></a>
+                                <a th:if="${parking.parkingType.toString() == 'GARAGE' && parking.getTicket() != null}"
+                                   th:href="@{/mobile/reports/(mail=${mail},idGarage=${parking.getTicket().getParking_place().getId()})}">
+                                    <i class="fa-solid fa-triangle-exclamation text-white me-2"></i>
+                                </a>
                                 <a href="#"><i class="fa-solid fa-circle-xmark text-danger"></i></a>
-                                <a th:if="${parking.parkingType.toString() == 'GARAGE'}" th:href="@{/mobile/reports/(mail=${mail},idGarage=${parking.getTicket.getParking_place().getId()})}"><i class="fa-solid fa-rectangle-list text-blue me-2"></i></a>
                             </div>
 
 

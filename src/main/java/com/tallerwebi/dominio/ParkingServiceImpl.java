@@ -81,10 +81,7 @@ public class ParkingServiceImpl implements ParkingService {
 
         Parking parking = createNewParking(parkingRegisterDTO, user, vehicle);
 
-        if (parking.getParkingType().equals(ParkingType.GARAGE)){
-            //TO DO: para cuando se agrega la entidad Garage
-        }
-        else if (parking.getParkingType().equals(ParkingType.POINT_SALE)){
+        if (parking.getParkingType().equals(ParkingType.POINT_SALE)){
             createPointSaleTicket(parking, parkingRegisterDTO);
         }
 
@@ -147,7 +144,7 @@ public class ParkingServiceImpl implements ParkingService {
         LocalDateTime newDateTime = dateTime.plusHours(amountHrsAlarm);
         ZonedDateTime zonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
         alarm.createAlarm(zonedDateTime, userId);
-         }
+    }
     private void createAlarmWithAmountDesired(float amountDesired, Long parkingPlaceId, Long userId) throws InterruptedException, AlarmNotNullException {
         if (parkingPlaceId == null) throw new ParkingNotFoundException();
         if (amountDesired == 0) throw new AlarmNotNullException();

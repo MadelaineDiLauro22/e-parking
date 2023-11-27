@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class ProfileServiceImpl implements ProfileService{
 
@@ -57,7 +58,6 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         Collections.sort(listParking);
-        Collections.reverse(listParking);
 
         return new ProfileResponseDTO(listVehicle, listParking);
     }
