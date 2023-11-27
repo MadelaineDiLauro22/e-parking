@@ -117,7 +117,8 @@ public class GarageController {
                         model);
             } else{
                 garageService.registerNotExistingVehicleInSystem(vehicleIngressDTO, (Long) session.getAttribute("id"));
-                return new ModelAndView("redirect:/web/admin/");
+                model.put("success", true);
+                return new ModelAndView("redirect:/web/admin/", model);
             }
 
         } catch (Exception e) {

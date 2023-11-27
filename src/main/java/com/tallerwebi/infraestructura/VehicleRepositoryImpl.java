@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 @Repository("repositorioVehiculo")
@@ -67,5 +68,10 @@ public class VehicleRepositoryImpl implements VehicleRepository{
             vehicle.setIsActive(false);
             save(vehicle);
         }
+    }
+
+    @Override
+    public List<Vehicle> getAllVehicles(){
+        return sessionFactory.getCurrentSession().createCriteria(Vehicle.class).list();
     }
 }

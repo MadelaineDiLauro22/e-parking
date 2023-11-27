@@ -38,6 +38,8 @@ public class GarageServiceImplTest {
 
     @Captor
     private ArgumentCaptor<Parking> parkingArgumentCaptor;
+    @Captor
+    ArgumentCaptor<Vehicle> vehicleArgumentCaptor;
 
     @Captor
     private ArgumentCaptor<OTP> otpArgumentCaptor;
@@ -56,7 +58,33 @@ public class GarageServiceImplTest {
     }
 
     @Test
-    public void testRegisterVehicleSuccess() {
+    public void testExistVehicleInSystem(){
+        Vehicle vehicle = new Vehicle();
+        vehicle.setPatent("123");
+
+        when(vehicleRepository.findVehicleByPatent("123")).thenReturn(vehicle);
+
+        assertTrue(garageService.vehicleExistsInSystem(vehicle.getPatent()));
+    }
+
+    @Test
+    public void testExistVehicleInGarage(){
+        MobileUser user = new MobileUser();
+        user.setId(1L);
+        Garage garage = new Garage();
+        Vehicle vehicle = new Vehicle();
+        vehicle.setPatent("123");
+
+        garage.addVehicle(vehicle.getPatent());
+
+        when(userRepository.findUserById(user.getId())).thenReturn(user);
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+
+        assertTrue(garageService.vehicleExistsInGarage(vehicle.getPatent(),user.getId()));
+    }
+
+    @Test
+    public void testRegisterExistingVehicleSuccess() {
         VehicleIngressDTO dto = new VehicleIngressDTO();
         dto.setPatent("ABC123");
         Long idUser = 1L;
@@ -81,6 +109,29 @@ public class GarageServiceImplTest {
         assertEquals(ParkingType.GARAGE, registered.getParkingType());
         assertEquals(vehicle, registered.getVehicle());
         assertEquals(user, registered.getMobileUser());
+    }
+
+    @Test
+    public void testRegisterNotExistingVehicleSuccess() {
+        VehicleIngressDTO dto = new VehicleIngressDTO();
+        dto.setPatent("ABC123");
+        Long idUser = 1L;
+        MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        Garage garage = new Garage();
+
+        Mockito.when(userRepository.findUserById(idUser))
+                .thenReturn(user);
+        Mockito.when(vehicleRepository.findVehicleByPatent("ABC123"))
+                .thenReturn(vehicle);
+        Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+
+        garageService.registerNotExistingVehicleInSystem(dto, idUser);
+        Mockito.verify(vehicleRepository).save(vehicleArgumentCaptor.capture());
+
+        Vehicle registered = vehicleArgumentCaptor.getValue();
+
+        assertEquals(dto.getPatent(), registered.getPatent());
     }
 
     @Test

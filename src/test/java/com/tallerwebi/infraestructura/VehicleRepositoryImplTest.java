@@ -14,6 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -65,6 +66,22 @@ class VehicleRepositoryImplTest {
         List<Vehicle> vehicleList = vehicleRepository.findVehiclesByUser(user);
 
         assertEquals(vehicleList.size(), 2);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void shouldDeleteVehicleByPatent(){
+        Vehicle vehicle = new Vehicle();
+        vehicle.setPatent("ABC123");
+
+        vehicleRepository.save(vehicle);
+
+        vehicleRepository.deleteByPatent(vehicle.getPatent());
+
+        List<Vehicle> vehicleList = vehicleRepository.getAllVehicles();
+
+        assertEquals(vehicleList.size(), 0);
     }
 
     private Vehicle getBMWVehicle(){
