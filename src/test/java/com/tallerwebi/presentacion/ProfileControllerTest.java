@@ -127,13 +127,14 @@ public class ProfileControllerTest {
     }
 
     @Test
-    void shouldRegisterVehicle_ThenReturnToProfileViewWithSuccess(){
+    void shouldRegisterVehicle_ThenReturnToProfileViewWithSuccess() {
         VehicleRegisterDTO vehicleRegisterDTO = new VehicleRegisterDTO("ABC123", "BMW", "2023", "Red");
-        Mockito.when(mockHttpSession.getAttribute("id")).thenReturn(getUserId());
+        Long userId = 1L;
+        when(mockHttpSession.getAttribute("id")).thenReturn(userId);
 
         ModelAndView page = profileController.registerVehicle(vehicleRegisterDTO);
-        verify(mockProfileService).registerVehicle(vehicleRegisterDTO, getUserId());
 
+        verify(mockProfileService).registerVehicle(vehicleRegisterDTO, userId);
         assertEquals("redirect:/mobile/profile", page.getViewName());
         assertTrue((boolean) page.getModel().get("success"));
     }
