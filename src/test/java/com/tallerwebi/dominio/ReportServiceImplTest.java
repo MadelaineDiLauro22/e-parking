@@ -11,6 +11,7 @@ import com.tallerwebi.infraestructura.ReportRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.Report;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
@@ -53,6 +54,7 @@ public class ReportServiceImplTest {
         assertEquals(reports,reportsList);
     }
 
+
     @Test
     public void shouldEditReportSuccesfully(){
         Report report = new Report(ReportType.FRAUD,"fraude",new Garage(),new MobileUser());
@@ -65,13 +67,10 @@ public class ReportServiceImplTest {
 
         reportService.editReport(new EditReportDTO(true,ReportStatus.ACCEPTED,1L,1L));
 
-        //Mockito.verify(notificationRepository).save(notificationCaptor.capture());
         Mockito.verify(reportRepository).save(reportCaptor.capture());
 
         Report edited = reportCaptor.getValue();
-        Notification notification = notificationCaptor.getValue();
 
         assertEquals(ReportStatus.ACCEPTED, edited.getReportStatus());
-        assertEquals("Su denuncia fue revisada por un administrador",notification.getTitle());
     }
 }

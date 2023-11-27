@@ -4,7 +4,7 @@
 
     <section class="justify-content-center">
 
-        <article class="container text-white bg-windows col-lg-6 p-2 my-3 rounded-4">
+        <article class="container text-white bg-windows col-lg-6 px-2 py-4 my-3 rounded-4">
             <div>
                 <h1 class="text-bold text-white text-center fs-5">Parking</h1>
             </div>
@@ -36,13 +36,15 @@
 
                 <div class="col-md-6 mx-auto">
 
-                    <p th:if="${parking.name}" class="my-2"><strong class="text-bold">Nombre:</strong> <span th:text="${parking.getName()}" class="text-primary"></span></p>
+                    <p th:if="${parking.name}" class="my-4"><strong class="text-bold">Nombre:</strong> <span th:text="${parking.getName()}" class="text-primary"></span></p>
 
-                    <p class="my-2"><strong>Horario de Ingreso:</strong> <span th:text="${parking.getDateArrival()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
+                    <p class="my-4"><strong>Horario de Ingreso:</strong> <span th:text="${parking.getDateArrival()}" class="form-control rounded-4" style="background-color: white"></span></p>
 
-                    <p class="my-2"><strong>Tipo de Parking:</strong> <span th:text="${parking.getParkingType()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
+                    <p class="my-4"><strong>Tipo de Parking:</strong> <span th:text="${parking.getParkingType()}" class="form-control rounded-4" style="background-color: white"></span></p>
 
-                    <p id="direction" class="my-2"><strong>Dirección:</strong> <span id="geolocation" th:text="${parking.getGeolocation()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
+                    <p id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></p>
+
+                    <p class="my-4"><strong>Dirección:</strong> <span id="direction" class="form-control rounded-4" style="background-color: white"></span></p>
 
                 </div>
 
@@ -80,8 +82,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
-                var formattedAddress = data.resourceSets[0].resources[0].address.formattedAddress;
-                directionElement.textContent = "Dirección: " + formattedAddress;
+                directionElement.textContent = data.resourceSets[0].resources[0].address.formattedAddress;
 
             } else {
                 console.error('No se encontró ninguna dirección.');
