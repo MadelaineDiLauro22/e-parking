@@ -135,7 +135,11 @@
 }
 
 .text-violet{
-    color:blueviolet;;
+    color:blueviolet !important;
+}
+
+.text-green{
+    color:aquamarine !important;
 }
 
 .titleViewBlack{
