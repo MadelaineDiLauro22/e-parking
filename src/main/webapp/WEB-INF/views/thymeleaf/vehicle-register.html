@@ -1,10 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div th:replace="fragments/header.html"></div>
 
-</body>
-</html>
+<main role="main" class="container-fluid m-f">
+
+    <section class="container text-white bg-windows mx-auto col-lg-4 px-2 py-4 rounded-4 box-shadow mb-4 mt-4">
+
+        <article class="mx-auto">
+
+            <form action="#" th:action="@{/mobile/profile/vehicle/register}" method="POST" th:object="${vehicleRegisterDTO}">
+
+                <div class="px-5 py-3 mx-auto">
+
+                    <h3 class="fs-5 text-white text-bold">Vehiculo</h3>
+
+                    <label for="patent" class="text-gray text-bold mb-1 d-inline text-shadow-none">Patente:</label>
+
+                    <input id="patent" th:field="*{patent}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                    <label for="brand" class=" text-gray text-bold mb-1 d-inline text-shadow-none">Marca:</label>
+
+                    <input id="brand" th:field="*{brand}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                    <label for="model" class="text-gray text-bold mb-1 d-inline text-shadow-none">Modelo:</label>
+
+                    <input id="model" th:field="*{model}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                    <label for="color" class="text-gray text-bold mb-1 d-inline text-shadow-none">Color:</label>
+
+                    <input id="color" th:field="*{color}" type="text" class="form-control d-inline my-1 text-center rounded-4">
+
+                </div>
+
+                <hr class="border-terciary border-3">
+
+                <div class="px-4 text-center mx-auto d-flex justify-content-around pt-3">
+
+                    <a th:href="@{/web/admin/}" class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-4
+                fs-6 text-center btn-danger text-white">Cancelar
+                    </a>
+
+                    <button class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5
+                fs-6 text-center btn-success text-white" type="submit" id="registrar">Registrar</button>
+
+                </div>
+            </form>
+        </article>
+    </section>
+</main>
+<div th:replace="fragments/footer.html"></div>
