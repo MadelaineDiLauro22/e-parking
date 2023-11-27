@@ -16,7 +16,7 @@
 
                         <div class="d-flex align-items-start justify-content-between">
 
-                            <i class="fa-solid fa-envelope-open-text text-white fs-5"></i>
+                            <i class="fa-solid fa-envelope-open-text fs-5" th:classappend="${notification.isRead()} ? 'text-secondary' : 'text-white'"></i>
 
                             <div>
                                 <h5 class="m-0 px-3" th:text="${notification.getTitle()}"></h5>
