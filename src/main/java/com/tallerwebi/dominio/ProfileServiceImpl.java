@@ -103,32 +103,6 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public void registerReport(Long adminId, String userEmail, String description) {
-        MobileUser user = userRepository.findUserByMail(userEmail);
-        Garage garage = (Garage) parkingPlaceRepository.findById(adminId);
-
-        if (user == null) throw new UserNotFoundException();
-        if (garage == null) throw new GarageNotFoundException();
-
-        Report report = new Report(ReportType.FRAUD, description, garage, user);
-        user.addReport(report);
-        garage.addReport(report);
-
-        parkingPlaceRepository.save(garage);
-        userRepository.save(user);
-        reportRepository.save(report);
-    }
-
-    @Override
-    public List<Report> getReportsByUser(Long userId) {
-        MobileUser user = userRepository.findUserById(userId);
-
-        if (user == null) throw new UserNotFoundException();
-
-        return reportRepository.getReportByUser(user);
-    }
-
-    @Override
     public void removeVehicle(String patent) {
         Vehicle vehicle = vehicleRepository.findVehicleByPatent(patent);
         if (vehicle == null) throw new VehicleNotFoundException();

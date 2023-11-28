@@ -68,14 +68,6 @@ public class DatabaseInitializationConfig {
         Geolocation geolocation = new Geolocation(-34.670560, -58.562780);
         Garage garage = new Garage("Lo de Pepe", 30, geolocation, "Florencio Varela 1903, B1754JEE San Justo, Buenos Aires Province, Argentina", garagePriceHour, garagePriceFraction, garageFractionTime);
         garage.setUser(garageUser);
-        garage.addVehicle(vehicle2.getPatent());
-
-        Parking parking = new Parking(ParkingType.GARAGE, null, null, garage.getGeolocation(), Date.from(Instant.now()));
-        parking.setMobileUser(admin);
-        parking.setVehicle(vehicle2);
-        List<Parking> parkingList = new ArrayList<>();
-        parkingList.add(parking);
-        admin.setParkings(parkingList);
 
         user.registerVehicle(vehicle);
         admin.registerVehicle(vehicle2);
@@ -87,11 +79,6 @@ public class DatabaseInitializationConfig {
 
         userRepository.save(garageUser);
         parkingPlaceRepository.save(garage);
-        parkingRepository.save(parking);
-
-        Report report = new Report(ReportType.FRAUD, "Example Report", garage, user);
-
-        reportRepository.save(report);
     }
 
     private void createAndSaveParkingsPlaces() throws IOException {

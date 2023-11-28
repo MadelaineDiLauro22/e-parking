@@ -6,7 +6,7 @@
 
     <article class="container text-white bg-windows mx-auto col-lg-6 px-2 py-4 my-3 rounded-4">
 
-      <h2 class="titleView fs-3 pb-4">Mis Denuncias</h2>
+      <h2 class="titleView fs-3 pb-4">Denuncias de Usuarios</h2>
 
       <div class="py-2">
 
@@ -18,7 +18,7 @@
 
               <i class="fa-solid fa-rectangle-list text-danger fs-5"></i>
 
-              <p class="m-0 text-truncate px-3" th:text="${report.getParkingPlace().getName() + ' - ' + report.reportType}"></p>
+              <p class="m-0 text-truncate px-3" th:text="${report.getParkingPlace().getName() + ' - ' + report.reportType.toString()}"></p>
 
             </div>
 

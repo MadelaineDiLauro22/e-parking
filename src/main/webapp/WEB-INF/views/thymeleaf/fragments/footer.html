@@ -30,7 +30,7 @@
 
                         <li class="li-f" th:if="${rol == 'USER' || rol == 'ADMIN'}">
 
-                            <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
+                            <a th:href="@{${rol == 'ADMIN' ? '/mobile/admin/reports' : '/mobile/reports/user-reports'}}" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
 
                                 <i class="fa-solid fa-list-check icon-f"></i>
 

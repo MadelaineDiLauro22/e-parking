@@ -84,7 +84,7 @@
 
                                                 <ul th:class="${rol == 'USER'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
 
-                                                    <div class="dropdown-divider" th:if="${rol == 'USER' || rol == 'ADMIN'}"></div>
+                                                    <div th:if="${rol == 'USER' || rol == 'ADMIN'}"></div>
 
                                                     <li>
 

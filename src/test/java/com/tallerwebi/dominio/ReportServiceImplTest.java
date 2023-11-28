@@ -57,7 +57,7 @@ public class ReportServiceImplTest {
 
     @Test
     public void shouldEditReportSuccesfully(){
-        Report report = new Report(ReportType.FRAUD,"fraude",new Garage(),new MobileUser());
+        Report report = new Report(ReportType.PAYMENT_PROBLEM,"fraude",new Garage(),new MobileUser());
         MobileUser user = new MobileUser();
 
         Mockito.when(reportRepository.getReportById(1L))

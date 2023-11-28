@@ -10,9 +10,7 @@ import java.util.List;
 public interface ReportService {
      List<Report> getAllReports();
      void editReport(EditReportDTO editReportDTO);
-
      void registerReport(ReportDTO reportDTO);
-
      List<Report> getUserReport(Long userId);
      Report findReportById(Long id);
 }
