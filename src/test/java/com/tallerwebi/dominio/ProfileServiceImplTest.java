@@ -9,7 +9,9 @@ import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +25,7 @@ class ProfileServiceImplTest {
     @Mock
     private UserRepository mockUserRepository;
     @Mock
-    private NotificationRepository notificationRepository;
+    private ParkingRepository parkingRepository;
     @Mock
     private ParkingPlaceRepository parkingPlaceRepository;
     @Mock
@@ -31,7 +33,7 @@ class ProfileServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, notificationRepository, parkingPlaceRepository, reportRepository);
+        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, parkingRepository, parkingPlaceRepository, reportRepository);
     }
 
     @Test
@@ -41,6 +43,8 @@ class ProfileServiceImplTest {
 
         Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(user);
+        Mockito.when(parkingRepository.findParkingsByUser(user))
+                .thenReturn(new ArrayList<>(List.of(new Parking())));
 
         ProfileResponseDTO response = profileService.getVehiclesAndParkingsByMobileUser(userId);
 
@@ -63,12 +67,11 @@ class ProfileServiceImplTest {
         MobileUser user = getNewMobileUserWithNotificationList();
         List<Notification> notifications = user.getNotifications();
 
-        Mockito.when(mockUserRepository.findUserById(user.getId()))
+        Mockito.when(mockUserRepository.findUserById(1L))
                 .thenReturn(user);
-        Mockito.when(notificationRepository.findAllByUser(user))
-                .thenReturn(user.getNotifications());
+        List<Notification> notis = profileService.getAllNotificationsByMobileUser(1L);
 
-        assertEquals(notifications, notificationRepository.findAllByUser(user));
+        assertEquals(notifications, notis);
     }
 
     @Test

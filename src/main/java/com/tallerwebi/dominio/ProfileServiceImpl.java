@@ -22,16 +22,16 @@ import java.util.stream.Collectors;
 @Service
 public class ProfileServiceImpl implements ProfileService{
 
-    private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
-    private final NotificationRepository notificationRepository;
+    private final VehicleRepository vehicleRepository;
+    private final ParkingRepository parkingRepository;
     private final ParkingPlaceRepository parkingPlaceRepository;
     private final ReportRepository reportRepository;
 
-    public ProfileServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, NotificationRepository notificationRepository, ParkingPlaceRepository parkingPlaceRepository, ReportRepository reportRepository) {
+    public ProfileServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, ParkingRepository parkingRepository, ParkingPlaceRepository parkingPlaceRepository, ReportRepository reportRepository) {
         this.vehicleRepository = vehicleRepository;
         this.userRepository = userRepository;
-        this.notificationRepository = notificationRepository;
+        this.parkingRepository = parkingRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
         this.reportRepository = reportRepository;
     }
@@ -42,13 +42,10 @@ public class ProfileServiceImpl implements ProfileService{
 
         if (user == null) throw new UserNotFoundException();
 
-        Set<Vehicle> listVehicle = new HashSet<>();
+        Set<Vehicle> listVehicle = user.getVehicles().stream()
+                .filter(Vehicle::isIsActive).collect(Collectors.toSet());
 
-        for (Vehicle vehicle:user.getVehicles()) {
-            if(vehicle.isIsActive()) listVehicle.add(vehicle);
-        }
-
-        List<Parking> listParking = user.getParkings();
+        List<Parking> listParking = parkingRepository.findParkingsByUser(user);
 
         for (Parking parking: listParking) {
             if (parking.getTicket() != null){
@@ -84,7 +81,6 @@ public class ProfileServiceImpl implements ProfileService{
 
         if (user == null) throw new UserNotFoundException();
 
-        //List<Notification> notifications = notificationRepository.findAllByUser(user);
         Hibernate.initialize(user.getNotifications());
 
         return user.getNotifications();
