@@ -7,8 +7,6 @@ import java.util.Map;
 
 public abstract class NotificationSocketHandler {
 
-    //private WebSocketSession webSocketSession = null;
-    //private Long userId = null;
 
     private final Map<Long, WebSocketSession> sessions;
 
@@ -18,22 +16,6 @@ public abstract class NotificationSocketHandler {
 
     public abstract void sendMessage(Long userId);
 
-
-    /*public WebSocketSession getWebSocketSession() {
-        return webSocketSession;
-    }
-
-    public void setWebSocketSession(WebSocketSession webSocketSession) {
-        this.webSocketSession = webSocketSession;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }*/
 
     public void setWebsocketSession(Long userId, WebSocketSession session) {
         sessions.put(userId, session);
