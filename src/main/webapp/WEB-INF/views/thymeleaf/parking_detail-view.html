@@ -48,9 +48,19 @@
 
                 </div>
 
-                <div th:if="${parking.getTicket() != null}" th:text="${'Esta pago: '+parking.getTicket().isPaid()}">
+            </div>
 
-                </div>
+            <div class="col-md-6 mx-auto my-4">
+
+                <div id="myMap" class="mapRegister" style="border-radius: 10px !important; overflow: hidden;"></div>
+
+            </div>
+
+            <div class="mx-auto text-center">
+
+                <a th:href="@{/mobile/profile}"
+                   class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5 fs-6 text-center btn-primary mb-2">Volver
+                </a>
 
             </div>
 
@@ -60,11 +70,176 @@
 
 </main>
 
+<script type='text/javascript'
+        src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'
+        async defer></script>
+
+<script th:inline="javascript">
+    var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+    var bingMap = null;
+
+    function initializeBingMap() {
+        if (navigator.geolocation) {
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    GetMap(position);
+                },
+                function (error) {
+                    alert(error);
+                    GetMap(null);
+                },
+                options
+            );
+        } else {
+            GetMap(null);
+        }
+    }
+
+    function GetMap(position) {
+        var lat = null;
+        var long = null;
+
+        if (position != null) {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+        } else {
+            lat = -34.670560;
+            long = -58.562780;
+        }
+
+        bingMap = new Microsoft.Maps.Map("#myMap", {
+            credentials: credentials,
+            center: new Microsoft.Maps.Location(lat, long),
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            zoom: 15
+        });
+
+        var center = bingMap.getCenter();
+
+        const url = `https://dev.virtualearth.net/REST/v1/Locations/${lat},${long}?key=${credentials}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                    var address = data.resourceSets[0].resources[0].address.formattedAddress;
+                    var personalPin = createPin(center,'¡Yo!', address, "PERSONAL");
+
+                    setInfoboxOnPin(personalPin);
+                    clickFunctionToInfoboxPin(personalPin);
+
+                    bingMap.entities.push(personalPin);
+                } else {
+                    console.error('No se encontró ninguna dirección.');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud: ', error);
+            });
+
+        const geolocationElement = document.getElementById("geolocation");
+        const geolocation = geolocationElement.textContent.split(',');
+
+        const latV = geolocation[0];
+        const lnV = geolocation[1];
+
+        var newLocation = new Microsoft.Maps.Location(latV, lnV);
+
+        const url2 = 'https://dev.virtualearth.net/REST/v1/Locations/' + latV + ',' + lnV + '?key=' + credentials;
+
+        fetch(url2)
+            .then(response => response.json())
+            .then(data => {
+                if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                    var address = data.resourceSets[0].resources[0].address.formattedAddress;
+                    var vehiclePin = createPin(newLocation,'Mi vehiculo', address, "VEHICLE");
+
+                    setInfoboxOnPin(vehiclePin);
+                    clickFunctionToInfoboxPin(vehiclePin);
+
+                    bingMap.entities.push(vehiclePin);
+                } else {
+                    console.error('No se encontró ninguna dirección.');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud: ', error);
+            });
+    }
+
+    function createPin(location, title, description, type) {
+        var customIconUrl;
+        switch (type) {
+            case "PERSONAL":
+                customIconUrl = "/eparking/img/pinIcons/loc-icon.png";
+                break;
+            case "VEHICLE":
+                customIconUrl = "/eparking/img/pinIcons/vehicle.png";
+                break;
+            default:
+                break;
+        }
+
+        var iconOptions = {
+            title: title,
+            icon: customIconUrl,
+        };
+
+        var pin = new Microsoft.Maps.Pushpin(location, iconOptions);
+        pin.metadata = {description: description};
+
+        return pin;
+    }
+
+    function setInfoboxOnPin(pin) {
+        var infoboxOffset = new Microsoft.Maps.Point(0, -170);
+
+        if (!pin.infobox) {
+            var center = pin.getLocation();
+            var title = pin.getTitle();
+            var description = pin.metadata.description;
+
+            infobox = new Microsoft.Maps.Infobox(center, {
+                title: title,
+                description: description,
+            });
+
+            infobox.setMap(bingMap);
+            infobox.setOptions({
+                visible: false,
+                offset: infoboxOffset
+            })
+            pin.infobox = infobox;
+        } else {
+            var newCenter = pin.getLocation();
+            var newTitle = pin.getTitle();
+            var newDescription = pin.metadata.description;
+
+            infobox.setLocation(newCenter);
+            infobox.setOptions({
+                title: newTitle,
+                description: newDescription,
+                visible: false,
+                offset: infoboxOffset
+            });
+            pin.infobox = infobox;
+        }
+    }
+
+    function clickFunctionToInfoboxPin(pin) {
+        Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+            pin.infobox.setOptions({visible: true});
+        });
+    }
+</script>
 
 
 <script th:inline="javascript">
-    var image = [[${vehiclePicture}]];
-    console.log(image);
 
     var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
 

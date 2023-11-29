@@ -52,7 +52,7 @@
 
                                 <i class="fa-solid fa-location-dot text-blue fs-5"></i>
 
-                                <p th:class="${parking.parkingType.toString() == 'STREET'} ? 'text-white px-3 m-0' : (${parking.parkingType.toString() == 'GARAGE'} ? 'text-violet px-3 m-0':'text-green px-3 m-0')" th:text="${parking.getParkingType()}"></p>
+                                <p th:class="${parking.parkingType.toString() == 'STREET'} ? 'text-white px-3 m-0' : (${parking.parkingType.toString() == 'GARAGE'} ? 'text-violet px-3 m-0':'text-green px-3 m-0')" th:text="${parking.getParkingType().toString().charAt(0)}"></p>
 
                                 <p class="vehicle-parking d-none" th:text="${parking.getVehicle().toString()}"></p>
 
