@@ -23,7 +23,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) {
-        notificationService.setWebSocketSession(webSocketSession);
+
     }
 
     @Override
@@ -32,8 +32,8 @@ public class SocketHandler extends TextWebSocketHandler {
                 message.getPayload(),
                 Long.class
         );
-        notificationService.setUserId(userId);
-        notificationService.sendMessage();
+        notificationService.setWebsocketSession(userId, session);
+        notificationService.sendMessage(userId);
     }
 
     @Override
@@ -43,8 +43,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) {
-        notificationService.setWebSocketSession(null);
-        notificationService.setUserId(null);
+        notificationService.removeWebsocketSession(webSocketSession.getId());
     }
 
     @Override

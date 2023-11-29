@@ -1,6 +1,7 @@
 package com.tallerwebi.model;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "NOTIFICATION")
@@ -20,6 +21,19 @@ public class Notification {
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MobileUser user;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public Notification(String title, String message, Date creationDate, MobileUser user) {
         this.title = title;

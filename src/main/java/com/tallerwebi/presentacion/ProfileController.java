@@ -38,6 +38,7 @@ public class ProfileController {
             ModelMap model = new ModelMap();
             model.put("vehicles", vehiclesAndParkings.getVehicles());
             model.put("parkings", vehiclesAndParkings.getParkings());
+            model.put("mail", httpSession.getAttribute("mail"));
             return new ModelAndView("profile", model);
         }
         catch (UserNotFoundException e){
@@ -59,14 +60,39 @@ public class ProfileController {
 
     @GetMapping("vehicle")
     public ModelAndView getRegisterVehicleView() {
-        //TODO: implement method
-        return null;
+        try{
+            ModelMap model = new ModelMap();
+            model.put("vehicleRegisterDTO", new VehicleRegisterDTO());
+            return new ModelAndView("vehicle-register", model);
+        } catch (Exception e){
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
     }
 
     @PostMapping("vehicle/register")
-    public ModelAndView registerVehicle(@ModelAttribute("vehicleRegister") VehicleRegisterDTO request) {
-        //TODO: implement method
-        return null;
+    public ModelAndView registerVehicle(@ModelAttribute("vehicleRegisterDTO") VehicleRegisterDTO vehicleRegisterDTO) {
+        try{
+            profileService.registerVehicle(vehicleRegisterDTO, (Long)httpSession.getAttribute("id"));
+            ModelMap model = new ModelMap();
+            model.put("success", true);
+            return new ModelAndView("redirect:/mobile/profile", model);
+        }catch (Exception e)
+        {
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
+    }
+
+    @GetMapping("vehicle/remove")
+    public ModelAndView removeVehicle(@RequestParam(name = "patent") String patent){
+        try{
+            profileService.removeVehicle(patent);
+            ModelMap model = new ModelMap();
+            model.put("success", true);
+            return new ModelAndView("redirect:/mobile/profile", model);
+        }catch (Exception e)
+        {
+            return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
+        }
     }
 
     @GetMapping("/parking")
@@ -76,11 +102,15 @@ public class ProfileController {
             Parking parking = profileService.getParkingById((Long) httpSession.getAttribute("id"), parkingId);
             model.put("parking", parking);
 
+            if(parking.getVehiclePicture()!=null){
             String vehiclePicture = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(parking.getVehiclePicture());
             model.put("vehiclePicture", vehiclePicture);
+            }
 
-            String ticketPicture = "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture());
-            model.put("ticketPicture", ticketPicture);
+            if(parking.getVehiclePicture()!=null) {
+                String ticketPicture = parking.getTicketPicture().length > 0 ? "data:image/jpeg;base64," + Base64Utils.encodeToString(parking.getTicketPicture()) : null;
+                model.put("ticketPicture", ticketPicture);
+            }
 
             return new ModelAndView("parking_detail-view", model);
         } catch (UserNotFoundException | ParkingNotFoundException e){

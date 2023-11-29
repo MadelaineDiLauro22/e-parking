@@ -35,4 +35,20 @@ public class VehicleRegisterDTO {
     public String getColor() {
         return color;
     }
+
+    public void setPatent(String patent) {
+        this.patent = patent;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

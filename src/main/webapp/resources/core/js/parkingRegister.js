@@ -103,7 +103,7 @@ function validateForm() {
     if (parking.value === "POINT_SALE" && pointSale === "") {
         alert("Por favor, selecciona un punto de pago antes de registrar el estacionamiento medido.");
         return false;
-    } else if (checkRegisterAlarm && dateAlarm == "") {
+    } else if (checkRegisterAlarm && dateAlarm == "" && document.getElementById("parkingType").value === 'STREET') {
         alert("Por favor, selecciona hora y fecha para la alarma.");
         return false;
     }

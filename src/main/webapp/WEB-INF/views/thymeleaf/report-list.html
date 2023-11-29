@@ -24,7 +24,7 @@
 
             </div>
 
-            <p th:class="${report.getReportStatus() == 'ACCEPTED'} ? 'm-0 text-success' : 'm-0 text-danger'" th:text="${report.getReportStatus()}"></p>
+            <p th:class="${report.getReportStatus().toString() == 'ACCEPTED'} ? 'm-0 text-success' : (${report.getReportStatus().toString() == 'IN_PROCESS'} ? 'm-0 text-warning' : 'm-0 text-danger')" th:text="${report.getReportStatus()}"></p>
 
           </div>
 

@@ -4,6 +4,7 @@ import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Vehicle;
 
 import java.util.List;
+import java.util.Set;
 
 public interface VehicleRepository {
 
@@ -11,5 +12,7 @@ public interface VehicleRepository {
     Vehicle findVehicleByPatent(String vehicle);
     void save(Vehicle vehicle);
     List<Vehicle> findVehiclesByPatents(List<String> patents);
-
+    void deleteByPatent(String patent);
+    void disableVehicleByPatent(String patent);
+    List<Vehicle> getAllVehicles();
 }

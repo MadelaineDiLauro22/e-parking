@@ -3,27 +3,35 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
 import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class ProfileServiceImpl implements ProfileService{
 
-    private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
-    private final NotificationRepository notificationRepository;
+    private final VehicleRepository vehicleRepository;
+    private final ParkingRepository parkingRepository;
     private final ParkingPlaceRepository parkingPlaceRepository;
     private final ReportRepository reportRepository;
 
-    public ProfileServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, NotificationRepository notificationRepository, ParkingPlaceRepository parkingPlaceRepository, ReportRepository reportRepository) {
+    public ProfileServiceImpl(VehicleRepository vehicleRepository, UserRepository userRepository, ParkingRepository parkingRepository, ParkingPlaceRepository parkingPlaceRepository, ReportRepository reportRepository) {
         this.vehicleRepository = vehicleRepository;
         this.userRepository = userRepository;
-        this.notificationRepository = notificationRepository;
+        this.parkingRepository = parkingRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
         this.reportRepository = reportRepository;
     }
@@ -34,7 +42,21 @@ public class ProfileServiceImpl implements ProfileService{
 
         if (user == null) throw new UserNotFoundException();
 
-        return new ProfileResponseDTO(user.getVehicles(), user.getParkings());
+        Set<Vehicle> listVehicle = user.getVehicles().stream()
+                .filter(Vehicle::isIsActive).collect(Collectors.toSet());
+
+        List<Parking> listParking = parkingRepository.findParkingsByUser(user);
+
+        for (Parking parking: listParking) {
+            if (parking.getTicket() != null){
+                Hibernate.initialize(parking.getTicket());
+                Hibernate.initialize(parking.getTicket().getParking_place());
+            }
+        }
+
+        Collections.sort(listParking);
+
+        return new ProfileResponseDTO(listVehicle, listParking);
     }
 
     @Override
@@ -53,14 +75,15 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
+    @Transactional
     public List<Notification> getAllNotificationsByMobileUser(Long idUser) {
         MobileUser user = (MobileUser) userRepository.findUserById(idUser);
 
         if (user == null) throw new UserNotFoundException();
 
-        List<Notification> notifications = notificationRepository.findAllByUser(user);
+        Hibernate.initialize(user.getNotifications());
 
-        return notifications;
+        return user.getNotifications();
     }
 
     @Override
@@ -80,29 +103,11 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public void registerReport(Long adminId, String userEmail, String description) {
-        MobileUser user = userRepository.findUserByMail(userEmail);
-        Garage garage = (Garage) parkingPlaceRepository.findById(adminId);
+    public void removeVehicle(String patent) {
+        Vehicle vehicle = vehicleRepository.findVehicleByPatent(patent);
+        if (vehicle == null) throw new VehicleNotFoundException();
 
-        if (user == null) throw new UserNotFoundException();
-        if (garage == null) throw new GarageNotFoundException();
-
-        Report report = new Report(ReportType.FRAUD, description, garage, user);
-        user.addReport(report);
-        garage.addReport(report);
-
-        parkingPlaceRepository.save(garage);
-        userRepository.save(user);
-        reportRepository.save(report);
-    }
-
-    @Override
-    public List<Report> getReportsByUser(Long userId) {
-        MobileUser user = userRepository.findUserById(userId);
-
-        if (user == null) throw new UserNotFoundException();
-
-        return reportRepository.getReportByUser(user);
+        vehicleRepository.disableVehicleByPatent(patent);
     }
 
 }

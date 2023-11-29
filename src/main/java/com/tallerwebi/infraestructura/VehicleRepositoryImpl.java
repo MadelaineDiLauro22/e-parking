@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 @Repository("repositorioVehiculo")
@@ -25,7 +26,7 @@ public class VehicleRepositoryImpl implements VehicleRepository{
         Session session = sessionFactory.getCurrentSession();
 
         return (List<Vehicle>) session.createCriteria(Vehicle.class)
-                .add(Restrictions.eq("user", user)).list();
+                .add(Restrictions.eq("user", user)).add(Restrictions.eq("isActive", true)).list();
     }
 
     @Override
@@ -46,5 +47,31 @@ public class VehicleRepositoryImpl implements VehicleRepository{
         Session session = sessionFactory.getCurrentSession();
         return (List<Vehicle>) session.createCriteria(Vehicle.class)
                 .add(Restrictions.in("patent", patents)).list();
+    }
+
+    @Override
+    public void deleteByPatent(String patent) {
+        Session session = sessionFactory.getCurrentSession();
+        Vehicle vehicle = findVehicleByPatent(patent);
+
+        if (vehicle != null) {
+            session.delete(vehicle);
+        }
+    }
+
+    @Override
+    public void disableVehicleByPatent(String patent) {
+        Session session = sessionFactory.getCurrentSession();
+        Vehicle vehicle = findVehicleByPatent(patent);
+
+        if(vehicle != null){
+            vehicle.setIsActive(false);
+            save(vehicle);
+        }
+    }
+
+    @Override
+    public List<Vehicle> getAllVehicles(){
+        return sessionFactory.getCurrentSession().createCriteria(Vehicle.class).list();
     }
 }

@@ -30,7 +30,7 @@
 
                         <li class="li-f" th:if="${rol == 'USER' || rol == 'ADMIN'}">
 
-                            <a href="#" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
+                            <a th:href="@{${rol == 'ADMIN' ? '/mobile/admin/reports' : '/mobile/reports/user-reports'}}" class="text-center d-flex flex-column text-decoration-none text-white text-bold text-shadow-none">
 
                                 <i class="fa-solid fa-list-check icon-f"></i>
 
@@ -51,20 +51,6 @@
                                 </a>
 
                                 <ul th:class="${rol == 'USER' || rol == 'ADMIN'} ? 'dropdown-menu end-0 bg-windows' : 'dropdown-menu end-0 bg-home'" aria-labelledby="navbarDropdown">
-
-                                    <li th:if="${rol == 'USER' || rol == 'ADMIN'}">
-
-                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis estacionamientos</a>
-
-                                    </li>
-
-                                    <li th:if="${rol == 'USER' || rol == 'ADMIN'}">
-
-                                        <a class="dropdown-item text-white text-bold" th:href="@{/#}">Mis vehiculos</a>
-
-                                    </li>
-
-                                    <div class="dropdown-divider" th:if="${rol == 'USER' || rol == 'ADMIN'}"></div>
 
                                     <li>
 
@@ -117,7 +103,7 @@
             const userId = [[${id}]];
 
             if(userId != null){
-                const client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
+                var client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
 
                 client.onopen = () => {
                     client.send(userId);
@@ -147,6 +133,7 @@
 
                 client.onclose = () => {
                     console.log("Sesión cerrada");
+                    client = new WebSocket("ws://localhost:8080/eparking/ws/notifications");
                 }
             }
         </script>

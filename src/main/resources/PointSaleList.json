@@ -1,82 +1,57 @@
 [
   {
-    "name":"Punto de Pago 1",
-    "geolocation":{"lat":-34.672212,"ln":-58.567592},
-    "address": "Malabia 2383, B1754APP San Justo, Buenos Aires Province, Argentina",
-    "feePerHour":500.0,
-    "feeFraction":200.0,
-    "fractionTime":30
+    "name": "Punto de Pago 1",
+    "geolocation": {
+      "lat": -34.687458,
+      "ln": -58.542616
+    },
+    "address": "Pres. Juan Domingo Perón 4535, B1766 La Tablada",
+    "feePerHour": 500.0,
+    "feeFraction": 200.0,
+    "fractionTime": 30
   },
   {
-    "name":"Punto de Pago 2",
-    "geolocation":{"lat":-34.654237,"ln":-58.538934},
-    "address": "Posadas 560, Villa Rebasa, B1704HWL Ramos Mejía, Buenos Aires Province, Argentina",
-    "feePerHour":600.0,
-    "feeFraction":400.0,
-    "fractionTime":45
+    "name": "Punto de Pago 2",
+    "geolocation": {
+      "lat": -34.689115,
+      "ln": -58.536077
+    },
+    "address": "Atahualpa 5443, B1766EIA La Tablada",
+    "feePerHour": 600.0,
+    "feeFraction": 400.0,
+    "fractionTime": 45
   },
   {
-    "name":"Punto de Pago 3",
-    "geolocation":{"lat":-34.688534,"ln":-58.550255},
-    "address": "Sarandí 4122, B1754AMB San Justo, Buenos Aires Province, Argentina",
-    "feePerHour":750.0,
-    "feeFraction":300.0,
-    "fractionTime":40
+    "name": "Punto de Pago 3",
+    "geolocation": {
+      "lat": -34.688534,
+      "ln": -58.550255
+    },
+    "address": "Sarandí 4114, B1754AMB San Justo,",
+    "feePerHour": 750.0,
+    "feeFraction": 300.0,
+    "fractionTime": 40
   },
   {
-    "name":"Punto de Pago 4",
-    "geolocation":{"lat":-34.625105,"ln":-58.565905},
-    "address": "Andrés Ferreira 4466, Villa Pineral, B1678GZM Caseros, Buenos Aires Province, Argentina",
-    "feePerHour":550.0,
-    "feeFraction":250.0,
-    "fractionTime":35
+    "name": "Punto de Pago 4",
+    "geolocation": {
+      "lat": -34.69174364733101,
+      "ln": -58.53226114943993
+    },
+    "address": "San Pedro 1795, B1766BWG La Tablada",
+    "feePerHour": 550.0,
+    "feeFraction": 250.0,
+    "fractionTime": 35
   },
   {
-    "name":"Punto de Pago 5",
-    "geolocation":{"lat":-34.704249,"ln":-58.56871},
-    "address": "Colonia 4224, B1754HGK San Justo, Buenos Aires Province, Argentina",
-    "feePerHour":850.0,
-    "feeFraction":350.0,
-    "fractionTime":50
-  },
-  {
-    "name":"Punto de Pago 6",
-    "geolocation":{"lat":-34.691877,"ln":-58.547986},
-    "address": "Jujuy 4501, B1766ALZ La Tablada, Buenos Aires Province, Argentina",
-    "feePerHour":650.0,
-    "feeFraction":300.0,
-    "fractionTime":30
-  },
-  {
-    "name":"Punto de Pago 7",
-    "geolocation":{"lat":-34.678361,"ln":-58.560129},
-    "address": "Hipólito Yrigoyen 2462, B1754EVP San Justo, Buenos Aires Province, Argentina",
-    "feePerHour":700.0,
-    "feeFraction":250.0,
-    "fractionTime":40
-  },
-  {
-    "name":"Punto de Pago 8",
-    "geolocation":{"lat":-34.662837,"ln":-58.554794},
-    "address": "Pedro Bonifacio Palacios 1096, Villa Don Bosco, B1704HIQ Ramos Mejía, Buenos Aires Province, Argentina",
-    "feePerHour":750.0,
-    "feeFraction":350.0,
-    "fractionTime":45
-  },
-  {
-    "name":"Punto de Pago 9",
-    "geolocation":{"lat":-34.710937,"ln":-58.562569},
-    "address": "Asamblea 5130, Villa Puerta de Hierro, B1754HSX San Justo, Buenos Aires Province, Argentina",
-    "feePerHour":600.0,
-    "feeFraction":300.0,
-    "fractionTime":30
-  },
-  {
-    "name":"Punto de Pago 10",
-    "geolocation":{"lat":-34.665774,"ln":-58.549508},
-    "address": "Tomás Justo Villegas 884, Villa Don Bosco, B1752CJR Lomas del Mirador, Buenos Aires Province, Argentina",
-    "feePerHour":550.0,
-    "feeFraction":200.0,
-    "fractionTime":40
+    "name": "Punto de Pago 5",
+    "geolocation": {
+      "lat": -34.694926717831194,
+      "ln": -58.539937148583846
+    },
+    "address": "Monseñor José Francisco Marcón 5287, B1766 Buenos Aires",
+    "feePerHour": 850.0,
+    "feeFraction": 350.0,
+    "fractionTime": 50
   }
 ]

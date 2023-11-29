@@ -2,13 +2,16 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +25,7 @@ class ProfileServiceImplTest {
     @Mock
     private UserRepository mockUserRepository;
     @Mock
-    private NotificationRepository notificationRepository;
+    private ParkingRepository parkingRepository;
     @Mock
     private ParkingPlaceRepository parkingPlaceRepository;
     @Mock
@@ -30,7 +33,7 @@ class ProfileServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, notificationRepository, parkingPlaceRepository, reportRepository);
+        profileService = new ProfileServiceImpl(mockVehicleRepository, mockUserRepository, parkingRepository, parkingPlaceRepository, reportRepository);
     }
 
     @Test
@@ -40,6 +43,8 @@ class ProfileServiceImplTest {
 
         Mockito.when(mockUserRepository.findUserById(userId))
                 .thenReturn(user);
+        Mockito.when(parkingRepository.findParkingsByUser(user))
+                .thenReturn(new ArrayList<>(List.of(new Parking())));
 
         ProfileResponseDTO response = profileService.getVehiclesAndParkingsByMobileUser(userId);
 
@@ -62,59 +67,17 @@ class ProfileServiceImplTest {
         MobileUser user = getNewMobileUserWithNotificationList();
         List<Notification> notifications = user.getNotifications();
 
-        Mockito.when(mockUserRepository.findUserById(user.getId()))
+        Mockito.when(mockUserRepository.findUserById(1L))
                 .thenReturn(user);
-        Mockito.when(notificationRepository.findAllByUser(user))
-                .thenReturn(user.getNotifications());
+        List<Notification> notis = profileService.getAllNotificationsByMobileUser(1L);
 
-        assertEquals(notifications, notificationRepository.findAllByUser(user));
-    }
-
-    @Test
-    void shouldRegisterNewReport() {
-        Long idAdmin = 1L;
-        String email = "jdoe@mail.com";
-
-        createAndPersistMobileUser(email);
-        createAndPersistGarage(idAdmin);
-
-        profileService.registerReport(idAdmin, email, "some description");
-
-        Mockito.verify(reportRepository).save(ArgumentMatchers.argThat(report ->
-                report.getReportType().equals(ReportType.FRAUD) &&
-                        report.isActive() &&
-                        report.getDescription().equals("some description") &&
-                        report.getReportStatus().equals(ReportStatus.IN_PROCESS)
-        ));
-    }
-
-    @Test
-    void whenRegisterReport_ifGarageNotExist_shouldThrowException() {
-        Long idAdmin = 1L;
-        String email = "jdoe@mail.com";
-        createAndPersistMobileUser(email);
-
-        Mockito.when(parkingPlaceRepository.findById(idAdmin))
-                .thenReturn(null);
-
-        assertThrows(GarageNotFoundException.class, () -> profileService.registerReport(idAdmin, email, "some desc"));
-    }
-
-    @Test
-    void shouldGetReportsByUser() {
-        Long id = 1L;
-        MobileUser user = createAndPersistMobileUser(id);
-        Mockito.when(reportRepository.getReportByUser(user))
-                .thenReturn(List.of());
-
-        List<Report> reports = profileService.getReportsByUser(id);
-
-        assertTrue(reports.isEmpty());
+        assertEquals(notifications, notis);
     }
 
     private MobileUser sinceItSavesAMobileUserWithVehiclesAndParkings() {
         MobileUser user = new MobileUser();
         Vehicle vehicle = new Vehicle();
+        vehicle.setIsActive(true);
         Parking parking = new Parking();
         user.registerParking(parking);
         user.registerVehicle(vehicle);
@@ -145,5 +108,29 @@ class ProfileServiceImplTest {
     private void createAndPersistGarage(Long idAdmin) {
         Mockito.when(parkingPlaceRepository.findById(idAdmin))
                 .thenReturn(new Garage());
+    }
+
+    @Test
+    void shouldRemoveExistingVehicle() {
+        String existingPatent = "ExistingPatent";
+        Vehicle existingVehicle = new Vehicle();
+        existingVehicle.setPatent(existingPatent);
+
+        Mockito.when(mockVehicleRepository.findVehicleByPatent(existingPatent))
+                .thenReturn(existingVehicle);
+
+        profileService.removeVehicle(existingPatent);
+
+        Mockito.verify(mockVehicleRepository).disableVehicleByPatent(existingPatent);
+    }
+
+    @Test
+    void whenTryToRemoveNonExistingVehicle_ShouldThrowVehicleNotFoundException() {
+        String nonExistingPatent = "NonExistingPatent";
+
+        Mockito.when(mockVehicleRepository.findVehicleByPatent(nonExistingPatent))
+                .thenReturn(null);
+
+        assertThrows(VehicleNotFoundException.class, () -> profileService.removeVehicle(nonExistingPatent));
     }
 }

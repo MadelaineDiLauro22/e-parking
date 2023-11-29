@@ -17,11 +17,11 @@ public class OTP {
     private Long idGarage;
     private Date expirationDate;
 
-    public OTP(String otpKey, String userEmail, Long idGarage) {
+    public OTP(String otpKey, String userEmail, Long idGarage, int expirationTime) {
         this.otpKey = otpKey;
         this.userEmail = userEmail;
         this.idGarage = idGarage;
-        this.expirationDate = calculateExpiration();
+        this.expirationDate = calculateExpiration(expirationTime);
     }
 
     public OTP() {
@@ -43,9 +43,9 @@ public class OTP {
         return idGarage;
     }
 
-    private Date calculateExpiration(){
+    private Date calculateExpiration(int expirationTime){
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
+        calendar.add(Calendar.MINUTE, expirationTime);
 
         Date date = calendar.getTime();
 

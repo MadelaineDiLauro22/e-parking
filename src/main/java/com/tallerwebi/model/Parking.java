@@ -123,5 +123,7 @@ public class Parking implements Comparable<Parking>{
         return vehiclePicture != null && vehiclePicture.length > 0;
     }
 
-
+    public void setName(String name) {
+        this.name = name;
+    }
 }

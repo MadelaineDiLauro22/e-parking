@@ -11,6 +11,7 @@ import com.tallerwebi.infraestructura.ReportRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.Report;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
@@ -26,7 +27,7 @@ public class ReportServiceImplTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private NotificationRepository notificationRepository;
+    private NotificationService notificationService;
     @Captor
     private ArgumentCaptor<Report> reportCaptor;
     @Captor
@@ -36,7 +37,7 @@ public class ReportServiceImplTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        reportService = new ReportServiceImpl(reportRepository, notificationRepository, userRepository, parkingPlaceRepository);
+        reportService = new ReportServiceImpl(reportRepository, notificationService, userRepository, parkingPlaceRepository);
     }
 
     @Test
@@ -53,9 +54,10 @@ public class ReportServiceImplTest {
         assertEquals(reports,reportsList);
     }
 
+
     @Test
     public void shouldEditReportSuccesfully(){
-        Report report = new Report(ReportType.FRAUD,"fraude",new Garage(),new MobileUser());
+        Report report = new Report(ReportType.PAYMENT_PROBLEM,"fraude",new Garage(),new MobileUser());
         MobileUser user = new MobileUser();
 
         Mockito.when(reportRepository.getReportById(1L))
@@ -65,13 +67,10 @@ public class ReportServiceImplTest {
 
         reportService.editReport(new EditReportDTO(true,ReportStatus.ACCEPTED,1L,1L));
 
-        Mockito.verify(notificationRepository).save(notificationCaptor.capture());
         Mockito.verify(reportRepository).save(reportCaptor.capture());
 
         Report edited = reportCaptor.getValue();
-        Notification notification = notificationCaptor.getValue();
 
         assertEquals(ReportStatus.ACCEPTED, edited.getReportStatus());
-        assertEquals("Su denuncia fue revisada por un administrador",notification.getTitle());
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -60,7 +61,9 @@ public class ParkingServiceImpl implements ParkingService {
             ParkingPlaceResponseDTO parkingPlaceResponseDTO = new ParkingPlaceResponseDTO(parkingPlace.getClass().getSimpleName(), parkingPlace.getId(), parkingPlace.getName(),
                     parkingPlace.getGeolocation(), parkingPlace.getAddress(), parkingPlace.getFeePerHour(), parkingPlace.getFeeFraction(), parkingPlace.getFractionTime());
             if(parkingPlace instanceof Garage){
-                parkingPlaceResponseDTO.setUserId(((Garage) parkingPlace).getUser().getId());
+                if (((Garage) parkingPlace).getUser()!=null) {
+                    parkingPlaceResponseDTO.setUserId(((Garage) parkingPlace).getUser().getId());
+                }
                 parkingPlaceResponseDTO.setNumberOfCars(((Garage) parkingPlace).getNumberOfCars());
                 Hibernate.initialize(((Garage) parkingPlace).getPatents());
                 parkingPlaceResponseDTO.setPatents(((Garage) parkingPlace).getPatents());
@@ -80,10 +83,7 @@ public class ParkingServiceImpl implements ParkingService {
 
         Parking parking = createNewParking(parkingRegisterDTO, user, vehicle);
 
-        if (parking.getParkingType().equals(ParkingType.GARAGE)){
-            //TO DO: para cuando se agrega la entidad Garage
-        }
-        else if (parking.getParkingType().equals(ParkingType.POINT_SALE)){
+        if (parking.getParkingType().equals(ParkingType.POINT_SALE)){
             createPointSaleTicket(parking, parkingRegisterDTO);
         }
 
@@ -93,13 +93,13 @@ public class ParkingServiceImpl implements ParkingService {
             try {
                 switch (parkingRegisterDTO.getAlarmType()){
                     case NORMAL:
-                        createAlarm(parkingRegisterDTO.getAlarmDate());
+                        createAlarm(parkingRegisterDTO.getAlarmDate(), idUser);
                         break;
                     case AMOUNT_HS:
-                        createAlarmWithAmountHrs(parkingRegisterDTO.getAmmountHrsAlarm());
+                        createAlarmWithAmountHrs(parkingRegisterDTO.getAmmountHrsAlarm(), idUser);
                         break;
                     case AMOUNT_DESIRED:
-                        createAlarmWithAmountDesired(parkingRegisterDTO.getAmountDesired(), parkingRegisterDTO.getParkingPlaceId());
+                        createAlarmWithAmountDesired(parkingRegisterDTO.getAmountDesired(), parkingRegisterDTO.getParkingPlaceId(), idUser);
                         break;
                     default:
                         break;
@@ -136,18 +136,18 @@ public class ParkingServiceImpl implements ParkingService {
         parking.setTicket(ticket);
     }
 
-    private void createAlarm(Date dateTime) throws InterruptedException, AlarmNotNullException {
+    private void createAlarm(Date dateTime, Long userId) throws InterruptedException, AlarmNotNullException {
         if (dateTime == null) throw new AlarmNotNullException();
-        alarm.createAlarm(ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")));
+        alarm.createAlarm(ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneId.of("America/Argentina/Buenos_Aires")), userId);
     }
-    private void createAlarmWithAmountHrs(int amountHrsAlarm) throws InterruptedException, AlarmNotNullException {
+    private void createAlarmWithAmountHrs(int amountHrsAlarm, Long userId) throws InterruptedException, AlarmNotNullException {
         if (amountHrsAlarm == 0) throw new AlarmNotNullException();
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDateTime newDateTime = dateTime.plusHours(amountHrsAlarm);
         ZonedDateTime zonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
-        alarm.createAlarm(zonedDateTime);
-         }
-    private void createAlarmWithAmountDesired(float amountDesired, Long parkingPlaceId) throws InterruptedException, AlarmNotNullException {
+        alarm.createAlarm(zonedDateTime, userId);
+    }
+    private void createAlarmWithAmountDesired(float amountDesired, Long parkingPlaceId, Long userId) throws InterruptedException, AlarmNotNullException {
         if (parkingPlaceId == null) throw new ParkingNotFoundException();
         if (amountDesired == 0) throw new AlarmNotNullException();
         PointSale pointSale = (PointSale) parkingPlaceRepository.findById(parkingPlaceId);
@@ -157,6 +157,6 @@ public class ParkingServiceImpl implements ParkingService {
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDateTime newDateTime = dateTime.plusHours(addedHours);
         ZonedDateTime zonedDateTime = newDateTime.atZone(ZoneId.of("America/Argentina/Buenos_Aires"));
-        alarm.createAlarm(zonedDateTime);
+        alarm.createAlarm(zonedDateTime, userId);
     }
 }

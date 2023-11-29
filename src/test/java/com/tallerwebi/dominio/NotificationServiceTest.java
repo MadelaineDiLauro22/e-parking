@@ -37,8 +37,10 @@ class NotificationServiceTest {
         MockitoAnnotations.openMocks(this);
         notificationService = new NotificationService(mockNotificationRepository, mockUserRepository, new Mapper());
 
-        notificationService.setWebSocketSession(WS_SESSION);
-        notificationService.setUserId(USER_ID);
+        //notificationService.setWebSocketSession(WS_SESSION);
+        //notificationService.setUserId(USER_ID);
+        when(WS_SESSION.isOpen()).thenReturn(true);
+        notificationService.setWebsocketSession(USER_ID, WS_SESSION);
     }
 
     @Test
@@ -46,7 +48,7 @@ class NotificationServiceTest {
         MobileUser user = createAndPersistUser();
         createAndAddNotifications(user);
 
-        notificationService.sendMessage();
+        notificationService.sendMessage(USER_ID);
         verify(WS_SESSION).sendMessage(any());
     }
 
@@ -55,10 +57,10 @@ class NotificationServiceTest {
         String title = "Hi!";
         String message = "This is a notification";
         NotificationRequestDTO request = createNotificationRequest(title, message);
-        MobileUser user = createAndPersistUser();
+        createAndPersistUser();
 
         notificationService.registerNotification(request);
-        Notification notification = verifyRepositoriesAndExtractNotification(user);
+        Notification notification = verifyRepositoriesAndExtractNotification();
 
         assertEquals(title, notification.getTitle());
         assertEquals(message, notification.getMessage());
@@ -76,8 +78,7 @@ class NotificationServiceTest {
         assertThrows(NotificationServiceException.class, () -> notificationService.registerNotification(request));
     }
 
-    private Notification verifyRepositoriesAndExtractNotification(MobileUser user) {
-        verify(mockUserRepository).save(user);
+    private Notification verifyRepositoriesAndExtractNotification() {
         verify(mockNotificationRepository).save(notificationCaptor.capture());
 
         return notificationCaptor.getValue();
@@ -100,7 +101,7 @@ class NotificationServiceTest {
     }
 
     private NotificationRequestDTO createNotificationRequest(String title, String message) {
-        return new NotificationRequestDTO(title, message, NotificationType.MESSAGE);
+        return new NotificationRequestDTO(title, message, NotificationType.MESSAGE, USER_ID);
     }
 
 }

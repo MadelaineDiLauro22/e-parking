@@ -18,15 +18,17 @@ public class Alarm {
     }
 
     @Async
-    public void createAlarm(ZonedDateTime nextRun) throws InterruptedException {
+    public void createAlarm(ZonedDateTime nextRun, Long userId) throws InterruptedException {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")).withSecond(0).withNano(0);
 
         while (now.compareTo(nextRun) < 0) {
-            Thread.sleep(60000);
+            Thread.sleep(10000);
             now = ZonedDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"));
         }
 
-       notificationService.registerAndSendNotification(new NotificationRequestDTO("Alarma", "Este es un recordatorio para mover el auto", NotificationType.ALARM));
+       notificationService.registerAndSendNotification(
+               new NotificationRequestDTO("Alarma", "Este es un recordatorio para mover el auto", NotificationType.ALARM, userId)
+       );
     }
 
 }

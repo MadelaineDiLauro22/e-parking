@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.OTPNotFoundException;
 import com.tallerwebi.helpers.EmailService;
+import com.tallerwebi.helpers.NotificationService;
 import com.tallerwebi.infraestructura.*;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
@@ -15,9 +16,7 @@ import org.springframework.mail.MailException;
 import javax.mail.MessagingException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,25 +39,54 @@ public class GarageServiceImplTest {
 
     @Captor
     private ArgumentCaptor<Parking> parkingArgumentCaptor;
-
+    @Captor
+    ArgumentCaptor<Vehicle> vehicleArgumentCaptor;
     @Captor
     private ArgumentCaptor<OTP> otpArgumentCaptor;
+    @Mock
+    private NotificationService notificationService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository);
+        garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository, notificationService);
     }
 
     @Test
     public void testConstructorInitialization() {
         MockitoAnnotations.openMocks(this);
-        GarageService garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository);
+        GarageService garageService = new GarageServiceImpl(userRepository, vehicleRepository, parkingPlaceRepository, parkingRepository, emailService, otpRepository, notificationService);
         assertNotNull(garageService);
     }
 
     @Test
-    public void testRegisterVehicleSuccess() {
+    public void testExistVehicleInSystem(){
+        Vehicle vehicle = new Vehicle();
+        vehicle.setPatent("123");
+
+        when(vehicleRepository.findVehicleByPatent("123")).thenReturn(vehicle);
+
+        assertTrue(garageService.vehicleExistsInSystem(vehicle.getPatent()));
+    }
+
+    @Test
+    public void testExistVehicleInGarage(){
+        MobileUser user = new MobileUser();
+        user.setId(1L);
+        Garage garage = new Garage();
+        Vehicle vehicle = new Vehicle();
+        vehicle.setPatent("123");
+
+        garage.addVehicle(vehicle.getPatent());
+
+        when(userRepository.findUserById(user.getId())).thenReturn(user);
+        when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+
+        assertTrue(garageService.vehicleExistsInGarage(vehicle.getPatent(),user.getId()));
+    }
+
+    @Test
+    public void testRegisterExistingVehicleSuccess() {
         VehicleIngressDTO dto = new VehicleIngressDTO();
         dto.setPatent("ABC123");
         Long idUser = 1L;
@@ -75,7 +103,7 @@ public class GarageServiceImplTest {
         Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
         Mockito.when(otpRepository.exists(dto.getUserEmail(), garage.getId(), otp.getOtpKey())).thenReturn(true);
 
-        garageService.registerVehicle(dto, otp, idUser);
+        garageService.registerExistingVehicleInSystem(dto, otp, idUser);
         Mockito.verify(parkingRepository).save(parkingArgumentCaptor.capture());
 
         Parking registered = parkingArgumentCaptor.getValue();
@@ -83,6 +111,29 @@ public class GarageServiceImplTest {
         assertEquals(ParkingType.GARAGE, registered.getParkingType());
         assertEquals(vehicle, registered.getVehicle());
         assertEquals(user, registered.getMobileUser());
+    }
+
+    @Test
+    public void testRegisterNotExistingVehicleSuccess() {
+        VehicleIngressDTO dto = new VehicleIngressDTO();
+        dto.setPatent("ABC123");
+        Long idUser = 1L;
+        MobileUser user = new MobileUser();
+        Vehicle vehicle = new Vehicle();
+        Garage garage = new Garage();
+
+        Mockito.when(userRepository.findUserById(idUser))
+                .thenReturn(user);
+        Mockito.when(vehicleRepository.findVehicleByPatent("ABC123"))
+                .thenReturn(vehicle);
+        Mockito.when(parkingPlaceRepository.findGarageByUser(user)).thenReturn(garage);
+
+        garageService.registerNotExistingVehicleInSystem(dto, idUser);
+        Mockito.verify(vehicleRepository).save(vehicleArgumentCaptor.capture());
+
+        Vehicle registered = vehicleArgumentCaptor.getValue();
+
+        assertEquals(dto.getPatent(), registered.getPatent());
     }
 
     @Test
@@ -98,7 +149,7 @@ public class GarageServiceImplTest {
         when(otpRepository.exists(vehicleIngressDTO.getUserEmail(), garageAdminUserId, otpDto.getOtpKey())).thenReturn(false);
 
         assertThrows(OTPNotFoundException.class, () -> {
-            garageService.registerVehicle(vehicleIngressDTO, otpDto, garageAdminUserId);
+            garageService.registerExistingVehicleInSystem(vehicleIngressDTO, otpDto, garageAdminUserId);
         });
     }
 
@@ -121,10 +172,15 @@ public class GarageServiceImplTest {
                 "    <div style=\"text-align: center; justify-content: center;\">\n" +
                 "        <img src=\"https://i.imgur.com/P8FBUXF.png\" style=\"width: 200px; height: 230px\">\n" +
                 "    </div>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Este es un código de seguridad temporal para validar el ingreso al estacionamiento.</p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Solo puede ser utilizado una vez en los próximos 5 minutos, tras lo cual expirará:</p>\n" +
                 "<h1 style=\"text-align: center; justify-content: center; color: antiquewhite;\">Código: " + otp.getOtpKey() + "</h1>\n" +
-                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Estan queriendo ingresar tu vehiculo, si no sos vos, hace la denuncia: <a href=\"" + link + "\" style=\"color: #D13639;\">AQUI</a></p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Estan queriendo ingresar tu vehículo, si no sos vos, hacé la denuncia: <a href=\"" + link + "\" style=\"color: #D13639;\">AQUI</a></p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Atentamente,</p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">El equipo de eParking</p>\n" +
                 "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
                 "</div>";
+
 
         verify(emailService).sendMimeMessage(mail, "Clave de ingreso:", messageWithStyles);
     }

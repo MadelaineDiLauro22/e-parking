@@ -2,12 +2,13 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.GarageNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
-import com.tallerwebi.infraestructura.NotificationRepository;
+import com.tallerwebi.helpers.NotificationService;
 import com.tallerwebi.infraestructura.ParkingPlaceRepository;
 import com.tallerwebi.infraestructura.ReportRepository;
 import com.tallerwebi.infraestructura.UserRepository;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.EditReportDTO;
+import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
 import com.tallerwebi.presentacion.dto.ReportDTO;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,13 @@ import java.util.List;
 public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
     private final UserRepository userRepository;
     private final ParkingPlaceRepository parkingPlaceRepository;
 
-    public ReportServiceImpl(ReportRepository reportRepository, NotificationRepository notificationRepository, UserRepository userRepository, ParkingPlaceRepository parkingPlaceRepository) {
+    public ReportServiceImpl(ReportRepository reportRepository, NotificationService notificationService, UserRepository userRepository, ParkingPlaceRepository parkingPlaceRepository) {
         this.reportRepository = reportRepository;
-        this.notificationRepository = notificationRepository;
+        this.notificationService = notificationService;
         this.userRepository = userRepository;
         this.parkingPlaceRepository = parkingPlaceRepository;
     }
@@ -45,13 +46,17 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void editReport(EditReportDTO editReportDTO) {
         Report report = reportRepository.getReportById(editReportDTO.getId());
-        MobileUser user = userRepository.findUserById(editReportDTO.getUserId());
 
         report.setReportStatus(editReportDTO.getReportStatus());
         if(editReportDTO.getReportStatus() == ReportStatus.ACCEPTED || editReportDTO.getReportStatus() == ReportStatus.REJECTED) report.setActive(false);
 
         reportRepository.save(report);
-        notificationRepository.save(new Notification("Su denuncia fue revisada por un administrador","Vea las novedades acerca del estado de su denuncia", Date.from(Instant.now()),user));
+        notificationService.registerAndSendNotification(new NotificationRequestDTO(
+                "Su denuncia fue revisada por un administrador",
+                "Puede ver el estado de su denuncia en su perfil",
+                NotificationType.REPORT,
+                editReportDTO.getUserId()
+        ));
     }
 
     @Override

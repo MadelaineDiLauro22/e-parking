@@ -3,8 +3,11 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProfileService;
 import com.tallerwebi.dominio.excepcion.ParkingNotFoundException;
 import com.tallerwebi.dominio.excepcion.UserNotFoundException;
+import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.ProfileResponseDTO;
+import com.tallerwebi.presentacion.dto.VehicleRegisterDTO;
+import org.dom4j.rule.Mode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,7 +21,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class ProfileControllerTest {
@@ -27,8 +30,6 @@ public class ProfileControllerTest {
     private ProfileService mockProfileService;
     @Mock
     private ProfileController profileController;
-    @Mock
-    private ProfileService profileService;
     @Mock
     private HttpSession mockHttpSession;
 
@@ -118,5 +119,50 @@ public class ProfileControllerTest {
 
         assertEquals("redirect:/error?errorMessage=null", response.getViewName());
     }
-}
 
+    @Test
+    void shouldGetRegisterVehicleView(){
+        ModelAndView page = profileController.getRegisterVehicleView();
+        assertEquals("vehicle-register", page.getViewName());
+    }
+
+    @Test
+    void shouldRegisterVehicle_ThenReturnToProfileViewWithSuccess() {
+        VehicleRegisterDTO vehicleRegisterDTO = new VehicleRegisterDTO("ABC123", "BMW", "2023", "Red");
+        Long userId = 1L;
+        when(mockHttpSession.getAttribute("id")).thenReturn(userId);
+
+        ModelAndView page = profileController.registerVehicle(vehicleRegisterDTO);
+
+        verify(mockProfileService).registerVehicle(vehicleRegisterDTO, userId);
+        assertEquals("redirect:/mobile/profile", page.getViewName());
+        assertTrue((boolean) page.getModel().get("success"));
+    }
+
+    private Long getUserId(){
+        return 1L;
+    }
+
+    @Test
+    void testRemoveExistingVehicle() {
+        String existingPatent = "ExistingPatent";
+        doNothing().when(mockProfileService).removeVehicle(existingPatent);
+
+        ModelAndView modelAndView = profileController.removeVehicle(existingPatent);
+
+        verify(mockProfileService).removeVehicle(existingPatent);
+        assertEquals("redirect:/mobile/profile", modelAndView.getViewName());
+        assertTrue((boolean) modelAndView.getModel().get("success"));
+    }
+
+    @Test
+    void testRemoveNonExistingVehicle() {
+        String nonExistingPatent = "NonExistingPatent";
+        doThrow(new VehicleNotFoundException()).when(mockProfileService).removeVehicle(nonExistingPatent);
+
+        ModelAndView modelAndView = profileController.removeVehicle(nonExistingPatent);
+
+        verify(mockProfileService).removeVehicle(nonExistingPatent);
+        assertEquals("redirect:/error?errorMessage=Vehículo inexistente", modelAndView.getViewName());
+    }
+}

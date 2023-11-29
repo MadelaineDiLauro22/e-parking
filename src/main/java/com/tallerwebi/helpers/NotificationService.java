@@ -10,6 +10,7 @@ import com.tallerwebi.model.MobileUser;
 import com.tallerwebi.model.Notification;
 import com.tallerwebi.presentacion.dto.NotificationDTO;
 import com.tallerwebi.presentacion.dto.NotificationRequestDTO;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
@@ -18,8 +19,10 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NotificationService extends NotificationSocketHandler {
 
     private final NotificationRepository notificationRepository;
@@ -27,49 +30,51 @@ public class NotificationService extends NotificationSocketHandler {
     private final Mapper mapper;
 
     public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository, Mapper mapper) {
+        super();
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
     @Override
-    public void sendMessage()  {
+    public void sendMessage(Long userId)  {
         try {
-            if(super.getWebSocketSession() == null) throw new NotificationServiceException("Websocket session not connected");
-            NotificationDTO notifications = getNotifications();
-            super.getWebSocketSession().sendMessage(new TextMessage(mapper.getMapper().writeValueAsBytes(notifications)));
+            if(!isConnected(userId)) throw new NotificationServiceException("Websocket session not connected");
+            NotificationDTO notifications = getNotifications(userId);
+            super.getWebsocketSession(userId).sendMessage(new TextMessage(mapper.getMapper().writeValueAsBytes(notifications)));
         } catch (IOException e) {
             throw new CantSendMessageException(e.getMessage());
         }
     }
 
-    @Transactional
     public void registerNotification(NotificationRequestDTO request) {
         try {
-            MobileUser user = userRepository.findUserById(super.getUserId());
+            MobileUser user = userRepository.findUserById(request.getUserId());
 
             if(user == null) throw new UserNotFoundException();
 
             Notification notification = new Notification(request.getTitle(), request.getMessage(), Date.from(Instant.now()), user);
             user.addNotification(notification);
 
-            userRepository.save(user);
+            //userRepository.save(user);
             notificationRepository.save(notification);
         } catch (Exception e) {
             throw new NotificationServiceException("Can't register notification. Exception: " + e.getMessage());
         }
     }
 
-    @Transactional
     public void registerAndSendNotification(NotificationRequestDTO request) {
         registerNotification(request);
-        if (super.getWebSocketSession().isOpen()) sendMessage();
+        if (isConnected(request.getUserId())) sendMessage(request.getUserId());
     }
 
-    private NotificationDTO getNotifications() {
+    private NotificationDTO getNotifications(Long userId) {
         try {
-            MobileUser user = userRepository.findUserById(super.getUserId());
-            List<Notification> notifications = notificationRepository.findAllByUserAndNotRead(user);
+            MobileUser user = userRepository.findUserById(userId);
+            //List<Notification> notifications = notificationRepository.findAllByUserAndNotRead(user);
+            Hibernate.initialize(user.getNotifications());
+            List<Notification> notifications = user.getNotifications()
+                    .stream().filter(notification -> !notification.isRead()).collect(Collectors.toList());
 
             int size = notifications.size();
 

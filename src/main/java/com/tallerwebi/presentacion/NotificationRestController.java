@@ -28,7 +28,7 @@ public class NotificationRestController {
     @ResponseStatus(HttpStatus.OK)
     public void seeNotifications() {
         notificationRestService.seeNotifications((Long) session.getAttribute("id"));
-        notificationService.sendMessage();
+        notificationService.sendMessage((Long) session.getAttribute("id"));
     }
 
 }

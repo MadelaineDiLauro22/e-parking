@@ -2,7 +2,6 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.GarageService;
 import com.tallerwebi.dominio.excepcion.VehicleExistInGarageException;
-import com.tallerwebi.dominio.excepcion.VehicleNotFoundException;
 import com.tallerwebi.model.*;
 import com.tallerwebi.presentacion.dto.OTPDTO;
 import com.tallerwebi.presentacion.dto.ParkingEgressDTO;
@@ -64,12 +63,15 @@ public class GarageController {
     public ModelAndView egressVehicleView(@RequestParam(name = "patent") String patent) {
         try {
             Vehicle vehicle = garageService.getVehicleByPatent(patent);
-            Parking parking = garageService.getUserByPatent(patent).getParkings().get(0);
-            ParkingEgressDTO dto = garageService.EstimateEgressVehicle(parking, (Long) session.getAttribute("id"));
-
             ModelMap model = new ModelMap();
+
+            if (vehicle.getUser() != null) {
+                Parking parking = garageService.getUserByPatent(patent).getParkings().get(0);
+                ParkingEgressDTO dto = garageService.EstimateEgressVehicle(parking, (Long) session.getAttribute("id"));
+                model.put("parking", dto);
+            }
+
             model.put("vehicle", vehicle);
-            model.put("parking", dto);
 
             return new ModelAndView("garage-vehicle", model);
         } catch (Exception e) {
@@ -95,6 +97,7 @@ public class GarageController {
     public ModelAndView sendOtp(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO) {
         try {
             ModelMap model = new ModelMap();
+            if(garageService.vehicleExistsInSystem(vehicleIngressDTO.getPatent())){
                 if(garageService.vehicleExistsInGarage(vehicleIngressDTO.getPatent().toUpperCase(), (Long) session.getAttribute("id"))) throw new VehicleExistInGarageException();
                 Garage garage = garageService.getGarageByAdminUserId((Long) session.getAttribute("id"));
                 garageService.sendOtp(vehicleIngressDTO.getUserEmail(), garage.getId());
@@ -112,6 +115,12 @@ public class GarageController {
                                 vehicleIngressDTO.getUserEmail()
                         ),
                         model);
+            } else{
+                garageService.registerNotExistingVehicleInSystem(vehicleIngressDTO, (Long) session.getAttribute("id"));
+                model.put("success", true);
+                return new ModelAndView("redirect:/web/admin/", model);
+            }
+
         } catch (Exception e) {
             return new ModelAndView("redirect:/error?errorMessage=" + e.getMessage());
         }
@@ -141,7 +150,7 @@ public class GarageController {
     @PostMapping(value = "/enter/register")
     public ModelAndView validationRegisterVehicle(@ModelAttribute("vehicleIngressDTO") VehicleIngressDTO vehicleIngressDTO, @ModelAttribute("otp") OTPDTO otpDTO) {
         try {
-            garageService.registerVehicle(vehicleIngressDTO, otpDTO, (Long) session.getAttribute("id"));
+            garageService.registerExistingVehicleInSystem(vehicleIngressDTO, otpDTO, (Long) session.getAttribute("id"));
             ModelMap model = new ModelMap();
             model.put("success", true);
 

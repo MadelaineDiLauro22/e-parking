@@ -34,7 +34,7 @@ class ReportRepositoryImplTest {
     @Rollback
     @Test
     public void whenSaveReportShouldPersistIt() {
-        Report report = new Report(ReportType.FRAUD, "some report", null, null);
+        Report report = new Report(ReportType.PAYMENT_PROBLEM, "some report", null, null);
 
         reportRepository.save(report);
 
@@ -48,7 +48,7 @@ class ReportRepositoryImplTest {
     @Rollback
     @Test
     public void whenGetAllReports_shouldNotGetInactiveReports() {
-        Report report = new Report(ReportType.FRAUD, "some report", null, null);
+        Report report = new Report(ReportType.PERSONAL_PROBLEM, "some report", null, null);
         report.setActive(false);
 
         reportRepository.save(report);
@@ -63,7 +63,7 @@ class ReportRepositoryImplTest {
     @Test
     public void shouldGetAllReportsByUser() {
         MobileUser user = new MobileUser();
-        Report report = new Report(ReportType.FRAUD, "some report", null, user);
+        Report report = new Report(ReportType.PAYMENT_PROBLEM, "some report", null, user);
         user.addReport(report);
 
         reportRepository.save(report);

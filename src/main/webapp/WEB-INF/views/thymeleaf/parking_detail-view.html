@@ -4,7 +4,10 @@
 
     <section class="justify-content-center">
 
-        <article class="container text-white bg-windows col-lg-6 p-2 my-3 rounded-4">
+        <article class="container text-white bg-windows col-lg-6 px-2 py-4 my-3 rounded-4">
+            <div>
+                <h1 class="text-bold text-white text-center fs-5">Parking</h1>
+            </div>
 
             <div>
 
@@ -17,8 +20,14 @@
                             <div class="my-2"><strong>Foto del Vehículo:</strong></div>
                             <img th:src="${vehiclePicture}" class="img-thumbnail" alt="Foto del Vehículo" style="width: 20rem; height: auto;">
 
-                            <p class="my-2"><strong>Foto del Ticket:</strong></p>
-                            <img th:src="${ticketPicture}" class="img-thumbnail" alt="Foto del Ticket" style="width: 20rem; height: auto;">
+                            <div th:if="${ticketPicture != null}">
+                                <p class="my-2"><strong>Foto del Ticket:</strong></p>
+                                <img th:src="${ticketPicture}" class="img-thumbnail" alt="Foto del Ticket" style="width: 20rem; height: auto;">
+                            </div>
+                            <div th:unless="${ticketPicture}">
+                                <p class="my-2"><strong>Foto del Ticket:</strong></p>
+                                <p class="mt-1"> - No hay ticket disponible - </p>
+                            </div>
                         </div>
 
                     </div>
@@ -27,17 +36,31 @@
 
                 <div class="col-md-6 mx-auto">
 
-                    <p th:if="${parking.name}" class="my-2"><strong>Nombre:</strong> <span th:text="${parking.getName()}" class="text-muted"></span></p>
+                    <p th:if="${parking.name}" class="my-4"><strong class="text-bold">Nombre:</strong> <span th:text="${parking.getName()}" class="text-primary"></span></p>
 
-                    <p class="my-2"><strong>Horario de Ingreso:</strong> <span th:text="${parking.getDateArrival()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
+                    <p class="my-4"><strong>Horario de Ingreso:</strong> <span th:text="${parking.getDateArrival()}" class="form-control rounded-4" style="background-color: white"></span></p>
 
-                    <p class="my-2"><strong>Tipo de Parking:</strong> <span th:text="${parking.getParkingType()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
+                    <p class="my-4"><strong>Tipo de Parking:</strong> <span th:text="${parking.getParkingType()}" class="form-control rounded-4" style="background-color: white"></span></p>
 
-                    <p id="direction" class="my-2"><strong>Dirección:</strong> <span id="geolocation" th:text="${parking.getGeolocation()}" class="form-control rounded-4" style="background-color: #FEBC3D"></span></p>
+                    <p id="geolocation" th:text="${parking.getGeolocation()}" class="d-none"></p>
 
-                    <div id="myMap" class="mapRegister"></div>
+                    <p class="my-4"><strong>Dirección:</strong> <span id="direction" class="form-control rounded-4" style="background-color: white"></span></p>
 
                 </div>
+
+            </div>
+
+            <div class="col-md-6 mx-auto my-4">
+
+                <div id="myMap" class="mapRegister" style="border-radius: 10px !important; overflow: hidden;"></div>
+
+            </div>
+
+            <div class="mx-auto text-center">
+
+                <a th:href="@{/mobile/profile}"
+                   class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-5 fs-6 text-center btn-primary mb-2">Volver
+                </a>
 
             </div>
 
@@ -47,11 +70,176 @@
 
 </main>
 
+<script type='text/javascript'
+        src='https://www.bing.com/api/maps/mapcontrol?callback=initializeBingMap&key=AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ&setLang=es'
+        async defer></script>
+
+<script th:inline="javascript">
+    var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
+    var bingMap = null;
+
+    function initializeBingMap() {
+        if (navigator.geolocation) {
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    GetMap(position);
+                },
+                function (error) {
+                    alert(error);
+                    GetMap(null);
+                },
+                options
+            );
+        } else {
+            GetMap(null);
+        }
+    }
+
+    function GetMap(position) {
+        var lat = null;
+        var long = null;
+
+        if (position != null) {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+        } else {
+            lat = -34.670560;
+            long = -58.562780;
+        }
+
+        bingMap = new Microsoft.Maps.Map("#myMap", {
+            credentials: credentials,
+            center: new Microsoft.Maps.Location(lat, long),
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            zoom: 15
+        });
+
+        var center = bingMap.getCenter();
+
+        const url = `https://dev.virtualearth.net/REST/v1/Locations/${lat},${long}?key=${credentials}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                    var address = data.resourceSets[0].resources[0].address.formattedAddress;
+                    var personalPin = createPin(center,'¡Yo!', address, "PERSONAL");
+
+                    setInfoboxOnPin(personalPin);
+                    clickFunctionToInfoboxPin(personalPin);
+
+                    bingMap.entities.push(personalPin);
+                } else {
+                    console.error('No se encontró ninguna dirección.');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud: ', error);
+            });
+
+        const geolocationElement = document.getElementById("geolocation");
+        const geolocation = geolocationElement.textContent.split(',');
+
+        const latV = geolocation[0];
+        const lnV = geolocation[1];
+
+        var newLocation = new Microsoft.Maps.Location(latV, lnV);
+
+        const url2 = 'https://dev.virtualearth.net/REST/v1/Locations/' + latV + ',' + lnV + '?key=' + credentials;
+
+        fetch(url2)
+            .then(response => response.json())
+            .then(data => {
+                if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+                    var address = data.resourceSets[0].resources[0].address.formattedAddress;
+                    var vehiclePin = createPin(newLocation,'Mi vehiculo', address, "VEHICLE");
+
+                    setInfoboxOnPin(vehiclePin);
+                    clickFunctionToInfoboxPin(vehiclePin);
+
+                    bingMap.entities.push(vehiclePin);
+                } else {
+                    console.error('No se encontró ninguna dirección.');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud: ', error);
+            });
+    }
+
+    function createPin(location, title, description, type) {
+        var customIconUrl;
+        switch (type) {
+            case "PERSONAL":
+                customIconUrl = "/eparking/img/pinIcons/loc-icon.png";
+                break;
+            case "VEHICLE":
+                customIconUrl = "/eparking/img/pinIcons/vehicle.png";
+                break;
+            default:
+                break;
+        }
+
+        var iconOptions = {
+            title: title,
+            icon: customIconUrl,
+        };
+
+        var pin = new Microsoft.Maps.Pushpin(location, iconOptions);
+        pin.metadata = {description: description};
+
+        return pin;
+    }
+
+    function setInfoboxOnPin(pin) {
+        var infoboxOffset = new Microsoft.Maps.Point(0, -170);
+
+        if (!pin.infobox) {
+            var center = pin.getLocation();
+            var title = pin.getTitle();
+            var description = pin.metadata.description;
+
+            infobox = new Microsoft.Maps.Infobox(center, {
+                title: title,
+                description: description,
+            });
+
+            infobox.setMap(bingMap);
+            infobox.setOptions({
+                visible: false,
+                offset: infoboxOffset
+            })
+            pin.infobox = infobox;
+        } else {
+            var newCenter = pin.getLocation();
+            var newTitle = pin.getTitle();
+            var newDescription = pin.metadata.description;
+
+            infobox.setLocation(newCenter);
+            infobox.setOptions({
+                title: newTitle,
+                description: newDescription,
+                visible: false,
+                offset: infoboxOffset
+            });
+            pin.infobox = infobox;
+        }
+    }
+
+    function clickFunctionToInfoboxPin(pin) {
+        Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+            pin.infobox.setOptions({visible: true});
+        });
+    }
+</script>
 
 
 <script th:inline="javascript">
-    var image = [[${vehiclePicture}]];
-    console.log(image);
 
     var credentials = "AmmJKyxVf-6eaa2iHK_GT4J0wH58FQbLciGKGgSMYZWJSjeZ8x5Tc67SrzWnTLmQ";
 
@@ -69,8 +257,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
-                var formattedAddress = data.resourceSets[0].resources[0].address.formattedAddress;
-                directionElement.textContent = "Dirección: " + formattedAddress;
+                directionElement.textContent = data.resourceSets[0].resources[0].address.formattedAddress;
 
             } else {
                 console.error('No se encontró ninguna dirección.');

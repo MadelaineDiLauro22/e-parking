@@ -4,19 +4,13 @@
 
         <section>
 
-            <article class="container text-white bg-windows mx-auto col-lg-8 p-2 mb-3 rounded-4">
-
-                <h2 class="titleView fs-2 py-4" th:text="${nickName}"></h2>
-
-            </article>
-
             <article class="container text-white bg-windows mx-auto col-lg-8 px-2 py-4 my-3 rounded-4">
 
                 <h2 class="titleView fs-3 pb-4">Mis Vehículos</h2>
 
                 <div class="py-2">
 
-                    <div th:each="vechicle : ${vehicles}">
+                    <div th:each="vehicle : ${vehicles}">
 
                         <div class="d-flex bg-secondary rounded-4 my-2 align-items-center justify-content-between p-2">
 
@@ -24,11 +18,11 @@
 
                                 <i class="fa-solid fa-car-side text-white fs-5"></i>
 
-                                <p class="m-0 text-truncate px-3" th:text="${vechicle.model + ' - ' + vechicle.patent}"></p>
+                                <p class="m-0 text-truncate px-3" th:text="${vehicle.getModel() + ' - ' + vehicle.getPatent()}"></p>
 
                             </div>
 
-                            <a href="#"><i class="fa-solid fa-gear text-blue"></i></a>
+                            <a th:href="@{/mobile/profile/vehicle/remove(patent=${vehicle.getPatent()})}"><i class="fa-solid fa-circle-xmark text-danger"></i></a>
 
                         </div>
 
@@ -36,7 +30,7 @@
 
                     <div class="text-end">
 
-                        <a class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-3 fs-6 text-center btn-primary" th:href="@{/vehicle-register.html}"><i class="fa-solid fa-plus fs-6"></i></a>
+                        <a class="btn btn-lg btn-block rounded-4 box-shadow text-bold px-3 fs-6 text-center btn-primary" th:href="@{/mobile/profile/vehicle}"><i class="fa-solid fa-plus fs-6"></i></a>
 
                     </div>
 
@@ -58,6 +52,8 @@
 
                                 <i class="fa-solid fa-location-dot text-blue fs-5"></i>
 
+                                <p th:class="${parking.parkingType.toString() == 'STREET'} ? 'text-white px-3 m-0' : (${parking.parkingType.toString() == 'GARAGE'} ? 'text-violet px-3 m-0':'text-green px-3 m-0')" th:text="${parking.getParkingType().toString().charAt(0)}"></p>
+
                                 <p class="vehicle-parking d-none" th:text="${parking.getVehicle().toString()}"></p>
 
                                 <p class="geolocation d-none " th:text="${parking.getGeolocation()}"></p>
@@ -66,7 +62,11 @@
 
                             </div>
                             <div class="d-flex justify-content-around">
-                                <a th:href="@{/mobile/profile/parking(id=${parking.getId()})}"><i class="fa-solid fa-rectangle-list text-blue me-2"></i></a>
+                                <a th:href="@{/mobile/profile/parking(id=${parking.getId()})}"><i class="fa-solid fa-rectangle-list text-primary me-2"></i></a>
+                                <a th:if="${parking.parkingType.toString() == 'GARAGE' && parking.getTicket() != null}"
+                                   th:href="@{/mobile/reports/(mail=${mail},idGarage=${parking.getTicket().getParking_place().getId()})}">
+                                    <i class="fa-solid fa-triangle-exclamation text-white me-2"></i>
+                                </a>
                                 <a href="#"><i class="fa-solid fa-circle-xmark text-danger"></i></a>
                             </div>
 

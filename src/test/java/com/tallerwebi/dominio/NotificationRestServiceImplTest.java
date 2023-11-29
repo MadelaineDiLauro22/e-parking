@@ -72,8 +72,7 @@ class NotificationRestServiceImplTest {
     private void createNotification(MobileUser user) {
         Notification notification = new Notification("title", "message", Date.from(Instant.now()), user);
 
-        when(mockNotificationRepository.findAllByUserAndNotRead(user))
-                .thenReturn(List.of(notification));
+        user.addNotification(notification);
     }
 
 }

@@ -47,7 +47,7 @@ function GetMap(position) {
         credentials: credentials,
         center: new Microsoft.Maps.Location(lat, long),
         mapTypeId: Microsoft.Maps.MapTypeId.road,
-        zoom: 18
+        zoom: 15
     });
 
     var center = bingMap.getCenter();

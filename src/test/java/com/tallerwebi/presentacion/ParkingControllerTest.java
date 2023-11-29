@@ -100,7 +100,7 @@ class ParkingControllerTest {
 
         ModelAndView response = parkingController.getParkingRegister();
 
-        assertEquals("redirect:/error?errorMessage=Usuario inexistente", response.getViewName());
+        assertEquals("redirect:/error?errorMessage=Usuario+inexistente", response.getViewName());
     }
 
     @Test
@@ -114,7 +114,7 @@ class ParkingControllerTest {
 
         ModelAndView response = parkingController.getParkingRegister();
 
-        assertEquals("redirect:/error?errorMessage=Vehículo inexistente", response.getViewName());
+        assertEquals("redirect:/error?errorMessage=Veh%C3%ADculo+inexistente", response.getViewName());
     }
 
     private Long getUserId(){

@@ -33,6 +33,7 @@ import java.util.concurrent.Executors;
 @EnableAsync
 @Configuration
 @ComponentScan({"com.tallerwebi.presentacion", "com.tallerwebi.dominio", "com.tallerwebi.infraestructura", "com.tallerwebi.model", "com.tallerwebi.helpers"})
+@PropertySource({"classpath:application.properties"})
 public class SpringWebConfig implements WebMvcConfigurer, WebSocketConfigurer {
 
     // Spring + Thymeleaf need this
