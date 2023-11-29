@@ -95,8 +95,12 @@ public class GarageServiceImpl implements GarageService {
                 "    <div style=\"text-align: center; justify-content: center;\">\n" +
                 "        <img src=\"https://i.imgur.com/P8FBUXF.png\" style=\"width: 200px; height: 230px\">\n" +
                 "    </div>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Este es un código de seguridad temporal para validar el ingreso al estacionamiento.</p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Solo puede ser utilizado una vez en los próximos 5 minutos, tras lo cual expirará:</p>\n" +
                 "<h1 style=\"text-align: center; justify-content: center; color: antiquewhite;\">Código: " + String.valueOf(randomNum) + "</h1>\n" +
-                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Estan queriendo ingresar tu vehiculo, si no sos vos, hace la denuncia: <a href=\"" + link + "\" style=\"color: #D13639;\">AQUI</a></p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Estan queriendo ingresar tu vehículo, si no sos vos, hacé la denuncia: <a href=\"" + link + "\" style=\"color: #D13639;\">AQUI</a></p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">Atentamente,</p>\n" +
+                "<p style=\"text-align: center; justify-content: center; color: antiquewhite;\">El equipo de eParking</p>\n" +
                 "<div style=\"width: 100%; height: 2em; background-color: #FEBC3D;\"></div>\n" +
                 "</div>";
 
