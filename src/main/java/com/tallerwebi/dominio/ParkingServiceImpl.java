@@ -61,7 +61,9 @@ public class ParkingServiceImpl implements ParkingService {
             ParkingPlaceResponseDTO parkingPlaceResponseDTO = new ParkingPlaceResponseDTO(parkingPlace.getClass().getSimpleName(), parkingPlace.getId(), parkingPlace.getName(),
                     parkingPlace.getGeolocation(), parkingPlace.getAddress(), parkingPlace.getFeePerHour(), parkingPlace.getFeeFraction(), parkingPlace.getFractionTime());
             if(parkingPlace instanceof Garage){
-                parkingPlaceResponseDTO.setUserId(((Garage) parkingPlace).getUser().getId());
+                if (((Garage) parkingPlace).getUser()!=null) {
+                    parkingPlaceResponseDTO.setUserId(((Garage) parkingPlace).getUser().getId());
+                }
                 parkingPlaceResponseDTO.setNumberOfCars(((Garage) parkingPlace).getNumberOfCars());
                 Hibernate.initialize(((Garage) parkingPlace).getPatents());
                 parkingPlaceResponseDTO.setPatents(((Garage) parkingPlace).getPatents());

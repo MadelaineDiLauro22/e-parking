@@ -81,14 +81,25 @@ public class DatabaseInitializationConfig {
         parkingPlaceRepository.save(garage);
     }
 
-    private void createAndSaveParkingsPlaces() throws IOException {
+    public void createAndSaveParkingsPlaces() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<PointSale> pointsSale = objectMapper.readValue(new File("src/main/resources/PointSaleList.json"), new TypeReference<List<PointSale>>() {
+        List<PointSale> pointsSaleList = objectMapper.readValue(new File("src/main/resources/PointSaleList.json"), new TypeReference<List<PointSale>>() {
         });
 
-        for (PointSale pointSale : pointsSale) {
+        for (PointSale pointSale : pointsSaleList) {
             parkingPlaceRepository.save(pointSale);
         }
+
+        Geolocation geo1 = new Geolocation(-34.686558, -58.543516);
+        Geolocation geo2 = new Geolocation(-34.6877562324958, -58.53428406521504);
+        Geolocation geo3 = new Geolocation(-34.687634, -58.550955);
+
+        Garage garage1 = new Garage("Garage 1", 0, geo1, "AGL, Adolfo Berro 2135, B1766 La Tablada", 500.0F, 200.0F, 30);
+        Garage garage2 = new Garage("Garage 2", 0, geo2, "EQV La Tablada Buenos Aires AR, Rincón 5480, B1766", 600.0F, 400.0F, 45);
+        Garage garage3 = new Garage("Garage 3", 0, geo3, "Yeruá 2652, B1754GHJ San Justo, Provincia de Buenos Aires", 750.0F, 300.0F, 40);
+        parkingPlaceRepository.save(garage1);
+        parkingPlaceRepository.save(garage2);
+        parkingPlaceRepository.save(garage3);
     }
 
 }
